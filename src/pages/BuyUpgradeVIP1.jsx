@@ -1,13 +1,17 @@
 import React from "react";
 import "./BuyUpgradeVIP1.css";
-import { Link } from "react-router-dom";
 
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 export default function BuyUpgradeVIP1() {
+   const navigate = useNavigate();
   return (
     <div className="buyupgrade-container">
       {/* Header */}
       <header className="buyupgrade-header">
-        <Link to="/orders" className="back-btn">←</Link>
+        <button className="back-btnR" onClick={() => navigate(-1)}>
+          <ArrowLeft color="white"/>
+        </button>
         <h1>My Products</h1>
       </header>
 

@@ -27,15 +27,20 @@
   margin-bottom: 20px;
 }
 
-.back-btn {
+.back-btn1 {
   background: transparent;
   border: none;
   font-size: 24px;
   cursor: pointer;
 }
+.back-btn1:hover {
+  transform: translateX(-4px);
+  color: #341539;
+}
 
 .withdraw-box,
 .records-box {
+  
   background: #fff;
   border-radius: 20px;
   padding: 20px;
@@ -60,7 +65,7 @@
 .withdraw-input {
   width: 100%;
   padding: 12px;
-  border: 2px solid #341539;
+    border: 1px solid  rgb(78, 69, 81);
   border-radius: 12px;
   font-size: 16px;
   margin-bottom: 15px;
@@ -69,12 +74,13 @@
 .bank-select {
   position: relative;
   margin-bottom: 15px;
+  
 }
 
 .bank-btn {
   width: 100%;
   padding: 12px;
-  border: 2px solid #341539;
+   border: 1px solid  rgb(190, 110, 216);
   border-radius: 12px;
   background: #ffffff;
   font-size: 16px;
@@ -89,28 +95,30 @@
   font-size: 18px;
 }
 
-.bank-list {
-  position: absolute;
-  top: 110%;
-  left: 0;
-  right: 0;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-  overflow: hidden;
-  z-index: 10;
+.bank-select {
+  width: 100%;
+  max-width: 320px;
+  margin: 10px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.bank-item {
-  padding: 12px;
+.bank-label {
+  font-size: 14px;
+  color: #444;
+}
+
+.bank-dropdown {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background: #f8f4ff;
   cursor: pointer;
-  transition: background 0.2s;
 }
 
-.bank-item:hover {
-  background: #341539;
-  color: white;
-}
 
 .apply-btn {
   width: 100%;
@@ -126,7 +134,7 @@
 }
 
 .apply-btn:hover {
-  background: #c06fb3;
+  background: #000000;
 }
 
 .explain-box {
@@ -168,11 +176,11 @@
 }
 
 .record.success {
-  border: 2px solid #3cb371;
+  border: 1px solid #3cb371;
   color: #3cb371;
 }
 
 .record.returned {
-  border: 2px solid #e63946;
+  border: 1px solid #e63946;
   color: #e63946;
 }

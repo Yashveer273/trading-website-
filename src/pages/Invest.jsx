@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Invest.css";
+import { ArrowLeft } from "lucide-react";
 
 const Invest = () => {
   const navigate = useNavigate();
@@ -82,10 +83,10 @@ const Invest = () => {
     <div className="invest-container">
       {/* Header */}
       <div className="invest-header">
-        <button className="back-btn" onClick={() => navigate("/home")}>
-          ←
+         <button className="back-btnR" onClick={() => navigate(-1)}>
+          <ArrowLeft color="white"/>
         </button>
-        <h2>Invest</h2>
+        <h3>Invest</h3>
       </div>
 
       {/* Tabs */}

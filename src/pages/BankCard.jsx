@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./BankCard.css";
+import { ArrowLeft } from "lucide-react";
 
 export default function BankCardInfo() {
   const navigate = useNavigate();
@@ -24,8 +25,8 @@ export default function BankCardInfo() {
     <div className="bank-page">
       {/* Header */}
       <div className="header">
-        <button className="back-btn" onClick={() => navigate("/accounts")}>
-          ←
+        <button className="back-btnR" onClick={() => navigate(-1)}>
+          <ArrowLeft color="white"/>
         </button>
         <h1>Bank Card Info</h1>
       </div>

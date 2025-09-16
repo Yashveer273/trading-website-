@@ -4,8 +4,8 @@
   font-family: "Instrument Sans", sans-serif;
   width: 480px;
   margin: 0 auto;
-  height: 100vh;
-  background: linear-gradient(to bottom, #f1c0f8, #ffffff);
+  height: auto;
+  background: linear-gradient(to bottom, #fff6ff, #bbbaba);
   color: #341539;
   padding: 20px;
 }

@@ -10,7 +10,7 @@ function AboutPage() {
     <div className="about-page">
       {/* Header with back arrow */}
       <div className="header">
-        <button className="back-btn" onClick={() => navigate("/account")}>
+        <button className="back-btn" onClick={() => navigate(-1)}>
           <ArrowLeft size={24} />
         </button>
         <h1>About Vivo</h1>

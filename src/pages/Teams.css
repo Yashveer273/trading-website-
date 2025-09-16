@@ -19,12 +19,15 @@ body {
 
 /* Hero Section */
 .hero {
-  text-align: center;
+ 
   padding: 20px 12px;
   background:#341439;
   border-radius: 10px;
   margin: 12px;
-  flex-direction: column;
+ display: flex;
+ justify-content: space-between;
+ align-items: start;
+ text-align: center;
 }
 
 .hero h1 {

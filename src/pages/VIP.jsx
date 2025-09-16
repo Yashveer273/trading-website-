@@ -2,6 +2,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./VIP.css";
+import { ArrowLeft } from "lucide-react";
 
 export default function VIP() {
   const navigate = useNavigate();
@@ -22,9 +23,9 @@ export default function VIP() {
     <div className="vip-page">
       {/* Header */}
       <div className="vip-header">
-        <button className="back-btn" onClick={() => navigate("/account")}>
-          ←
-        </button>
+        <button className="back-btnR" onClick={() => navigate(-1)}>
+                  <ArrowLeft color="white"/>
+                </button>
         <h1 className="vip-title">Vip Level</h1>
       </div>
 

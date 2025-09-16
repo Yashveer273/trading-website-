@@ -8,7 +8,7 @@
 }
 
 .recharge-container {
-  background:#ffffff;
+  background: #ffffff;
   background-size: 400% 400%;
   animation: gradientBG 18s ease infinite;
   min-height: 100vh;
@@ -20,9 +20,17 @@
 
 /* Background animation */
 @keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Header with back arrow */
@@ -36,7 +44,7 @@
   opacity: 0;
 }
 
-.back-btn {
+.back-btnR {
   background: transparent;
   border: none;
   font-size: 28px;
@@ -45,25 +53,26 @@
   transition: transform 0.2s ease, color 0.3s ease;
 }
 
-.back-btn:hover {
+.back-btnR:hover {
   transform: translateX(-4px);
   color: #341539;
 }
 
 /* Recharge Box */
 .recharge-box {
+  border: 1px solid rgb(228, 228, 228);
   background: #fff;
-  border-radius: 20px;
+  border-radius: 12px;
   padding: 25px;
   width: 100%;
   max-width: 500px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.062);
   animation: slideUp 1.2s ease forwards;
   opacity: 0;
 }
 
 /* Labels */
-.label {
+.label1 {
   font-weight: 600;
   margin-bottom: 8px;
   display: block;
@@ -75,16 +84,17 @@
 .amount-input {
   width: 100%;
   padding: 14px;
-  border: 2px solid #341539;
-  border-radius: 12px;
+  border: 1px solid rgb(206, 115, 239);
+  border-radius: 8px;
   font-size: 16px;
   margin-bottom: 22px;
   transition: border 0.3s ease, box-shadow 0.3s ease;
 }
 
 .amount-input:focus {
-  border-color: #341539;
-  box-shadow: 0 0 6px rgba(255,152,0,0.4);
+  border-color: rgb(206, 115, 239);
+  ;
+  box-shadow: 0 0 6px rgba(74, 74, 74, 0.666);
   outline: none;
 }
 
@@ -97,9 +107,9 @@
 }
 
 .quick-btn {
-  background: #fffaf0;
-  border: 2px solid #341539;
-  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #341539;
+  border-radius: 8px;
   padding: 12px;
   font-size: 16px;
   cursor: pointer;
@@ -108,7 +118,8 @@
 
 .quick-btn:hover,
 .quick-btn.selected {
-  background: #341539;
+  background: #c78efa;
+  border: 1px solid #d3a0ff;
   color: #ffffff;
   transform: scale(1.05);
 }
@@ -122,18 +133,19 @@
 
 .channel-btn {
   flex: 1;
-  background: #c06fb3;
-  border: 2px solid #341539;
-  border-radius: 12px;
+  background: #bcbbbb;
+  border: none;
+  border-radius: 8px;
   padding: 14px;
   cursor: pointer;
   font-size: 16px;
   transition: 0.3s;
+  color: white;
 }
 
 .channel-btn:hover,
 .channel-btn.selected {
-  background: #341539;
+  background: #000000;
   color: white;
   transform: translateY(-3px);
 }
@@ -162,34 +174,57 @@
 
 /* Recharge Button */
 .recharge-btn {
+
   width: 100%;
   padding: 15px;
-  background: linear-gradient(to right, #341539, #341539);
-  border: none;
-  border-radius: 14px;
+  background: #747474;
+
+  border: 1px solid #b76cca;
+  border-radius: 10px;
   font-size: 18px;
   font-weight: 600;
   color: white;
   cursor: pointer;
   transition: 0.3s;
-  box-shadow: 0 5px 15px rgba(255,152,0,0.4);
+
 }
 
 .recharge-btn:hover {
-  background: linear-gradient(to right, #c06fb3, #c06fb3);
+  background: #212121;
   transform: translateY(-2px);
 }
 
 /* Animations */
 @keyframes slideUp {
-  from { transform: translateY(40px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
+
 @keyframes slideDown {
-  from { transform: translateY(-30px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
+
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }

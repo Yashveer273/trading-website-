@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Notice.css";
+import { ArrowLeft } from "lucide-react";
 
 export default function Notice() {
   const navigate = useNavigate();
@@ -9,9 +10,9 @@ export default function Notice() {
     <div className="notice-page">
       {/* Header */}
       <div className="header">
-        <button className="back-btn" onClick={() => navigate("/accounts")}>
-          ←
-        </button>
+        <button className="back-btnR" onClick={() => navigate(-1)}>
+                  <ArrowLeft color="white"/>
+                </button>
         <h1>notice</h1>
       </div>
 

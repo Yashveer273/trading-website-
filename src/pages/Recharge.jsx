@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Recharge.css";
+import { ArrowLeft, } from "lucide-react";
 
 const Recharge = () => {
   const [amount, setAmount] = useState("");
@@ -30,14 +31,14 @@ const Recharge = () => {
     <div className="recharge-container">
       <div className="recharge-header">
        
-        <button className="back-btn" onClick={() => navigate("/")}>
-          ←
+        <button className="back-btnR" onClick={() => navigate(-1)}>
+          <ArrowLeft color="black"/>
         </button>
         <h2>Recharge</h2>
       </div>
 
       <div className="recharge-box">
-        <label className="label">Recharge Amount</label>
+        <label className="label1">Recharge Amount</label>
         <input
           type="text"
           value={amount}
@@ -58,7 +59,7 @@ const Recharge = () => {
           ))}
         </div>
 
-        <label className="label">Channel</label>
+      
         <div className="channels">
           <button
             className={`channel-btn ${channel === "Ptm" ? "selected" : ""}`}

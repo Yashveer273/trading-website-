@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Mail.css";
+import { ArrowLeft } from "lucide-react";
 
 export default function Mail() {
   const navigate = useNavigate();
@@ -9,8 +10,8 @@ export default function Mail() {
     <div className="mail-page">
       {/* Header */}
       <div className="header">
-        <button className="back-btn" onClick={() => navigate("/accounts")}>
-          ←
+         <button className="back-btnR" onClick={() => navigate(-1)}>
+          <ArrowLeft color="white"/>
         </button>
         <h1>Mail</h1>
       </div>

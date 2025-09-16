@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "./Info.css";
-
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 function Info() {
+  const navigate = useNavigate();
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
   const [profilePic, setProfilePic] = useState("/vivo-logo.png");
@@ -19,6 +21,9 @@ function Info() {
 
   return (
     <div className="info-container">
+      <button className="back-btnR" onClick={() => navigate(-1)}>
+                  <ArrowLeft color="black"/>
+                </button>
       <header className="info-header">Setting Info</header>
 
       <form className="info-card" onSubmit={handleSubmit}>

@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Withdraw.css";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, } from "framer-motion";
+import { ArrowLeft,} from "lucide-react";
 
 const Withdraw = () => {
   const navigate = useNavigate();
   const [amount, setAmount] = useState("");
   const [password, setPassword] = useState("");
   const [selectedBank, setSelectedBank] = useState("");
-  const [showBanks, setShowBanks] = useState(false);
+
 
   const banks = [
     "State Bank of India (SBI)",
@@ -48,7 +49,7 @@ const Withdraw = () => {
     <div className="withdraw-container">
       {/* Header */}
       <div className="withdraw-header">
-        <button className="back-btn" onClick={() => navigate("/home")}>←</button>
+        <button className="back-btn1" onClick={() => navigate(-1)}><ArrowLeft color="black"/></button>
         <h2>Withdraw</h2>
       </div>
 
@@ -76,42 +77,25 @@ const Withdraw = () => {
         />
 
         {/* Bank Select */}
-        <div className="bank-select">
-          <button
-            className="bank-btn"
-            onClick={() => setShowBanks(!showBanks)}
-          >
-            {selectedBank || "Choose a Bank Card"} <span className="arrow">⌄</span>
-          </button>
+            <div className="bank-select">
+      <label htmlFor="bank" className="bank-label">
+        Choose a Bank:
+      </label>
+      <select
+        id="bank"
+        value={selectedBank}
+        onChange={(e) => setSelectedBank(e.target.value)}
+        className="bank-dropdown"
+      >
+        <option value="">Select Bank</option>
+        {banks.map((bank, index) => (
+          <option key={index} value={bank}>
+            {bank}
+          </option>
+        ))}
+      </select>
+    </div>
 
-          <AnimatePresence>
-            {showBanks && (
-              <motion.ul
-                className="bank-list"
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                {banks.map((bank, index) => (
-                  <motion.li
-                    key={index}
-                    className="bank-item"
-                    onClick={() => {
-                      setSelectedBank(bank);
-                      setShowBanks(false);
-                    }}
-                    initial={{ x: -50, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    {bank}
-                  </motion.li>
-                ))}
-              </motion.ul>
-            )}
-          </AnimatePresence>
-        </div>
 
         <button className="apply-btn" onClick={handleApply}>
           Apply Withdrawal

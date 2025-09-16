@@ -1,16 +1,25 @@
 import { Link } from "react-router-dom";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./Teams.css";
+import { ArrowLeft } from "lucide-react";
 
 export default function TeamPage() {
+    const navigate = useNavigate();
   return (
     <div className="team-dashboard">
-      {/* Hero Section */}
+     
       <section className="hero">
-        <h1>Team Overview</h1>
+        <button className="back-btnR" onClick={() => navigate(-1)}>
+          <ArrowLeft color="white"/>
+        </button>
+        <div>
+          <h1>Team Overview</h1>
         <p>
           Total Commission Rate: <span>0%</span>
         </p>
+        </div>
+        
       </section>
 
       {/* Cards Section */}
@@ -61,7 +70,7 @@ function TeamCard({ title, recharge, commission, referral, link }) {
       </div>
 
       <Link to={link} className="details-btn">
-        View Details →
+        View Details 
       </Link>
     </div>
   );

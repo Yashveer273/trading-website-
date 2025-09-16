@@ -1,9 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
 import "./HelpCenter.css";
+import { useNavigate } from "react-router-dom";
 import { ArrowLeft, MessageCircle, Send, Headphones } from "lucide-react";
 
 export default function HelpCenter() {
+   const navigate = useNavigate();
   const helpOptions = [
     {
       id: 1,
@@ -35,6 +37,9 @@ export default function HelpCenter() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
+        <button className="back-btnR" onClick={() => navigate(-1)}>
+                  <ArrowLeft color="Black"/>
+                </button>
         <h1>Help Center</h1>
       </motion.header>
 

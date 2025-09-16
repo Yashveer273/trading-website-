@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Password.css";
+import { ArrowLeft } from "lucide-react";
 
 function Password() {
   const navigate = useNavigate();
@@ -18,9 +19,9 @@ function Password() {
     <div className="password-container">
       {/* Header */}
       <div className="password-header">
-        <button className="back-btn" onClick={() => navigate("/account")}>
-          ←
-        </button>
+       <button className="back-btnR" onClick={() => navigate(-1)}>
+                  <ArrowLeft color="Black"/>
+                </button>
         <h2>Update Password</h2>
       </div>
 

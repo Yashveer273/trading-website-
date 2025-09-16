@@ -19,22 +19,27 @@ body {
 }
 
 /* Header */
-.header {
-  display: flex;
-  justify-content: space-between;
-  padding: 14px 20px;
-  background: linear-gradient(120deg, #f2a9fd, white);
-  color: white;
-  font-weight: 600;
-  align-items: center;
+.back-btnR {
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #333;
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.back-btnR:hover {
+  transform: translateX(-4px);
+  color: #341539;
 }
 
 /* Profile Card */
 .profile-card {
-  margin: 16px;
-  padding: 16px;
+  margin: 0 16px 1px 16px ;
+padding: 0 16px 16px 16px ;
   border-radius: 14px;
-  background: #f9f8ff;
+  background: #e5e0fe;
+   border: 1px solid #c7bdf8;
   box-shadow: 0 4px 10px rgba(0,0,0,0.06);
   animation: slideUp 0.7s ease;
 }
@@ -47,7 +52,7 @@ body {
 
 .profile-top h2 {
   margin: 0;
-  color: #341539;
+  color: #000000;
 }
 
 .stats {
@@ -59,7 +64,7 @@ body {
 
 .stats span {
   font-weight: 700;
-  color: #341439;
+  color: #000000;
 }
 
 /* Quick Actions */
@@ -69,10 +74,10 @@ body {
   margin: 20px 16px;
   padding: 12px;
   border-radius: 12px;
-  background: #dfbee4;
+  background: #e5e0fe;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   animation: fadeIn 1s ease;
-  border: 1px solid black;
+  border: 1px solid #c7bdf8;
 }
 
 .action {
@@ -89,10 +94,10 @@ body {
 .menu-list {
   flex: 1;
   margin: 16px;
-  background: #dfbee4;
+  background: #e5e0fe;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  border: 1px solid black;
+ border: 1px solid #c7bdf8;
 }
 
 .menu-item {
@@ -105,7 +110,8 @@ body {
 }
 
 .menu-item:hover {
-  background: #ffffff;
+  background: #c7bdf8;
+  border-radius: 12px;
 }
 
 .menu-left {
@@ -131,8 +137,9 @@ body {
 /* Logout */
 .logout-btn {
   margin: 20px;
+
   padding: 12px;
-  width: calc(100% - 40px);
+  width: 70px;
   border: none;
   border-radius: 8px;
   background: #341539;
@@ -141,9 +148,20 @@ body {
   cursor: pointer;
   transition: background 0.2s, transform 0.2s;
 }
+.logout-btn2 {
+  margin: 20px;
 
+  padding: 12px;
+  width: 70px;
+  border: none;
+  border-radius: 8px;
+  background: #34153900;
+  color: white;
+  font-size: 1rem;
+ 
+}
 .logout-btn:hover {
-  background: #5a2cb0;
+  background: #000000;
   transform: translateY(-2px);
 }
 
@@ -160,8 +178,8 @@ body {
 
 /* Arrow styling */
 .arrow {
-  font-size: 20px;
-  color: #555;
+ 
+  color: #979797;
   background: transparent;
   border-radius: 50%;
   padding: 6px 10px;
@@ -169,6 +187,6 @@ body {
 }
 
 .menu-item:hover .arrow {
-  background: #8a4fc1;
+  background: #c7bdf8;
   color: white;
 }

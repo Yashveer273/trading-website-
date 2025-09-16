@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./Home.css";
 
+import "./Home.css";
+import { Users,Copy, Mail, Package, Home as HomeIcon, DollarSign, User, ArrowRight } from "lucide-react";
 const Home = () => {
   const navigate = useNavigate();
-
-  const copyLink = () => {
-    navigator.clipboard.writeText(
-      "https://m.india1188.com/?invitation_code-390EA"
-    );
-    alert("Invitation link copied!");
+const [copied, setCopied] = useState(false);
+   const copyLink = () => {
+    const link = "https://m.india1188.com/?invitation_code-390EA";
+    navigator.clipboard.writeText(link);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -38,33 +39,41 @@ const Home = () => {
       {/* Features */}
       <section className="features-section slide-left">
         <div onClick={() => navigate("/teams")} className="feature-box">
-          <h4>👥 Teams</h4>
+          <Users size={40}/>
+          <h2>Teams</h2>
           <p>Build and manage your trading network.</p>
         </div>
         <div onClick={() => navigate("/mail")} className="feature-box">
-          <h4>💬 Mail</h4>
+          <Mail size={40}/>
+          <h2>Mail</h2>
           <p>Stay connected with real-time updates.</p>
         </div>
         <div onClick={() => navigate("/orders")} className="feature-box">
-          <h4>📦 Orders</h4>
+         <Package size={40}/> 
+         <h2>Orders</h2>
           <p>Track your active and past orders easily.</p>
         </div>
       </section>
 
       {/* Invitation Section */}
       <section className="invitation-card slide-right">
-        <h3>Invitation</h3>
-        <a href="#" onClick={() => navigate("/teams")}>
-          My Team →
-        </a>
-        <p>
-          Promotional Link: <br />
+      <h3>Invitation</h3>
+
+      <div className="invite-grid">
+        <Link to="/teams"  className="team-link">
+          <Users size={18} /> My Team <ArrowRight/>
+        </Link>
+
+        <div className="link-wrapper">
           <span className="link">
             https://m.india1188.com/?invitation_code-390EA
           </span>
-        </p>
-        <button onClick={copyLink}>Copy Invitation Link</button>
-      </section>
+          <button onClick={copyLink} className="copy-btn">
+            {copied ? "Copied" : <Copy size={16} />}
+          </button>
+        </div>
+      </div>
+    </section>
 
       {/* Lucky Draw */}
       <section className="lucky-draw slide-up">
@@ -81,23 +90,23 @@ const Home = () => {
       {/* Bottom Navbar */}
       <nav className="bottom-navbar">
         <button onClick={() => navigate("/home")}>
-          <span>🏠</span>
+         <HomeIcon/>
           <p>Home</p>
         </button>
         <button onClick={() => navigate("/invest")}>
-          <span>💰</span>
+          <DollarSign/>
           <p>Invest</p>
         </button>
         <button onClick={() => navigate("/teams")}>
-          <span>👥</span>
+          <Users/>
           <p>Teams</p>
         </button>
         <button onClick={() => navigate("/mail")}>
-          <span>💬</span>
-          <p>Mail</p>
+          <span> <Mail/></span>
+        <p>Mail</p>
         </button>
         <button onClick={() => navigate("/account")}>
-          <span>👤</span>
+          <User/>
           <p>Account</p>
         </button>
       </nav>

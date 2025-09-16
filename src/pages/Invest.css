@@ -8,10 +8,11 @@
 
 .invest-container {
   font-family: "Instrument Sans", sans-serif;
-  background: linear-gradient(135deg, #e4abec, #ffffff);
+    background: #e5e0fe;
+    border: 1px solid #c7bdf8;
   width: 480px;
   margin: 0 auto;
-  padding: 10px;
+
 }
 
 /* Header */
@@ -22,7 +23,7 @@
   padding: 12px;
   background: #341439;
   color: white;
-  border-radius: 0 0 12px 12px;
+  
   position: sticky;
   top: 0;
   z-index: 10;
@@ -63,6 +64,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  padding: 20px;
 }
 
 .plan-card {

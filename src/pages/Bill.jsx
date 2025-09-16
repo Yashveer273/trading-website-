@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Bill.css";
-
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 const transactions = [
   { type: "task rewards", date: "2025-09-05 09:54:37", amount: "+ ₹10.00", category: "recharge" },
   { type: "withdrawal return", date: "2025-09-02 09:00:37", amount: "+ ₹7000.00", category: "withdrawal" },
@@ -13,6 +14,7 @@ const transactions = [
 ];
 
 function Bill() {
+    const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("all");
 
   const filteredTransactions =
@@ -24,8 +26,8 @@ function Bill() {
     <div className="bill-page">
       {/* Header */}
       <div className="bill-header">
-        <button className="back-btn" onClick={() => window.location.href = "/account"}>
-          ←
+        <button className="back-btnR" onClick={() => navigate(-1)}>
+          <ArrowLeft color="Black"/>
         </button>
         <h1>Balance Details</h1>
       </div>

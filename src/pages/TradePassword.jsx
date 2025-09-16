@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./TradePassword.css";
+import { ArrowLeft } from "lucide-react";
 
 function TradePassword() {
   const navigate = useNavigate();
@@ -18,9 +19,9 @@ function TradePassword() {
       <div className="trade-container">
         {/* Header */}
         <div className="trade-header">
-          <button className="back-btn" onClick={() => navigate("/account")}>
-            ←
-          </button>
+         <button className="back-btnR" onClick={() => navigate(-1)}>
+                  <ArrowLeft color="white"/>
+                </button>
           <h2>Update Trade Password</h2>
         </div>
 

@@ -1,12 +1,13 @@
 
 import React from "react";
-import { useParams, Link } from "react-router-dom";
+
 import { motion } from "framer-motion";
 import "./VIP1VivoY100.css";
-
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 export default function OrderDetails() {
-  const { id } = useParams();
 
+const navigate = useNavigate();
   
   const order = {
     id: 1,
@@ -29,7 +30,10 @@ export default function OrderDetails() {
     <div className="order-details-page">
       {/* Header */}
       <header className="details-header">
-        <Link to="/orders" className="back-btn">← Back</Link>
+        
+        <button className="back-btnR" onClick={() => navigate(-1)}>
+                  <ArrowLeft color="black"/>
+                </button>
         <h1>{order.title}</h1>
       </header>
 

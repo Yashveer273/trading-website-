@@ -2,6 +2,8 @@ import React from "react";
 import "./Account.css";
 import { useNavigate } from "react-router-dom";
 
+
+import { ArrowLeft, ArrowDownRightFromSquare} from "lucide-react";
 const menuItems = [
   { title: "Team", icon: "https://img.icons8.com/color/48/group.png", path: "/teams" },
   { title: "VIP", icon: "https://img.icons8.com/color/48/vip.png", path: "/vip" },
@@ -22,9 +24,14 @@ export default function AccountPage() {
   return (
     <div className="account-container">
       {/* Header */}
-      <header className="header">
-      </header>
-
+      <div style={{display:"flex", marginLeft:"20px",marginTop:"10px", justifyContent:"space-between"}}>
+     <button className="back-btnR" onClick={() => navigate(-1)}>
+          <ArrowLeft color="black"/>
+        </button>
+        <button className="logout-btn" onClick={() => navigate("/login")}>
+        Logout
+      </button>
+</div>
       {/* Profile Card */}
       <section className="profile-card">
         <div className="profile-top">
@@ -71,15 +78,16 @@ export default function AccountPage() {
               <img src={item.icon} alt={item.title} />
               <span>{item.title}</span>
             </div>
-            <span className="arrow">›</span>
+            <span className="arrow"><ArrowDownRightFromSquare size={18}/></span>
           </div>
         ))}
       </section>
 
       {/* Logout Button */}
-      <button className="logout-btn" onClick={() => navigate("/login")}>
-        Logout
+      <button className="logout-btn2">
+        
       </button>
+      {/* <div style={{height:"20px"}}></div> */}
     </div>
   );
 }
