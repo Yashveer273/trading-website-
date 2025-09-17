@@ -7,7 +7,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import HomePage from "./pages/Home";
 import Recharge from "./pages/Recharge";      
-import Afterrecharge from "./pages/Afterrecharge";
+
 import Withdraw from "./pages/Withdraw";
 import Teams from "./pages/Teams";
 import Teamonelevel from "./pages/Teamonelevel";
@@ -42,7 +42,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/recharge" element={<Recharge />} />
-        <Route path="/afterrecharge" element={<Afterrecharge />} />
+        
         <Route path="/withdraw" element={<Withdraw />} />
         <Route path="/teams" element={<Teams />} />
         <Route path="/teamonelevel" element={<Teamonelevel />} />

@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 
 function Login() {
@@ -46,7 +46,7 @@ function Login() {
           </div>
 
           <div className="forgot-password">
-            <a href="#">Forgot Password?</a>
+            <Link to="#">Forgot Password?</Link>
           </div>
 
           <button type="submit" className="login-btn">
