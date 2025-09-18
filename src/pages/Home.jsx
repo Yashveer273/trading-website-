@@ -1,117 +1,209 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Home,
+  DollarSign,
+  MessageCircle,
+  User,
+  Gift,
+  Users,
+  MessageSquare,
+  ShoppingBag,
+  ArrowRight,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import "./Home.css"; // 👈 Import external CSS
 
-import "./Home.css";
-import { Users,Copy, Mail, Package, Home as HomeIcon, DollarSign, User, ArrowRight } from "lucide-react";
-const Home = () => {
+const HomePage = () => {
+  const [activeTab, setActiveTab] = useState("Home");
+  const [copied, setCopied] = useState(false);
   const navigate = useNavigate();
-const [copied, setCopied] = useState(false);
-   const copyLink = () => {
-    const link = "https://m.india1188.com/?invitation_code-390EA";
-    navigator.clipboard.writeText(link);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+
+  const copyLink = () => {
+    const link = "https://m.india1188.com/?invitation_code=390EA";
+    navigator.clipboard
+      .writeText(link)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch((err) => {
+        console.error("Failed to copy link: ", err);
+      });
   };
 
+  const tabs = [
+    { name: "Home", icon: <Home size={22} />, path: "/home" },
+    { name: "invest", icon: <DollarSign size={22} />, path: "/invest" },
+    { name: "Mail", icon: <MessageCircle size={22} />, path: "/mail" },
+    { name: "Teams", icon: <Users size={22} />, path: "/teams" },
+    { name: "Profile", icon: <User size={22} />, path: "/account" },
+  ];
+ const questRewards = [
+    { id: 1, text: "Inviting activation of 20", reward: "₹ 1600.00", progress: { current: 4, total: 20 } },
+    { id: 2, text: "Inviting activation of 70", reward: "₹ 5000.00", progress: { current: 4, total: 70 } },
+    { id: 3, text: "Inviting activation of 200", reward: "₹ 13000.00", progress: { current: 4, total: 200 } },
+    { id: 4, text: "Inviting activation of 500", reward: "₹ 50000.00", progress: { current: 4, total: 500 } },
+    { id: 5, text: "Inviting activation of 2000", reward: "₹ 180000.00", progress: { current: 4, total: 2000 } },
+    { id: 6, text: "Inviting activation of 5000", reward: "₹ 500000.00", progress: { current: 4, total: 5000 } },
+    { id: 7, text: "Inviting activation of 10000", reward: "₹ 1000000.00", progress: { current: 4, total: 10000 } },
+  ];
   return (
-    <div className="home-page">
-      {/* Hero Section */}
-      <header className="hero-section">
-        <h1 className="fade-in">Welcome to Vivo Trading Platform</h1>
-        <p className="fade-in delay">
-          Building wealth together – track progress, manage your wallet, and grow
-          with confidence.
-        </p>
-      </header>
-
-      {/* Wallet Section */}
-      <section className="wallet-card slide-up">
-        <h3>Main Wallet</h3>
-        <p>Your Balance</p>
-        <h2>₹ 9821.14</h2>
-        <div className="btn-group">
-          <button onClick={() => navigate("/recharge")}>Recharge</button>
-          <button onClick={() => navigate("/withdraw")}>Withdraw</button>
-          <button onClick={() => navigate("/account")}>Account</button>
+    <>
+   
+    <div>
+      <div className="page-container">
+        {/* Top Bar */}
+        <div className="topbar1">
+          <div className="logo-container1">
+            <div className="logo-circle1">
+              <img
+                src="https://latestlogo.com/wp-content/uploads/2024/02/vivo.png"
+                alt="Vivo Logo"
+                className="logo-img"
+              />
+            </div>
+            <h1>vivo</h1>
+          </div>
         </div>
-      </section>
 
-      {/* Features */}
-      <section className="features-section slide-left">
-        <div onClick={() => navigate("/teams")} className="feature-box">
-          <Users size={40}/>
-          <h2>Teams</h2>
-          <p>Build and manage your trading network.</p>
+        {/* Wallet Card */}
+        <div className="card1 wallet-card">
+          <h3>Main Wallet</h3>
+          <div className="wallet-info">
+            <div>
+              <p className="label">Your Balance</p>
+              <p className="balance">
+                <span className="rupee">₹</span>9821.14
+              </p>
+            </div>
+            <Gift size={80} className="gift-icon" />
+          </div>
+          <div className="button-row">
+            <button
+              onClick={() => navigate("/recharge")}
+              className="card-button"
+            >
+              Recharge
+            </button>
+            <button
+              onClick={() => navigate("/withdraw")}
+              className="card-button"
+            >
+              Withdraw
+            </button>
+          </div>
         </div>
-        <div onClick={() => navigate("/mail")} className="feature-box">
-          <Mail size={40}/>
-          <h2>Mail</h2>
-          <p>Stay connected with real-time updates.</p>
+
+        {/* Icon Grid */}
+        <div className="icon-grid">
+          <div className="grid-item" onClick={() => navigate("/teams")}>
+            <Users size={40} className="grid-icon" />
+            <span>Teams</span>
+          </div>
+          <div className="grid-item" onClick={() => navigate("/mail")}>
+            <MessageSquare size={40} className="grid-icon" />
+            <span>Message</span>
+          </div>
+          <div className="grid-item" onClick={() => navigate("/orders")}>
+            <ShoppingBag size={40} className="grid-icon" />
+            <span>Orders</span>
+          </div>
         </div>
-        <div onClick={() => navigate("/orders")} className="feature-box">
-         <Package size={40}/> 
-         <h2>Orders</h2>
-          <p>Track your active and past orders easily.</p>
-        </div>
-      </section>
 
-      {/* Invitation Section */}
-      <section className="invitation-card slide-right">
-      <h3>Invitation</h3>
-
-      <div className="invite-grid">
-        <Link to="/teams"  className="team-link">
-          <Users size={18} /> My Team <ArrowRight/>
-        </Link>
-
-        <div className="link-wrapper">
-          <span className="link">
-            https://m.india1188.com/?invitation_code-390EA
-          </span>
-          <button onClick={copyLink} className="copy-btn">
-            {copied ? "Copied" : <Copy size={16} />}
+        {/* Invitation Card */}
+        <div className="card1 invitation-card">
+          <div className="card-header">
+            <h3>Invitation</h3>
+            <button onClick={() => navigate("/teams")} className="link-button">
+              <div className="card-header">
+                <div> My team </div> <ArrowRight />
+              </div>
+            </button>
+          </div>
+          <div className="invite-info">
+            <div className="profile-img">
+              <img
+                src="https://placehold.co/64x64/orange/white?text=Invite"
+                alt="Invitation Icon"
+                className="profile-img"
+              />
+            </div>
+            <div>
+              <p className="label">Promotional Links</p>
+              <p className="link-text">
+                https://m.india1188.com/?invitation_code=390EA
+              </p>
+            </div>
+          </div>
+          <button onClick={copyLink} className="full-button copy-button">
+            {copied ? "Copied!" : "Copy Invitation Link"}
           </button>
         </div>
+
+        {/* Lucky Draw */}
+        <div className="card1 lucky-draw-card">
+          <h3>Lucky Draw</h3>
+          <p className="label">
+            The lucky wheel keeps spinning with great gifts
+          </p>
+          <button
+            onClick={() => navigate("/luckydraw")}
+            className="full-button go-button"
+          >
+            Go
+          </button>
+        </div>
+        <div className="card1 quest-rewards-card">
+              <h3>Quest Rewards</h3>
+              {questRewards.map((quest) => (
+                <div key={quest.id} className="quest-item">
+                  <div className="quest-icon-container">
+                    <img
+                      src="https://placehold.co/64x64/orange/white?text=Invite"
+                      alt="Quest Icon"
+                    />
+                  </div>
+                  <div className="quest-content">
+                    <p className="quest-text">{quest.text}</p>
+                    <div className="quest-progress-bar-container">
+                      <div
+                        className="quest-progress-bar-fill"
+                        style={{ width: `${(quest.progress.current / quest.progress.total) * 100}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                  <div className="quest-reward-info">
+                    <p className="quest-reward">{quest.reward}</p>
+                    <p className="quest-progress">
+                      {quest.progress.current}/{quest.progress.total}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+        <div style={{height:"100px"}}></div>
       </div>
-    </section>
 
-      {/* Lucky Draw */}
-      <section className="lucky-draw slide-up">
-        <h3>Lucky Draw 🎉</h3>
-        <p>The lucky wheel keeps spinning with great gifts!</p>
-        <button onClick={() => navigate("/luckydraw")}>Try Your Luck</button>
-      </section>
-
-      {/* Footer */}
-      <footer className="footer">
-        <p>© 2025 Vivo Trading Platform. All rights reserved.</p>
-      </footer>
-
-      {/* Bottom Navbar */}
-      <nav className="bottom-navbar">
-        <button onClick={() => navigate("/home")}>
-         <HomeIcon/>
-          <p>Home</p>
-        </button>
-        <button onClick={() => navigate("/invest")}>
-          <DollarSign/>
-          <p>Invest</p>
-        </button>
-        <button onClick={() => navigate("/teams")}>
-          <Users/>
-          <p>Teams</p>
-        </button>
-        <button onClick={() => navigate("/mail")}>
-          <span> <Mail/></span>
-        <p>Mail</p>
-        </button>
-        <button onClick={() => navigate("/account")}>
-          <User/>
-          <p>Account</p>
-        </button>
-      </nav>
+      {/* Bottom Navigation */}
+      
     </div>
+    <div className="bottom-nav">
+        {tabs.map((tab) => (
+          <button
+            key={tab.name}
+            className={`nav-item ${activeTab === tab.name ? "active" : ""}`}
+            onClick={() => {
+              setActiveTab(tab.name);
+              navigate(tab.path);
+            }}
+          >
+            {tab.icon}
+            <span>{tab.name}</span>
+          </button>
+        ))}
+      </div>
+     </>
   );
 };
 
-export default Home;
+export default HomePage;

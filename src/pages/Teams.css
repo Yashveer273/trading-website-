@@ -1,105 +1,46 @@
-@import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600&display=swap");
-
-body {
-  margin: 0;
-  font-family: "Instrument Sans", sans-serif;
-  background: #341439;
-  color: #333;
+         
+.nav-item {
   display: flex;
-  justify-content: center;
-}
-
-/* Main container */
-.team-dashboard {
-  width: 420px;
-  margin-left: 40px;
-  margin-right: 40px;
-  background: linear-gradient(120deg, #ffffff, #f7d0fd);
-}
-
-/* Hero Section */
-.hero {
- 
-  padding: 20px 12px;
-  background:#341439;
-  border-radius: 10px;
-  margin: 12px;
- display: flex;
- justify-content: space-between;
- align-items: start;
- text-align: center;
-}
-
-.hero h1 {
-  margin: 0 0 6px;
-  font-size: 1.3rem; 
-  color: #ffffff;
-}
-
-.hero p {
-  font-size: 0.9rem;
-  color: #eee7e7;
-}
-
-.hero span {
-  font-weight: 600;
-  color: #f5edf7;
-}
-
-/* Cards */
-.cards-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-  padding: 15px 12px;
-}
-
-.team-card {
-  background: #fff;
-  border-radius: 10px;
-  padding: 14px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-  border-radius: 12px;
-  border: 1px solid black;
-}
-
-.team-card h3 {
-  margin: 0 0 8px;
-  color: #341539;
-  font-size: 1rem;
-}
-
-.card-body p {
-  margin: 6px 0;
-  font-size: 0.85rem; 
-  line-height: 1.3;
-}
-
-/* Button */
-.details-btn {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 6px 12px;
-  background: #341539;
-  color: white;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s;
   border: none;
-  border-radius: 6px;
+  background: none;
   cursor: pointer;
-  font-size: 0.8rem;
-  text-decoration: none;
+  
 }
-
-.details-btn:hover {
-  background: #5c2670;
+.bottom-nav {
+    background-color: white;
+   z-index: 100;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid #e5e7eb;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+     max-width: 450px; 
+    
 }
-
-/* Footer */
-.footer {
-  text-align: center;
-  padding: 12px;
-  margin-top: 15px;
-  background: #f0edf5;
-  color: #666;
+.nav-item span {
   font-size: 0.75rem;
-  border-radius: 10px 10px 0 0;
+  margin-top: 0.25rem;
+}
+
+.nav-item.active {
+  color: #f59e0b;
+}
+
+.nav-item:not(.active) {
+  color: #6b7280;
+}
+
+.nav-item:not(.active):hover {
+  color: #4b5563;
+}
+
+.nav-item:focus {
+  outline: none;
 }

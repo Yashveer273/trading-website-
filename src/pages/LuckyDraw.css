@@ -15,16 +15,6 @@ body {
   padding: 20px;
 }
 
-.title {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-}
 
 /* Wheel Setup */
 .wheel-container {
@@ -59,12 +49,6 @@ body {
   justify-content: center;
 }
 
-.label {
-  transform: skewY(45deg) rotate(22.5deg);
-  font-size: 0.7rem;
-  font-weight: bold;
-  color: #fff;
-}
 
 /* Pointer */
 .pointer {

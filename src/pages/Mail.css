@@ -1,75 +1,126 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600&display=swap');
-
-* {
-  box-sizing: border-box;
-}
-
-.mail-page {
-  width: 480px;
-  height:100vh;
-  margin: 0 auto;
-  background: linear-gradient(to bottom, #edd8ff, #f4ccfa);
-  font-family: "Instrument Sans", sans-serif;
-  color: #341439;
+/* --- Container --- */
+.mail-container {
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  background-color: #f9fafb;
+  font-family: Inter, sans-serif;  display: flex;
+
+ 
+
+  
 }
 
-/* Header */
-.header {
+/* --- Header --- */
+.mail-header1 {
+  position: relative;
+  padding: 1.5rem;
+  background: linear-gradient(to right, #fb923c, #fcd34d);
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+  overflow: hidden;
+}
+
+.header-content1 {
+  position: relative;
+  z-index: 10;
   display: flex;
   align-items: center;
-  background: #341439;
-  padding: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  justify-content: space-between;
 }
-.header h1 {
-  flex: 1;
-  text-align: center;
-  font-size: 18px;
+
+.vivo-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vivo-logo {
+  padding: 0.25rem;
+  background-color: white;
+  border-radius: 9999px;
+}
+
+.vivo-text {
+  font-weight: bold;
+color: rgb(0, 0, 0);
+}
+
+.mail-title {
+  font-size: 1.25rem;
   font-weight: 600;
-  margin-right: 24px; 
-}
-.back-btn {
-  background: transparent;
-  border: none;
-  color: #341439;
-  font-size: 20px;
-  cursor: pointer;
 }
 
-/* Mail container */
-.mail-container {
+/* --- Main Content --- */
+.mail-main {
   flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  animation: slideUp 0.6s ease;
+  flex-direction: column;
+  gap: 0.75rem;
 }
-.mail-text {
-  font-size: 20px;
+
+/* --- Mail Item --- */
+.mail-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.mail-item:hover {
+  transform: scale(1.01);
+}
+
+.unread-mail {
+  border-left: 4px solid #fcd34d;
+}
+
+.mail-item-content {
+  flex: 1;
+}
+
+/* --- Sender --- */
+.sender {
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.unread-sender {
+  color: #3b82f6;
+}
+
+.read-sender {
+  color: #1f2937;
+}
+
+/* --- Subject --- */
+.subject {
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.unread-subject {
   font-weight: 500;
-  color: #341439;
-  text-align: center;
 }
 
-/* Animations */
-@keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+.read-subject {
+  color: #6b7280;
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fadeIn {
-  animation: fadeIn 1.2s ease forwards;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+/* --- Preview --- */
+.preview {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  margin-top: 0.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

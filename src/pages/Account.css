@@ -38,8 +38,8 @@ body {
   margin: 0 16px 1px 16px ;
 padding: 0 16px 16px 16px ;
   border-radius: 14px;
-  background: #e5e0fe;
-   border: 1px solid #c7bdf8;
+    background: linear-gradient(to right, #fb923c, #fcd34d);
+   border: 1px solid #fb923c;
   box-shadow: 0 4px 10px rgba(0,0,0,0.06);
   animation: slideUp 0.7s ease;
 }
@@ -74,10 +74,11 @@ padding: 0 16px 16px 16px ;
   margin: 20px 16px;
   padding: 12px;
   border-radius: 12px;
-  background: #e5e0fe;
+    background: linear-gradient(to right, #fb923c, #fcd34d);
+
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   animation: fadeIn 1s ease;
-  border: 1px solid #c7bdf8;
+  border: 1px solid #fb923c;
 }
 
 .action {
@@ -94,10 +95,10 @@ padding: 0 16px 16px 16px ;
 .menu-list {
   flex: 1;
   margin: 16px;
-  background: #e5e0fe;
+   background: linear-gradient(to right, #fb923c, #fcd34d);
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
- border: 1px solid #c7bdf8;
+ border: 1px solid #fb923c;
 }
 
 .menu-item {
@@ -110,7 +111,7 @@ padding: 0 16px 16px 16px ;
 }
 
 .menu-item:hover {
-  background: #c7bdf8;
+  background: #e1dcfc;
   border-radius: 12px;
 }
 

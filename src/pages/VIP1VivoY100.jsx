@@ -77,7 +77,7 @@ const navigate = useNavigate();
 
         <div className="total-footer">
           <p><strong>Total Income:</strong> {order.generatedIncome}</p>
-          <button className="finish-btn" style={{"background-color": "#341539"}}>Finish</button>
+          <button className="finish-btn" style={{"background-color": "#ff9800"}}>Finish</button>
           
         </div>
       </motion.div>

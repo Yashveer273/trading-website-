@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import "./Orders.css";
-
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 export default function Orders() {
   const [filter, setFilter] = useState("all");
 
@@ -17,7 +18,7 @@ export default function Orders() {
       status: "finish",
     },
     {
-      id: "vip1vivoy02t",
+      id: "VIP1VivoY100",
       title: "VIP1 Vivo Y02t",
       buyShare: 1,
       days: 6,
@@ -26,7 +27,7 @@ export default function Orders() {
       status: "finish",
     },
     {
-      id: "vip1welfare",
+      id: "VIP1VivoY100",
       title: "VIP1 Welfare",
       buyShare: 1,
       days: 1,
@@ -35,7 +36,7 @@ export default function Orders() {
       status: "finish",
     },
     {
-      id: "buyupgradevip1",
+      id: "VIP1VivoY100",
       title: "Buy and Upgrade VIP1",
       buyShare: 1,
       days: 42,
@@ -47,12 +48,22 @@ export default function Orders() {
 
   const filteredOrders =
     filter === "all" ? orders : orders.filter((o) => o.status === filter);
-
+  const navigate = useNavigate();
   return (
     <div className="orders-page">
       {/* Header */}
-      <header className="orders-header">
-        <h1>My Products</h1>
+      <header className="mail-header">
+        <div className="header-content">
+          <div className="vivo-logo-container">
+            <button className="back-btnR" onClick={() => navigate(-1)}>
+              <ArrowLeft color="white" />
+            </button>
+            <div className="vivo-logo">
+              <span className="vivo-text">vivo</span>
+            </div>
+            <h1 className="mail-title">Mail</h1>
+          </div>
+        </div>
       </header>
 
       {/* Filter Tabs */}
@@ -96,22 +107,41 @@ export default function Orders() {
             </div>
 
             <div className="order-body">
-              <p>
-                <strong>Buy Share:</strong> {order.buyShare}
-              </p>
-              <p>
-                <strong>Days:</strong> {order.days}.0000 Days
-              </p>
-              <p>
-                <strong>Daily Income:</strong> {order.dailyIncome}
-              </p>
-              <p>
-                <strong>Total Income:</strong> {order.totalIncome}
-              </p>
+              <div className="order-row">
+                <span className="order-label">Buy Share</span>
+                <span className="order-value">{order.buyShare}</span>
+              </div>
+              <div className="order-row">
+                <span className="order-label">Days</span>
+                <span className="order-value">{order.days}.0000 Days</span>
+              </div>
+              <div className="order-row">
+                <span className="order-label">Daily Income</span>
+                <span className="order-value">{order.dailyIncome}</span>
+              </div>
+              <div className="order-row">
+                <span className="order-label">Total Income</span>
+                <span className="order-value">{order.totalIncome}</span>
+              </div>
             </div>
 
             {/* Details Button */}
-            <Link to={`/${order.id}`} className="details-btn">
+            <Link to={`/${order.id}`} state={{ order:{
+    id: 1,
+    title: "VIP1 Vivo Y100",
+    price: "₹482.00",
+    revenue: "5 Days",
+    buyShare: 1,
+    generatedIncome: "₹4434.40",
+    estimateIncome: "₹4434.40",
+    settlements: [
+      { date: "2025-08-25", amount: "₹886.88" },
+      { date: "2025-08-26", amount: "₹886.88" },
+      { date: "2025-08-27", amount: "₹886.88" },
+      { date: "2025-08-28", amount: "₹886.88" },
+      { date: "2025-08-29", amount: "₹886.88" },
+    ],
+  } }} className="details-btn">
               Details →
             </Link>
           </motion.div>

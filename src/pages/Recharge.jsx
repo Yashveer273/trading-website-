@@ -1,94 +1,75 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+import { ArrowLeft } from "lucide-react";
 import "./Recharge.css";
-import { ArrowLeft, } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Recharge = () => {
-  const [amount, setAmount] = useState("");
-  const [channel, setChannel] = useState("");
   const navigate = useNavigate();
 
   const quickAmounts = [
-    100, 200, 300,
-    500, 1000, 1200,
-    1500, 2000, 2500,
-    3000, 4000, 5000
+    100, 200, 300, 500, 1000, 1200, 1500,
+    2000, 2500, 3000, 4000, 5000,
   ];
 
-  const handleQuickAmount = (val) => {
-    setAmount(val);
-  };
-
-  const handleRecharge = () => {
-    if (amount && channel) {
-      navigate("/Afterrecharge");
-    } else {
-      alert("Please enter amount and select a channel.");
-    }
-  };
+  const explanations = [
+    "Please do not modify the deposit amount unauthorized modification of the deposit amount will result in the deposit not being credited.",
+    "Each deposit requires payment to be initiated through this page, please do not save the payment.",
+    "Deposit received within 5 minutes, if not received within 5 minutes, please contact online customer service for processing.",
+    "Due to too many deposit users, please try multiple times to obtain the deposit link or try again after a period of time.",
+  ];
 
   return (
     <div className="recharge-container">
+      {/* Header */}
       <div className="recharge-header">
-       
-        <button className="back-btnR" onClick={() => navigate(-1)}>
-          <ArrowLeft color="black"/>
+        <button
+          className="back-btnR"
+          onClick={() => navigate(-1)}
+          aria-label="Back"
+        >
+          <ArrowLeft />
         </button>
         <h2>Recharge</h2>
       </div>
 
+      {/* Recharge Box */}
       <div className="recharge-box">
+        {/* 1. Recharge Amount */}
         <label className="label1">Recharge Amount</label>
         <input
-          type="text"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          placeholder="₹ Recharge Amount"
+          type="number"
+          placeholder="Recharge Amount"
           className="amount-input"
         />
 
+        {/* 2. Quick Amounts */}
         <div className="quick-amounts">
-          {quickAmounts.map((val) => (
-            <button
-              key={val}
-              className={`quick-btn ${amount === val ? "selected" : ""}`}
-              onClick={() => handleQuickAmount(val)}
-            >
-              {val}
+          {quickAmounts.map((amt) => (
+            <button key={amt} className="quick-btn">
+              ₹{amt}
             </button>
           ))}
         </div>
 
-      
+        {/* 3. Channels */}
         <div className="channels">
-          <button
-            className={`channel-btn ${channel === "Ptm" ? "selected" : ""}`}
-            onClick={() => setChannel("Ptm")}
-          >
-            Ptm
-          </button>
-          <button
-            className={`channel-btn ${channel === "QePay" ? "selected" : ""}`}
-            onClick={() => setChannel("QePay")}
-          >
-            QePay
-          </button>
+          <button className="channel-btn">Paytm</button>
+          <button className="channel-btn">QePay</button>
         </div>
 
+        {/* 4. Explain */}
         <div className="explain-box">
           <h3>Explain</h3>
           <ol>
-            <li>Please do not modify the deposit amount. Unauthorized modification will not be credited.</li>
-            <li>Each deposit requires payment to be initiated through this page. Do not save the payment.</li>
-            <li>Deposit should be received within 5 minutes. If not, contact customer service.</li>
-            <li>Due to too many users, please try multiple times if the link does not work immediately.</li>
+            {explanations.map((text, i) => (
+              <li key={i}>{text}</li>
+            ))}
           </ol>
-        </div>
-
-        <button className="recharge-btn" onClick={handleRecharge}>
-          Recharge Now
-        </button>
+        </div> <button className="recharge-btn">Recharge Now</button>
       </div>
+
+      {/* Recharge Button */}
+     
     </div>
   );
 };

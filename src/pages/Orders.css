@@ -10,43 +10,39 @@
 
 .orders-page {
   padding: 30px;
-  background: linear-gradient(145deg, #ffffff, #f2b4fc);
+  background: l#f5f5f5;
   width: 480px;
-  
+
+
 }
 
 /* Header */
-.orders-header h1 {
-  text-align: center;
-  font-size: 26px;
-  font-weight: 700;
-  color: #341539;
-  margin-bottom: 25px;
-}
+
 
 /* Tabs */
 .tabs {
   display: flex;
   justify-content: center;
   gap: 15px;
+  margin-top: 25px;
   margin-bottom: 25px;
 }
 
 .tabs button {
   padding: 10px 20px;
-  border: 2px solid #341539;
+  border: 2px solid #fb923c;
   border-radius: 25px;
   background: transparent;
   cursor: pointer;
   font-size: 14px;
   font-weight: 600;
-  color: #341539;
+  color: #fcd34d;
   transition: 0.3s;
 }
 
 .tabs button.active,
 .tabs button:hover {
-  background: #341539;
+  background: #fcd34d;
   color: white;
 }
 
@@ -62,7 +58,8 @@
   background: white;
   border-radius: 20px;
   padding: 20px;
-  box-shadow: 0 6px 18px rgba(52, 21, 57, 0.15);
+    border: 1px solid #fb923c;
+  box-shadow: 0 6px 18px #8d8d8d8d;
   transition: transform 0.3s;
 }
 
@@ -90,27 +87,61 @@
 }
 
 .status.normal {
-  background: #e4d1f5;
+  background: #fb923c;
   color: #341539;
 }
 
 .status.finish {
-  background: #f6d1e4;
-  color: #7a003c;
+  background: #000000;
+  color: #ffffff;
 }
 
-.order-body p {
-  margin: 4px 0;
-  font-size: 14px;
-  color: #4b3a52;
+/* Order Card Body */
+.order-body {
+  background: #fff;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
 }
+
+/* Each Row */
+.order-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed #e5e7eb;
+  padding-bottom: 0.5rem;
+}
+
+.order-row:last-child {
+  border-bottom: none;
+}
+
+/* Labels */
+.order-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Values */
+.order-value {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #2563eb;
+}
+
 
 /* Details Button */
 .details-btn {
   display: inline-block;
   margin-top: 15px;
   padding: 10px 16px;
-  background: #341539;
+  background: #fb923c;
   color: white;
   text-decoration: none;
   border-radius: 12px;

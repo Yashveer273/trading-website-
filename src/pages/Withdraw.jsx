@@ -1,135 +1,134 @@
 import React, { useState } from "react";
+import "./Withdraw.css"; // move your CSS here
 import { useNavigate } from "react-router-dom";
-import "./Withdraw.css";
-import { motion, } from "framer-motion";
-import { ArrowLeft,} from "lucide-react";
-
+import { ArrowLeft } from "lucide-react";
 const Withdraw = () => {
-  const navigate = useNavigate();
-  const [amount, setAmount] = useState("");
-  const [password, setPassword] = useState("");
-  const [selectedBank, setSelectedBank] = useState("");
-
-
-  const banks = [
-    "State Bank of India (SBI)",
-    "HDFC Bank",
-    "ICICI Bank",
-    "Axis Bank",
-    "Kotak Mahindra Bank",
-    "Punjab National Bank",
-    "Bank of Baroda",
-    "Canara Bank",
-    "Union Bank of India",
-    "IDFC First Bank"
-  ];
+    const navigate = useNavigate();
+  const [withdrawalAmount, setWithdrawalAmount] = useState("");
+  const [tradePassword, setTradePassword] = useState("");
+  const [bankCard, setBankCard] = useState("");
 
   const withdrawalRecords = [
-    { amount: 7000, status: "RETURNED" },
-    { amount: 500, status: "RETURNED" },
-    { amount: 2000, status: "RETURNED" },
-    { amount: 2000, status: "SUCCESS" },
-    { amount: 389, status: "SUCCESS" },
-    { amount: 483, status: "SUCCESS" }
+    { id: 1, amount: "₹7000.00", status: "RETURNED" },
+    { id: 2, amount: "₹500.00", status: "RETURNED" },
+    { id: 3, amount: "₹2000.00", status: "RETURNED" },
+    { id: 4, amount: "₹2000.00", status: "SUCCESS" },
+    { id: 5, amount: "₹389.00", status: "SUCCESS" },
+    { id: 6, amount: "₹483.00", status: "SUCCESS" },
   ];
 
-  const handleApply = () => {
-    if (amount < 200000 || amount > 999999) {
-      alert("Amount must be between 200000 and 999999");
-      return;
-    }
-    if (!password || !selectedBank) {
-      alert("Please enter password and select bank");
-      return;
-    }
-    navigate("/applywithdrawal");
+  const handleWithdrawal = () => {
+    console.log("Withdrawal request submitted:", {
+      withdrawalAmount,
+      tradePassword,
+      bankCard,
+    });
   };
 
   return (
-    <div className="withdraw-container">
-      {/* Header */}
-      <div className="withdraw-header">
-        <button className="back-btn1" onClick={() => navigate(-1)}><ArrowLeft color="black"/></button>
-        <h2>Withdraw</h2>
+    <div className="app-container">
+      {/* Top Gradient Header */}
+      <div className="header2">
+        <div className="flex items-center space-x-2">
+         <button className="back-btnR" onClick={() => navigate(-1)}>
+                           <ArrowLeft color="black"/>
+                         </button>
+        </div>
+        <h1 className="header-title">Withdraw</h1>
+        <div className="spacer"></div>
       </div>
 
-      <div className="withdraw-box">
-        <p className="balance">
-          Withdrawal Balance: <strong>₹9632.14</strong>
-        </p>
+      {/* Main Content */}
+      <div className="main-content">
+        {/* Withdrawal Form Card */}
+        <div className="card0 withdrawal-form-card">
+          <div className="balance-info">
+            <span className="balance-label">Withdrawal Balance:</span>
+            <span className="balance-amount">₹9632.14</span>
+          </div>
 
-        {/* Amount */}
-        <input
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          placeholder="Withdrawal amount 200000-999999"
-          className="withdraw-input"
-        />
+          <div className="input-group">
+            <input
+              type="number"
+              className="input-field"
+              placeholder="Withdrawal amount 200000-999999"
+              value={withdrawalAmount}
+              onChange={(e) => setWithdrawalAmount(e.target.value)}
+            />
+            <input
+              type="password"
+              className="input-field"
+              placeholder="Trade Password"
+              value={tradePassword}
+              onChange={(e) => setTradePassword(e.target.value)}
+            />
+            <div className="select-wrapper">
+              <select
+                className="select-field"
+                value={bankCard}
+                onChange={(e) => setBankCard(e.target.value)}
+              >
+                <option value="" disabled>
+                  Choose a Bank Card
+                </option>
+                <option value="card1">Bank of America</option>
+                <option value="card2">Chase Bank</option>
+              </select>
+              <div className="select-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    fillRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 
+                    111.414 1.414l-4 4a1 1 0 
+                    01-1.414 0l-4-4a1 1 0 
+                    010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
 
-        {/* Password */}
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Trade Password"
-          className="withdraw-input"
-        />
+          <button onClick={handleWithdrawal} className="apply-button">
+            Apply Withdrawal
+          </button>
 
-        {/* Bank Select */}
-            <div className="bank-select">
-      <label htmlFor="bank" className="bank-label">
-        Choose a Bank:
-      </label>
-      <select
-        id="bank"
-        value={selectedBank}
-        onChange={(e) => setSelectedBank(e.target.value)}
-        className="bank-dropdown"
-      >
-        <option value="">Select Bank</option>
-        {banks.map((bank, index) => (
-          <option key={index} value={bank}>
-            {bank}
-          </option>
-        ))}
-      </select>
-    </div>
+          {/* Explanation */}
+          <div className="explanation">
+            <h2 className="explanation-title">Explain</h2>
+            <ol className="rules-list">
+              <li>Daily marketing from 00:00:00 to 23:59:59.</li>
+              <li>Withdraw an amount between 200000 and 999999.</li>
+              <li>You can only request withdrawal once per day.</li>
+              <li>Withdrawal rate 5%.</li>
+            </ol>
+          </div>
+        </div>
 
-
-        <button className="apply-btn" onClick={handleApply}>
-          Apply Withdrawal
-        </button>
-      </div>
-
-      {/* Explain */}
-      <div className="explain-box">
-        <h3>Explain</h3>
-        <ol>
-          <li>Daily marketing from 00:00:00 to 23:59:59.</li>
-          <li>Withdraw an amount between 200000 and 999999.</li>
-          <li>You can only request withdrawal 1 time per day.</li>
-          <li>Withdrawal rate 5%.</li>
-        </ol>
-      </div>
-
-      {/* Records */}
-      <div className="records-box">
-        <h3>My Withdrawal Records</h3>
-        <ul>
-          {withdrawalRecords.map((rec, idx) => (
-            <motion.li
-              key={idx}
-              className={`record ${rec.status.toLowerCase()}`}
-              initial={{ x: rec.status === "SUCCESS" ? 50 : -50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.4 }}
-            >
-              ₹ {rec.amount.toFixed(2)}
-              <span>{rec.status}</span>
-            </motion.li>
-          ))}
-        </ul>
+        {/* Records */}
+        <div className="card records-card">
+          <h2 className="records-title">My Withdrawal Records</h2>
+          <div className="records-list">
+            {withdrawalRecords.map((record) => (
+              <div key={record.id} className={`record-item ${record.status.toLowerCase()}`}>
+                <div className="record-info">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="record-arrow"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                  <span className="record-amount">{record.amount}</span>
+                </div>
+                <div className={`record-status ${record.status.toLowerCase()}`}>{record.status}</div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

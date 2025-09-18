@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
@@ -8,47 +6,47 @@ const Register = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="register-container">
-      
-      <div className="top-bar">
+    <div id="register-container">
+      <div id="top-bar">
         <img
           src="https://latestlogo.com/wp-content/uploads/2024/02/vivo.png"
           alt="Vivo Logo"
-          className="logo"
+          id="logo"
         />
       </div>
-
+      <img src="/registration.png" alt="Bar Chart Graphic" id="chart-img" />
+      
       {/* Main Card */}
-      <div className="card">
-        <h2 className="register-title">Register</h2>
+      <div id="card">
+        <h2 id="register-title">Register</h2>
 
-        <div className="input-group">
+        <div id="input-group">
           <input type="text" placeholder="Please enter your number" />
         </div>
 
-        <div className="input-group">
+        <div id="input-group">
           <input type="password" placeholder="Please enter your password" />
         </div>
 
-        <div className="input-group">
+        <div id="input-group">
           <input type="text" placeholder="Enter Invitation code" />
         </div>
 
-        {/* Verification Code + Send Button in One Row */}
-        <div className="verification-row">
+        {/* Verification Code + Send Button */}
+        <div id="verification-row">
           <input type="text" placeholder="Enter verification code" />
-          <button className="send-btn">Send</button>
+          <button id="send-btn">Send</button>
         </div>
 
         {/* Register Button */}
-        <button className="register-btn" onClick={() => navigate("/login")}>
+        <button id="login-btn" onClick={() => navigate("/login")}>
           Register
         </button>
 
         {/* Login Redirect */}
-        <p className="login-text">
+        <p id="login-text">
           Already have an account?{" "}
-          <span className="login-link" onClick={() => navigate("/login")}>
+          <span id="login-link" onClick={() => navigate("/login")}>
             Login
           </span>
         </p>

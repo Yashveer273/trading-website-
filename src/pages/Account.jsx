@@ -1,7 +1,14 @@
-import React from "react";
+import React,{useState} from "react";
 import "./Account.css";
 import { useNavigate } from "react-router-dom";
+import {
+  Home,
+  Users,
+  MessageCircle,
+  User,
+  DollarSign,
 
+} from "lucide-react";
 
 import { ArrowLeft, ArrowDownRightFromSquare} from "lucide-react";
 const menuItems = [
@@ -20,7 +27,14 @@ const menuItems = [
 
 export default function AccountPage() {
   const navigate = useNavigate();
-
+const tabs = [
+    { name: "Home", icon: <Home size={22} />, path: "/home" },
+    { name: "invest", icon: <DollarSign size={22} />, path: "/invest" },
+    { name: "Mail", icon: <MessageCircle size={22} />, path: "/mail" },
+    { name: "Teams", icon: <Users size={22} />, path: "/teams" },
+    { name: "Profile", icon: <User size={22} />, path: "/account" },
+  ];
+  const [activeTab, setActiveTab] = useState("Profile");
   return (
     <div className="account-container">
       {/* Header */}
@@ -87,7 +101,21 @@ export default function AccountPage() {
       <button className="logout-btn2">
         
       </button>
-      {/* <div style={{height:"20px"}}></div> */}
+    <div className="bottom-nav">
+        {tabs.map((tab) => (
+          <button
+            key={tab.name}
+            className={`nav-item ${activeTab === tab.name ? "active" : ""}`}
+            onClick={() => {
+              setActiveTab(tab.name);
+              navigate(tab.path);
+            }}
+          >
+            {tab.icon}
+            <span>{tab.name}</span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
