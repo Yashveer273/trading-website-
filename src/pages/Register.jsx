@@ -14,7 +14,7 @@ const Register = () => {
           id="logo"
         />
       </div>
-      <img src="/registration.png" alt="Bar Chart Graphic" id="chart-img" />
+      <img src="https://img.freepik.com/free-vector/hand-drawn-stock-market-concept-with-analysts_23-2149163670.jpg?semt=ais_incoming&w=740&q=80" alt="Bar Chart Graphic" id="chart-img" />
       
       {/* Main Card */}
       <div id="card">

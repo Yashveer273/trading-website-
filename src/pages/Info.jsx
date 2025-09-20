@@ -24,7 +24,8 @@ function Info() {
       <button className="back-btnR" onClick={() => navigate(-1)}>
                   <ArrowLeft color="black"/>
                 </button>
-      <header className="info-header">Setting Info</header>
+      <header className="info-header">Settings Info</header>
+     
 
       <form className="info-card" onSubmit={handleSubmit}>
         {/* Profile Upload */}

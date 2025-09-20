@@ -243,11 +243,15 @@ const App = () => {
                 alignItems: "center",
               }}
             >
-              <img
-                src="https://placehold.co/80x80/ffe4b5/ffcc88?text=💰"
-                alt="Gold coins"
-                style={styles.goldImage}
-              />
+              <div
+                style={{
+                  ...styles.goldImage,
+                  backgroundImage: "url('https://img.freepik.com/free-vector/gradient-gold-coin_78370-4508.jpg?semt=ais_incoming&w=740&q=80')",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              ></div>  
+              
               <div style={styles.rateContainer}>
                 <div style={styles.rateValue}>{team.commissionRate}</div>
                 <div style={styles.rateLabel}>Commission Rate</div>

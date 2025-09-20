@@ -33,14 +33,8 @@ const Mail = () => {
       <header className="mail-header1">
         <div className="header-content1">
           <div className="vivo-logo-container">
-           
-            <div className="vivo-logo">
-              <span className="vivo-text">vivo</span>
-            </div>
             <h1 className="mail-title">Mail</h1>
-          </div>
-
-         
+          </div>         
         </div>
       </header>
 

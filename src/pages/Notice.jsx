@@ -13,7 +13,7 @@ export default function Notice() {
         <button className="back-btnR" onClick={() => navigate(-1)}>
                   <ArrowLeft color="white"/>
                 </button>
-        <h1>notice</h1>
+        <h1>Notice</h1>
       </div>
 
       {/* Notice Content */}

@@ -1,21 +1,13 @@
 import React, { useState } from "react";
-
 import { motion } from "framer-motion";
 import "./Invest.css";
 import { useNavigate } from "react-router-dom";
-import {
-  Home,
-  Users,
-  MessageCircle,
-  User,
-  DollarSign,
-
-} from "lucide-react";
+import { Home, Users, MessageCircle, User, DollarSign } from "lucide-react";
 
 const allPlans = {
   stable: [
     {
-      id: "vip1vivoy100",
+      id: "VIP1 VivoY100",
       img: "https://hamariweb.com/mobiles/LargeImages/6496_01.jpg",
       price: "₹280.00",
       revenue: "42 Days",
@@ -23,7 +15,7 @@ const allPlans = {
       total: "₹9643.2",
     },
     {
-      id: "vip1vivoy02t",
+      id: "VIP1 VivoY02t",
       img: "https://tse1.mm.bing.net/th/id/OIP.n9jd7Sqi6Zd2lcvmiKg5ZQHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
       price: "₹2840.00",
       revenue: "42 Days",
@@ -31,7 +23,7 @@ const allPlans = {
       total: "₹9002.4",
     },
     {
-      id: "vip1welfare",
+      id: "VIP1 Welfare",
       img: "https://asia-exstatic-vivofs.vivo.com/PSee2l50xoirPK7y/1661953062718/d01966f5058d31376339106458fadac2.png",
       price: "₹8840.00",
       revenue: "42 Days",
@@ -39,7 +31,7 @@ const allPlans = {
       total: "₹311875.2",
     },
     {
-      id: "vip4",
+      id: "VIP1 VivoY35",
       img: "https://in-exstatic-vivofs.vivo.com/gdHFRinHEMrj3yPG/1692691698575/c0f180bba865685a87025f8ff514ab13.png",
       price: "₹19440.00",
       revenue: "42 Days",
@@ -49,7 +41,7 @@ const allPlans = {
   ],
   daily: [
     {
-      id: "daily1",
+      id: "VIP1 VivoY15",
       img: "https://tse2.mm.bing.net/th/id/OIP.TAUDPB-olrcDl7BIsgNgBAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
       price: "₹34440.00",
       revenue: "42 Days",
@@ -57,7 +49,7 @@ const allPlans = {
       total: "₹1243972.8",
     },
     {
-      id: "daily2",
+      id: "VIP1 VivoY22",
       img: "https://in-exstatic-vivofs.vivo.com/gdHFRinHEMrj3yPG/1702983367485/d0467cb4099841dae725d707fce48b51.png",
       price: "₹64440.00",
       revenue: "42 Days",
@@ -67,7 +59,7 @@ const allPlans = {
   ],
   welfare: [
     {
-      id: "welfare1",
+      id: "VIP1 VivoY55",
       img: "https://tse2.mm.bing.net/th/id/OIP.Qlf_F8asPv5GssddWns4xAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
       price: "₹144400.00",
       revenue: "42 Days",
@@ -77,10 +69,10 @@ const allPlans = {
   ],
 };
 
-
 const Invest = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Stable Fund");
+
   const tabs = [
     { name: "Home", icon: <Home size={22} />, path: "/home" },
     { name: "invest", icon: <DollarSign size={22} />, path: "/invest" },
@@ -89,6 +81,7 @@ const Invest = () => {
     { name: "Profile", icon: <User size={22} />, path: "/account" },
   ];
   const [activeTab1, setActiveTab1] = useState("invest");
+
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -120,7 +113,6 @@ const Invest = () => {
         {/* Header */}
         <header className="header1">
           <div className="header-content">
-         
             <div className="header-logo">vivo</div>
             <span className="header-title">Invest</span>
           </div>
@@ -161,7 +153,7 @@ const Invest = () => {
 
               {/* Product details */}
               <div className="product-details">
-                <h3 className="product-title">{product.title}</h3>
+                <h3 className="product-title">{product.id}</h3>
                 <p className="product-price">Each Price: {product.price}</p>
 
                 <div className="product-stats">
@@ -181,11 +173,20 @@ const Invest = () => {
               </div>
 
               {/* Buy button */}
-              <button className="buy-button">Buy</button>
+              <button
+                className="buy-button"
+                onClick={() =>
+                  navigate(`/investbuy/${product.id}`, { state: product })
+                }
+              >
+                Buy
+              </button>
             </motion.div>
           ))}
         </div>
       </div>
+
+      {/* Bottom Navigation */}
       <div className="bottom-nav">
         {tabs.map((tab) => (
           <button

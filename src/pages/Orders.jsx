@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import "./Orders.css";
-import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import "./Orders.css";
+
 export default function Orders() {
   const [filter, setFilter] = useState("all");
+  const navigate = useNavigate();
 
+  // Orders Data
   const orders = [
     {
       id: "vip1vivoy100",
@@ -16,54 +18,77 @@ export default function Orders() {
       dailyIncome: "₹886.88",
       totalIncome: "₹4434.40",
       status: "finish",
+      price: "₹482.00",
+      revenue: "5 Days",
+      generatedIncome: "₹4434.40",
+      estimateIncome: "₹4434.40",
+      settlements: [
+        { date: "2025-08-25", amount: "₹886.88" },
+        { date: "2025-08-26", amount: "₹886.88" },
+        { date: "2025-08-27", amount: "₹886.88" },
+        { date: "2025-08-28", amount: "₹886.88" },
+        { date: "2025-08-29", amount: "₹886.88" },
+      ],
     },
     {
-      id: "VIP1VivoY100",
+      id: "vip1vivoy02t",
       title: "VIP1 Vivo Y02t",
       buyShare: 1,
       days: 6,
       dailyIncome: "₹830.79",
       totalIncome: "₹4984.74",
       status: "finish",
+      price: "₹500.00",
+      revenue: "6 Days",
+      generatedIncome: "₹4984.74",
+      estimateIncome: "₹4984.74",
+      settlements: [
+        { date: "2025-08-25", amount: "₹830.79" },
+        { date: "2025-08-26", amount: "₹830.79" },
+      ],
     },
     {
-      id: "VIP1VivoY100",
+      id: "vip1welfare",
       title: "VIP1 Welfare",
       buyShare: 1,
       days: 1,
       dailyIncome: "₹300.00",
       totalIncome: "₹300.00",
       status: "finish",
+      price: "₹0.00",
+      revenue: "1 Day",
+      generatedIncome: "₹300.00",
+      estimateIncome: "₹300.00",
+      settlements: [{ date: "2025-08-25", amount: "₹300.00" }],
     },
     {
-      id: "VIP1VivoY100",
+      id: "buyupgradevip1",
       title: "Buy and Upgrade VIP1",
       buyShare: 1,
       days: 42,
       dailyIncome: "₹229.60",
       totalIncome: "₹4132.80",
       status: "normal",
+      price: "₹1000.00",
+      revenue: "42 Days",
+      generatedIncome: "₹229.60",
+      estimateIncome: "₹4132.80",
+      settlements: [],
     },
   ];
 
+  // Filtering
   const filteredOrders =
     filter === "all" ? orders : orders.filter((o) => o.status === filter);
-  const navigate = useNavigate();
+
   return (
     <div className="orders-page">
       {/* Header */}
-      <header className="mail-header">
-        <div className="header-content">
-          <div className="vivo-logo-container">
-            <button className="back-btnR" onClick={() => navigate(-1)}>
-              <ArrowLeft color="white" />
-            </button>
-            <div className="vivo-logo">
-              <span className="vivo-text">vivo</span>
-            </div>
-            <h1 className="mail-title">Mail</h1>
-          </div>
-        </div>
+      <header className="orders-header">
+        <button className="back-btnR" onClick={() => navigate(-1)}>
+          <ArrowLeft color="white" />
+        </button>
+        <h1 className="orders-title">Orders</h1>
       </header>
 
       {/* Filter Tabs */}
@@ -126,22 +151,11 @@ export default function Orders() {
             </div>
 
             {/* Details Button */}
-            <Link to={`/${order.id}`} state={{ order:{
-    id: 1,
-    title: "VIP1 Vivo Y100",
-    price: "₹482.00",
-    revenue: "5 Days",
-    buyShare: 1,
-    generatedIncome: "₹4434.40",
-    estimateIncome: "₹4434.40",
-    settlements: [
-      { date: "2025-08-25", amount: "₹886.88" },
-      { date: "2025-08-26", amount: "₹886.88" },
-      { date: "2025-08-27", amount: "₹886.88" },
-      { date: "2025-08-28", amount: "₹886.88" },
-      { date: "2025-08-29", amount: "₹886.88" },
-    ],
-  } }} className="details-btn">
+            <Link
+              to="/orderdetails"
+              state={{ order }}
+              className="details-btn"
+            >
               Details →
             </Link>
           </motion.div>
@@ -150,3 +164,4 @@ export default function Orders() {
     </div>
   );
 }
+

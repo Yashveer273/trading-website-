@@ -3,15 +3,11 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #f9fafb;
-  font-family: Inter, sans-serif;  display: flex;
-
- 
-
-  
+  background: linear-gradient(135deg, #ffffff, rgb(253, 253, 204), rgb(248, 248, 160));
+  animation: bgFlow 10s infinite alternate;
+  font-family: Inter, sans-serif;  display: flex;  
 }
 
-/* --- Header --- */
 .mail-header1 {
   position: relative;
   padding: 1.5rem;
@@ -28,7 +24,7 @@
   z-index: 10;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .vivo-logo-container {

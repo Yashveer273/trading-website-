@@ -41,7 +41,7 @@ function Password() {
             className="toggle-visibility"
             onClick={() => setShowOld(!showOld)}
           >
-            {showOld ? "🙈" : "👁️"}
+            
           </span>
         </div>
 
@@ -59,7 +59,7 @@ function Password() {
             className="toggle-visibility"
             onClick={() => setShowNew(!showNew)}
           >
-            {showNew ? "🙈" : "👁️"}
+           
           </span>
         </div>
 

@@ -6,7 +6,7 @@ const prizes = [
   { name: 'Smartphone', value: '₹1000', image: 'https://m.india1188.com/public/uploads/lottery_prizes/_20fd1d09b06c0b652fa329fcc5ec1511.png' },
   { name: 'Laptop', value: '₹5000', image: 'https://m.india1188.com/public/uploads/lottery_prizes/_fc0edc264131262ceda0528059593a2a.png' },
   { name: 'Gaming Console', value: '₹10,000', image: "https://m.india1188.com/public/uploads/lottery_prizes/_4e9f1cf5df7d938069e21b089e7780cc.png" },
-  { name: 'Jackpot!', value: '₹10,00,000', image: 'https://images.unsplash.com/photo-1579782522770-349079f85469?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+  { name: 'Jackpot!', value: '₹10,00,000', image: 'https://img.freepik.com/premium-vector/jackpot-slots-icons-slot-sign-machine-night-vegas-vector-illustration_3482-11801.jpg?semt=ais_incoming&w=740&q=80' },
 ];
 
 const mockWinnings = [

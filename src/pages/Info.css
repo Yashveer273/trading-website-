@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600&display=swap');
 
 * {
@@ -8,31 +9,57 @@
 }
 
 .info-container {
-  background: linear-gradient(to bottom #f6baff, #ffffff);
+  background: linear-gradient(135deg, #ffffff, rgb(253, 253, 204), rgb(248, 248, 160));
+  animation: bgFlow 10s infinite alternate;
   width: 480px;
   height: 100vh;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  padding: 20px;
+  margin: 0 auto;
 }
 
+/* Header */
 .info-header {
-  font-size: 22px;
-  font-weight: 600;
-  margin: 20px 0;
-  color: #341439;
-  text-align: center;
-  animation: slideDown 0.6s ease;
+  width: 100%;
+  background: #fbbf24; 
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-bottom: 1px solid #eab308;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
+.info-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+  text-align: center;
+  flex: 1;
+}
+
+/* Back Button */
+.back-btnR {
+  position: absolute;
+  left: 16px;
+  background: transparent;
+  border: none;
+  color: #000;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Info Card */
 .info-card {
   width: 100%;
   max-width: 480px;
   background: #fff;
   border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 8px 25px rgba(52, 20, 57, 0.15);
+  margin-top: 20px;
+  box-shadow: 0 8px 25px rgba(202, 138, 4, 0.25);
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -52,8 +79,8 @@
   height: 80px;
   border-radius: 50%;
   object-fit: cover;
+  border: 3px solid #f59e0b;
   transition: transform 0.3s ease;
-  border: 3px solid #341439;
 }
 .profile-pic:hover {
   transform: scale(1.05);
@@ -66,7 +93,7 @@
 .change-text {
   margin-top: 8px;
   font-weight: 600;
-  color: #341439;
+  color: #b45309;
 }
 
 .recommend-text {
@@ -78,27 +105,26 @@
 .input-label {
   font-weight: 500;
   font-size: 14px;
-  color: #341439;
+  color: #92400e;
 }
 
 .info-input {
   padding: 10px 14px;
-  border: 2px solid #ddd;
+  border: 2px solid #fcd34d;
   border-radius: 10px;
   font-size: 14px;
   outline: none;
-  transition: all 0.3s ease;
 }
 .info-input:focus {
-  border-color: #341439;
-  box-shadow: 0 0 8px rgba(52, 20, 57, 0.2);
+  border-color: #f59e0b;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
 }
 
 /* Save Button */
 .save-btn {
   margin-top: 10px;
   padding: 12px;
-  background: #341439;
+  background: #f59e0b;
   color: #fff;
   border: none;
   border-radius: 12px;
@@ -108,7 +134,7 @@
   transition: transform 0.3s ease, background 0.3s ease;
 }
 .save-btn:hover {
-  background: #4a1d5c;
+  background: #d97706;
   transform: translateY(-2px);
 }
 

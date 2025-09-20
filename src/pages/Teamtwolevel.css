@@ -9,14 +9,14 @@
 
 .teamtwo-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #ffffff, #f3e6ff, #e8d6ff);
+  background: linear-gradient(135deg, #ffffff, rgb(253, 253, 204), rgb(248, 248, 160));
   animation: bgFlow 10s infinite alternate;
   padding: 20px;
 }
 
 @keyframes bgFlow {
-  0% { background: linear-gradient(135deg, #ffffff, #f3e6ff, #e8d6ff); }
-  100% { background: linear-gradient(135deg, #ffffff, #e8d6ff, #d1b3ff); }
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 
 /* Navbar */
@@ -25,7 +25,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px 25px;
-  background: #341539;
+  background: #f59e0b;   
   color: white;
   border-radius: 12px;
   margin-bottom: 25px;
@@ -52,7 +52,7 @@
 }
 
 .navbar-right button:hover {
-  color: #c9a8ff;
+  color: #fffacd;   
 }
 
 /* Header */
@@ -63,7 +63,7 @@
 
 .team-header h3 {
   font-size: 18px;
-  color: #341539;
+  color: #4a3c00;  
 }
 
 .team-header span {
@@ -84,15 +84,10 @@
   margin-bottom: 15px;
   font-size: 20px;
   text-align: center;
-  color: #341539;
+  color: #4a3c00;   
 }
 
-.members-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
+/* Member Cards */
 .member-card {
   display: flex;
   justify-content: space-between;
@@ -106,12 +101,8 @@
   animation: slideIn 0.6s forwards;
 }
 
-.member-card:nth-child(even) {
-  animation-delay: 0.2s;
-}
-.member-card:nth-child(odd) {
-  animation-delay: 0.4s;
-}
+.member-card:nth-child(even) { animation-delay: 0.2s; }
+.member-card:nth-child(odd)  { animation-delay: 0.4s; }
 
 @keyframes slideIn {
   to {
@@ -128,7 +119,7 @@
 .member-id {
   font-weight: 600;
   font-size: 16px;
-  color: #341539;
+  color: #4a3c00; 
 }
 
 .member-date {
@@ -165,3 +156,4 @@
   color: #555;
   font-size: 14px;
 }
+

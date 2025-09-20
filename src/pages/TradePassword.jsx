@@ -56,7 +56,6 @@ function TradePassword() {
               className="toggle-visibility"
               onClick={() => setShowTradePass(!showTradePass)}
             >
-              {showTradePass ? "🙈" : "👁️"}
             </span>
           </div>
 

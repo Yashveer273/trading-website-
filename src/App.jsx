@@ -6,8 +6,7 @@ import Splash from "./pages/Splash";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import HomePage from "./pages/Home";
-import Recharge from "./pages/Recharge";      
-
+import Recharge from "./pages/Recharge";
 import Withdraw from "./pages/Withdraw";
 import Teams from "./pages/Teams";
 import Teamonelevel from "./pages/Teamonelevel";
@@ -24,13 +23,11 @@ import HelpCenter from "./pages/HelpCenter";
 import Info from "./pages/Info";
 import TradePassword from "./pages/TradePassword";
 import Password from "./pages/Password";
-import VIP1VivoY100 from "./pages/VIP1VivoY100";
-import VIP1VivoY02t from "./pages/VIP1VivoY02t";
-import VIP1Welfare from "./pages/VIP1Welfare";
-import BuyUpgradeVIP1 from "./pages/BuyUpgradeVIP1";
 import BankCard from "./pages/BankCard";
 import Invest from "./pages/Invest";
 import LuckyDraw from "./pages/LuckyDraw";
+import OrderDetails from "./pages/OrderDetails";
+import InvestBuy from "./pages/InvestBuy";
 
 function App() {
   return (
@@ -42,7 +39,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/recharge" element={<Recharge />} />
-        
         <Route path="/withdraw" element={<Withdraw />} />
         <Route path="/teams" element={<Teams />} />
         <Route path="/teamonelevel" element={<Teamonelevel />} />
@@ -63,12 +59,10 @@ function App() {
         <Route path="/messages" element={<Mail />} />
         <Route path="/invest" element={<Invest />} />
         <Route path="/luckydraw" element={<LuckyDraw />} />
+        <Route path="/investbuy/:id" element={<InvestBuy />} />
 
-        {/* Detail Pages */}
-        <Route path="/vip1vivoy100" element={<VIP1VivoY100 />} />
-        <Route path="/vip1vivoy02t" element={<VIP1VivoY02t />} />
-        <Route path="/vip1welfare" element={<VIP1Welfare />} />
-        <Route path="/buyupgradevip1" element={<BuyUpgradeVIP1 />} />
+        {/* Shared Order Details Page */}
+        <Route path="/orderdetails" element={<OrderDetails />} />
 
         {/* Placeholder Routes */}
         <Route path="/search" element={<div>Search Page</div>} />
@@ -81,3 +75,4 @@ function App() {
 }
 
 export default App;
+

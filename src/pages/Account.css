@@ -3,7 +3,8 @@
 body {
   margin: 0;
   font-family: "Instrument Sans", sans-serif;
-  background: #fff;
+  background: linear-gradient(135deg, #ffffff, rgb(253, 253, 204), rgb(248, 248, 160));
+  animation: bgFlow 10s infinite alternate;
   color: #333;
 }
 
@@ -38,7 +39,7 @@ body {
   margin: 0 16px 1px 16px ;
 padding: 0 16px 16px 16px ;
   border-radius: 14px;
-    background: linear-gradient(to right, #fb923c, #fcd34d);
+    background: linear-gradient(to right, #fcc292, #fcd34d);
    border: 1px solid #fb923c;
   box-shadow: 0 4px 10px rgba(0,0,0,0.06);
   animation: slideUp 0.7s ease;
@@ -74,7 +75,7 @@ padding: 0 16px 16px 16px ;
   margin: 20px 16px;
   padding: 12px;
   border-radius: 12px;
-    background: linear-gradient(to right, #fb923c, #fcd34d);
+    background: linear-gradient(to right, #fcc292, #fcd34d);
 
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   animation: fadeIn 1s ease;
@@ -95,7 +96,8 @@ padding: 0 16px 16px 16px ;
 .menu-list {
   flex: 1;
   margin: 16px;
-   background: linear-gradient(to right, #fb923c, #fcd34d);
+  margin-bottom: 55px;
+   background: linear-gradient(to right, #fcc292, #fcd34d);
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
  border: 1px solid #fb923c;
@@ -111,7 +113,7 @@ padding: 0 16px 16px 16px ;
 }
 
 .menu-item:hover {
-  background: #e1dcfc;
+  background: rgb(255, 255, 181);
   border-radius: 12px;
 }
 
@@ -187,7 +189,3 @@ padding: 0 16px 16px 16px ;
   transition: 0.3s ease;
 }
 
-.menu-item:hover .arrow {
-  background: #c7bdf8;
-  color: white;
-}

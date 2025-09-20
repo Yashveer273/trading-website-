@@ -1,41 +1,51 @@
 
 .vip-page {
   min-height: 100vh;
-  width: 100vw;
-  background: #f3c6fa;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #ffffff, rgb(253, 253, 204), rgb(248, 248, 160));
+  animation: bgFlow 10s infinite alternate;
   color: #341439;
   padding: 12px;
   font-family: "Instrument sans", sans-serif;
   overflow-x: hidden;
+  padding-top: 60px;
 }
 
 @media (min-width: 480px) {
   .vip-page {
     max-width: 480px;
     margin: auto;
-    border: 1px solid #341439;
-    border-radius: 12px;
   }
 }
 
 /* Header */
 .vip-header {
+  width: 100%;
+  max-width: 480px;
   display: flex;
   align-items: center;
-  margin-bottom: 16px;
-  position: sticky;
+  justify-content: center;
+  position: fixed;
   top: 0;
-  background: #f3c6fa;
-  padding: 10px 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background: #fde38d;
+  padding: 12px;
+  box-sizing: border-box;
+  color: black;
   z-index: 10;
 }
 
 .back-btn {
+  position: absolute;
+  left: 12px;
   background: transparent;
   border: none;
-  color: #341439;
+  color: black;
   font-size: 24px;
-  margin-right: 12px;
   cursor: pointer;
   transition: transform 0.2s;
 }
@@ -46,6 +56,8 @@
 .vip-title {
   font-size: 20px;
   font-weight: bold;
+  margin: 0;
+  text-align: center;
 }
 
 /* VIP Cards */
@@ -57,15 +69,15 @@
 
 .vip-card {
   background: #ffffff;
-  border: 2px solid #341439;
-  border-radius: 14px;
-  padding: 14px;
-  box-shadow: 0px 4px 10px rgba(52, 21, 147, 0.15);
+  border: 1px solid rgb(255, 255, 161);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgb(245, 245, 165);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .vip-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0px 6px 16px #341439;
+  box-shadow: 0px 6px 16px rgb(255, 204, 110);
 }
 
 /* Responsive text scaling */

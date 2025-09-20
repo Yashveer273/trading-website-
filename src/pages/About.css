@@ -2,7 +2,8 @@
 
 .about-page {
   font-family: "Instrument Sans", sans-serif;
-  background: linear-gradient(-45deg, #ffffff, #f7f7ff, #ffffff, #f0f0f7);
+  background: linear-gradient(135deg, #ffffff, rgb(253, 253, 204), rgb(248, 248, 160));
+  animation: bgFlow 10s infinite alternate;
   background-size: 400% 400%;
   max-width: 480px;
   margin: 0 auto;
@@ -27,13 +28,9 @@
 .back-btn {
   background: none;
   border: none;
-  color: #341439;
+  color: black;
   cursor: pointer;
   margin-right: 10px;
-}
-
-.back-btn:hover {
-  transform: scale(1.1);
 }
 
 .header h1 {
@@ -50,7 +47,7 @@
   margin-bottom: 20px;
   box-shadow: 0 0 15px rgba(52, 20, 57, 0.2);
   transition: transform 0.3s, box-shadow 0.3s;
-  border: 1px solid black;
+  border: 1px solid white;
 }
 
 .info-card:hover {

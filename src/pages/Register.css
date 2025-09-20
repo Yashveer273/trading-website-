@@ -1,4 +1,4 @@
-/* --- Container --- */
+
 #register-container {
   display: flex;
   flex-direction: column;
@@ -10,7 +10,6 @@
   position: relative;
 }
 
-/* --- Curved Header with Logo --- */
 #top-bar {
   position: relative;
   width: 100%;
@@ -38,7 +37,7 @@
   z-index: 3;
 }
 
-/* Decorative Image Below Header */
+
 #chart-img {
   width: 120px;
   margin: 30px 0 20px 0;
