@@ -2,7 +2,8 @@
 
 .bill-page {
   font-family: "Instrument Sans", sans-serif;
-  width: 480px;      
+  width: 100;
+  max-width: 500px;      
   margin: 0 auto;
   min-height: 100vh;
   background: linear-gradient(135deg, #ffffff, rgb(253, 253, 204), rgb(248, 248, 160));

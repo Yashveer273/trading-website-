@@ -20,7 +20,9 @@ body, html {
   gap: 1rem;
   background: linear-gradient(135deg, #ffffff, rgb(253, 253, 204), rgb(248, 248, 160));
   animation: bgFlow 10s infinite alternate;
-
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .flex-center {
