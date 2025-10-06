@@ -1,25 +1,60 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Home,
   DollarSign,
-  MessageCircle,
+
   User,
   Gift,
   Users,
-  MessageSquare,
+  
   ShoppingBag,
   ArrowRight,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./Home.css";
+import CryptoJS from "crypto-js";
+import Cookies from "js-cookie";
+import { getUserInfo, SECRET_KEY } from "../api";
 
+const encryptedUser = Cookies.get("tredingWebUser");
 const HomePage = () => {
   const [activeTab, setActiveTab] = useState("Home");
+   const [UserData, setUserData] = useState({});
   const [copied, setCopied] = useState(false);
+  const [balance, setBalance] = useState("0");
   const navigate = useNavigate();
+useEffect(() => {
+  const fetchUser = async () => {
+    if (encryptedUser) {
+      const bytes = CryptoJS.AES.decrypt(encryptedUser, SECRET_KEY);
+      const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+      const UserData = JSON.parse(decrypted);
+
+      if (!UserData?._id) {
+        navigate("/login");
+        return;
+      }
+
+      setUserData(UserData);
+
+      try {
+        const res = await getUserInfo(UserData._id); // fetch user info
+      console.log(UserData._id);
+        // alert(UserData._id);
+        setBalance(res.data.users.balance || "0");
+      } catch (err) {
+        console.error("Failed to fetch user info:", err);
+      }
+    } else {
+      navigate("/login");
+    }
+  };
+
+  fetchUser();
+}, []); // ✅ empty array ensures it runs only once
 
   const copyLink = () => {
-    const link = "https://m.india1188.com/?invitation_code=390EA";
+    const link = `https://m.india1188.com/?invitation_code=${UserData.referralCode}`;
     navigator.clipboard.writeText(link).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -29,7 +64,7 @@ const HomePage = () => {
   const tabs = [
     { name: "Home", icon: <Home size={22} />, path: "/home" },
     { name: "invest", icon: <DollarSign size={22} />, path: "/invest" },
-    { name: "Mail", icon: <MessageCircle size={22} />, path: "/mail" },
+ 
     { name: "Teams", icon: <Users size={22} />, path: "/teams" },
     { name: "Profile", icon: <User size={22} />, path: "/account" },
   ];
@@ -65,13 +100,13 @@ const HomePage = () => {
               <div>
                 <p className="label">Your Balance</p>
                 <p className="balance">
-                  <span className="rupee">₹</span>9821.14
+                  <span className="rupee"></span>₹{balance}
                 </p>
               </div>
               <Gift size={80} className="gift-icon" />
             </div>
             <div className="button-row">
-              <button onClick={() => navigate("/recharge")} className="card-button">Recharge</button>
+               <button onClick={() => navigate("/recharge")} className="card-button">Recharge</button>
               <button onClick={() => navigate("/withdraw")} className="card-button">Withdraw</button>
             </div>
           </div>
@@ -82,10 +117,7 @@ const HomePage = () => {
               <Users size={40} className="grid-icon" />
               <span>Teams</span>
             </div>
-            <div className="grid-item" onClick={() => navigate("/mail")}>
-              <MessageSquare size={40} className="grid-icon" />
-              <span>Message</span>
-            </div>
+            
             <div className="grid-item" onClick={() => navigate("/orders")}>
               <ShoppingBag size={40} className="grid-icon" />
               <span>Orders</span>
@@ -113,7 +145,7 @@ const HomePage = () => {
               <div>
                 <p className="label">Promotional Links</p>
                 <p className="link-text">
-                  https://m.india1188.com/?invitation_code=390EA
+                  https://m.india1188.com/?invitation_code={UserData.referralCode}
                 </p>
               </div>
             </div>

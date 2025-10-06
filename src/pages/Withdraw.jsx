@@ -1,132 +1,215 @@
-import React, { useState } from "react";
-import "./Withdraw.css"; // move your CSS here
+import React, { useEffect, useState } from "react";
+import "./Withdraw.css";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+
+import {
+  addBankDetails,
+  GetBankDetails,
+  SECRET_KEY,
+  updateBankDetails,
+  withdrawReq,
+} from "../api";
+import CryptoJS from "crypto-js";
+import Cookies from "js-cookie";
+
+const encryptedUser = Cookies.get("tredingWebUser");
+
 const Withdraw = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const [bankDetails, setBankDetails] = useState(null);
+  const [hasBankDetails, setHasBankDetails] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+  const [isEditing, setIsEditing] = useState(false); // ✅ edit mode
+
+  const [userId, setUserId] = useState("");
+  const [holderName, setHolderName] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [ifscCode, setIfscCode] = useState("");
+  const [bankName, setBankName] = useState("");
+  const [upiId, setUpiId] = useState("");
+
+  const [tradePassword, setTradePassword] = useState(""); // For withdrawal
+  const [BUpTRadePassword, setBUpTRadePassword] = useState(""); // For bank update
   const [withdrawalAmount, setWithdrawalAmount] = useState("");
-  const [tradePassword, setTradePassword] = useState("");
-  const [bankCard, setBankCard] = useState("");
+  const [balance, setBalance] = useState("0");
+  const [responseMessage, setResponseMessage] = useState(null);
 
-  const withdrawalRecords = [
-    { id: 1, amount: "₹7000.00", status: "RETURNED" },
-    { id: 2, amount: "₹500.00", status: "RETURNED" },
-    { id: 3, amount: "₹2000.00", status: "RETURNED" },
-    { id: 4, amount: "₹2000.00", status: "SUCCESS" },
-    { id: 5, amount: "₹389.00", status: "SUCCESS" },
-    { id: 6, amount: "₹483.00", status: "SUCCESS" },
-  ];
+  const getUserId = async () => {
+    if (encryptedUser) {
+      const bytes = CryptoJS.AES.decrypt(encryptedUser, SECRET_KEY);
+      const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+      const UserData = JSON.parse(decrypted);
+      if (!UserData?._id) navigate("/login");
+      else {
+        setUserId(UserData._id);
+        return UserData._id;
+      }
+    }
+    navigate("/login");
+  };
 
-  const handleWithdrawal = () => {
-    console.log("Withdrawal request submitted:", {
-      withdrawalAmount,
-      tradePassword,
-      bankCard,
-    });
+  const fetchBankDetails = async () => {
+    try {
+      const id = await getUserId();
+      const res = await GetBankDetails(id);
+      if (res.data.bankDetails && Object.keys(res.data.bankDetails).length > 0) {
+        setHasBankDetails(true);
+        setBankDetails(res.data.bankDetails);
+        setHolderName(res.data.bankDetails.holderName || "");
+        setAccountNumber(res.data.bankDetails.accountNumber || "");
+        setIfscCode(res.data.bankDetails.ifscCode || "");
+        setBankName(res.data.bankDetails.bankName || "");
+        setUpiId(res.data.bankDetails.upiId || "");
+        setBalance(res.data.balance || "0");
+      } else {
+        setHasBankDetails(false);
+      }
+    } catch (err) {
+      setResponseMessage({
+        type: "error",
+        message: err.response?.data?.message || "Failed to fetch bank details",
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchBankDetails();
+  }, []);
+
+  const handleAddBank = async () => {
+    if (!holderName || !accountNumber || !ifscCode || !bankName) return alert("Fill all required fields");
+    try {
+      const res = await addBankDetails({ userId, holderName, accountNumber, ifscCode, bankName, upiId });
+      setHasBankDetails(true);
+      setBankDetails(res.data.bankDetails);
+      setIsAdding(false);
+      setResponseMessage({ type: "success", message: res.data.message });
+    } catch (err) {
+      setResponseMessage({ type: "error", message: err.response?.data?.message || "Failed to add bank details" });
+    }
+  };
+
+  const handleUpdateBank = async () => {
+    if (!BUpTRadePassword) return alert("Enter trade password to update bank details");
+    try {
+      const res = await updateBankDetails({
+        userId,
+        tradePassword: BUpTRadePassword,
+        bankDetails: { holderName, accountNumber, ifscCode, bankName, upiId },
+      });
+      setBankDetails(res.data.bankDetails);
+      setResponseMessage({ type: "success", message: res.data.message });
+      setBUpTRadePassword("");
+      setIsEditing(false); // ✅ exit edit mode
+    } catch (err) {
+      setResponseMessage({ type: "error", message: err.response?.data?.message || "Bank update failed" });
+    }
+  };
+
+  const handleWithdrawal = async () => {
+    if (!withdrawalAmount || !tradePassword) return alert("Enter amount and trade password");
+    try {
+      const res = await withdrawReq({ userId, tradePassword, amount: withdrawalAmount, bankDetails });
+      setBalance((prev) => prev - withdrawalAmount);
+      setTradePassword("");
+      setWithdrawalAmount("");
+      setResponseMessage({ type: "success", message: res.data.message });
+    } catch (err) {
+      setResponseMessage({ type: "error", message: err.response?.data?.message || "Withdrawal failed" });
+    }
   };
 
   return (
     <div className="app-container">
-      {/* Top Gradient Header */}
       <div className="header2">
-        <div className="flex items-center space-x-2">
-         <button className="back-btnR" onClick={() => navigate(-1)}>
-                           <ArrowLeft color="black"/>
-                         </button>
-        </div>
+        <button className="back-btnR" onClick={() => navigate(-1)}>
+          <ArrowLeft color="black" />
+        </button>
         <h1 className="header-title">Withdraw</h1>
         <div className="spacer"></div>
       </div>
 
-      {/* Main Content */}
       <div className="main-content">
-        {/* Withdrawal Form Card */}
         <div className="card0 withdrawal-form-card">
           <div className="balance-info">
             <span className="balance-label">Withdrawal Balance:</span>
-            <span className="balance-amount">₹9632.14</span>
+            <span className="balance-amount">₹ {balance || 0}</span>
           </div>
 
           <div className="input-group">
-            <input
-              type="number"
-              className="input-field"
-              placeholder="Withdrawal amount 200000-999999"
-              value={withdrawalAmount}
-              onChange={(e) => setWithdrawalAmount(e.target.value)}
-            />
-            <input
-              type="password"
-              className="input-field"
-              placeholder="Trade Password"
-              value={tradePassword}
-              onChange={(e) => setTradePassword(e.target.value)}
-            />
-            <div className="select-wrapper">
-              <select
-                className="select-field"
-                value={bankCard}
-                onChange={(e) => setBankCard(e.target.value)}
-              >
-                <option value="" disabled>
-                  Choose a Bank Card
-                </option>
-                <option value="card1">Bank of America</option>
-                <option value="card2">Chase Bank</option>
-              </select>
-              <div className="select-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                  <path
-                    fillRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 
-                    111.414 1.414l-4 4a1 1 0 
-                    01-1.414 0l-4-4a1 1 0 
-                    010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+            {responseMessage && <div className={`response-card ${responseMessage.type}`}>{responseMessage.message}</div>}
+
+            {/* Bank Details */}
+            {!hasBankDetails ? (
+              <>
+                {!isAdding ? (
+                  <button className="apply-button" onClick={() => setIsAdding(true)}>
+                    + Add Bank Details
+                  </button>
+                ) : (
+                  <>
+                    <input type="text" className="input-field" placeholder="Account Holder Name" value={holderName} onChange={(e) => setHolderName(e.target.value)} />
+                    <input type="number" className="input-field" placeholder="Account Number" value={accountNumber} onChange={(e) => setAccountNumber(e.target.value)} />
+                    <input type="text" className="input-field" placeholder="IFSC Code" value={ifscCode} onChange={(e) => setIfscCode(e.target.value)} />
+                    <input type="text" className="input-field" placeholder="Bank Name" value={bankName} onChange={(e) => setBankName(e.target.value)} />
+                    <input type="text" className="input-field" placeholder="UPI ID (Optional)" value={upiId} onChange={(e) => setUpiId(e.target.value)} />
+                    <div className="btn-group">
+                      <button onClick={handleAddBank} className="apply-button">Save</button>
+                      <button onClick={() => setIsAdding(false)} className="cancel-button">Cancel</button>
+                    </div>
+                  </>
+                )}
+              </>
+            ) : (
+              <div>
+                <span className="balance-label">My Bank Details</span>
+                {isEditing ? (
+                  <>
+                    <input type="text" className="input-field" value={holderName} onChange={(e) => setHolderName(e.target.value)} placeholder="Holder Name" />
+                    <input type="number" className="input-field" value={accountNumber} onChange={(e) => setAccountNumber(e.target.value)} placeholder="Account Number" />
+                    <input type="text" className="input-field" value={ifscCode} onChange={(e) => setIfscCode(e.target.value)} placeholder="IFSC Code" />
+                    <input type="text" className="input-field" value={bankName} onChange={(e) => setBankName(e.target.value)} placeholder="Bank Name" />
+                    <input type="text" className="input-field" value={upiId} onChange={(e) => setUpiId(e.target.value)} placeholder="UPI ID (Optional)" />
+                    <input type="password" className="input-field mt-2" placeholder="Trade Password" value={BUpTRadePassword} onChange={(e) => setBUpTRadePassword(e.target.value)} />
+                    <div className="btn-group">
+                      <button onClick={handleUpdateBank} className="apply-button">Save</button>
+                      <button onClick={() => setIsEditing(false)} className="cancel-button">Cancel</button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p><b>Holder:</b> {bankDetails.holderName}</p>
+                    <p><b>Account:</b> {bankDetails.accountNumber}</p>
+                    <p><b>IFSC:</b> {bankDetails.ifscCode}</p>
+                    <p><b>Bank:</b> {bankDetails.bankName}</p>
+                    {bankDetails.upiId && <p><b>UPI:</b> {bankDetails.upiId}</p>}
+                    <button onClick={() => setIsEditing(true)} className="apply-button">Edit</button>
+                  </>
+                )}
               </div>
+            )}
+
+            {/* Withdrawal */}
+            {hasBankDetails && (
+              <>
+                <input type="number" className="input-field" placeholder="Withdrawal Amount" value={withdrawalAmount} onChange={(e) => setWithdrawalAmount(e.target.value)} />
+                <input type="password" className="input-field" placeholder="Trade Password" value={tradePassword} onChange={(e) => setTradePassword(e.target.value)} />
+                <button onClick={handleWithdrawal} className="apply-button">Apply Withdrawal</button>
+              </>
+            )}
+
+            {/* Rules */}
+            <div className="explanation">
+              <h2 className="explanation-title">Explain</h2>
+              <ol className="rules-list">
+                <li>Daily marketing from 00:00:00 to 23:59:59.</li>
+                <li>Withdraw amount between 200000 and 999999.</li>
+                <li>Only one withdrawal per day.</li>
+                <li>Withdrawal rate 5%.</li>
+              </ol>
             </div>
-          </div>
-
-          <button onClick={handleWithdrawal} className="apply-button">
-            Apply Withdrawal
-          </button>
-
-          {/* Explanation */}
-          <div className="explanation">
-            <h2 className="explanation-title">Explain</h2>
-            <ol className="rules-list">
-              <li>Daily marketing from 00:00:00 to 23:59:59.</li>
-              <li>Withdraw an amount between 200000 and 999999.</li>
-              <li>You can only request withdrawal once per day.</li>
-              <li>Withdrawal rate 5%.</li>
-            </ol>
-          </div>
-        </div>
-
-        {/* Records */}
-        <div className="card records-card">
-          <h2 className="records-title">My Withdrawal Records</h2>
-          <div className="records-list">
-            {withdrawalRecords.map((record) => (
-              <div key={record.id} className={`record-item ${record.status.toLowerCase()}`}>
-                <div className="record-info">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="record-arrow"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                  </svg>
-                  <span className="record-amount">{record.amount}</span>
-                </div>
-                <div className={`record-status ${record.status.toLowerCase()}`}>{record.status}</div>
-              </div>
-            ))}
           </div>
         </div>
       </div>

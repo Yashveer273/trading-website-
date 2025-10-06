@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Splash.css";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie"; // <-- install with: npm install js-cookie
 
 function Splash() {
   const navigate = useNavigate();
+
+  // Auto-check for token in cookies
+  useEffect(() => {
+    const token = Cookies.get("tredingWeb");
+    if (token) {
+      navigate("/home");
+    }
+  }, [navigate]);
 
   const handleContinue = () => {
     navigate("/register");
@@ -20,7 +29,11 @@ function Splash() {
         />
 
         {/* Title */}
-        <h1 className="title1">Building Wealth<br></br> Together</h1>
+        <h1 className="title1">
+          Building Wealth
+          <br />
+          Together
+        </h1>
 
         {/* Subtitle */}
         <p className="subtitle">

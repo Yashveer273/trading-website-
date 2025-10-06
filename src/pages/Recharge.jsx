@@ -20,24 +20,19 @@ const Recharge = () => {
 
   // state for input amount & selected channel
   const [amount, setAmount] = useState("");
-  const [selectedChannel, setSelectedChannel] = useState("");
+
 
   const handleQuickAmount = (amt) => {
     setAmount(amt); 
   };
 
   const handleRecharge = () => {
-    if (!amount || !selectedChannel) {
+    if (!amount ) {
       alert("Please select an amount and a channel.");
       return;
     }
-
-    
-    if (selectedChannel === "Paytm") {
-      window.open("https://paytm.com", "_blank"); 
-    } else if (selectedChannel === "QePay") {
-      window.open("https://www.qepay.in", "_blank"); 
-    }
+navigate("/pay",{ state: amount })
+  
   };
 
   return (
@@ -78,21 +73,8 @@ const Recharge = () => {
           ))}
         </div>
 
-        {/* 3. Channels */}
-        <div className="channels">
-          <button
-            className={`channel-btn ${selectedChannel === "Paytm" ? "selected" : ""}`}
-            onClick={() => setSelectedChannel("Paytm")}
-          >
-            Paytm
-          </button>
-          <button
-            className={`channel-btn ${selectedChannel === "QePay" ? "selected" : ""}`}
-            onClick={() => setSelectedChannel("QePay")}
-          >
-            QePay
-          </button>
-        </div>
+     
+        
 
         {/* 4. Explain */}
         <div className="explain-box">

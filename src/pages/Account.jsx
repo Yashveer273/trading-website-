@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import {
   Home,
   Users,
-  MessageCircle,
+
   User,
   DollarSign,
 
@@ -31,7 +31,7 @@ export default function AccountPage() {
 const tabs = [
     { name: "Home", icon: <Home size={22} />, path: "/home" },
     { name: "invest", icon: <DollarSign size={22} />, path: "/invest" },
-    { name: "Mail", icon: <MessageCircle size={22} />, path: "/mail" },
+  
     { name: "Teams", icon: <Users size={22} />, path: "/teams" },
     { name: "Profile", icon: <User size={22} />, path: "/account" },
   ];
@@ -58,7 +58,7 @@ const tabs = [
         </div>
 
         <div className="stats">
-          <div><span>1421</span><p>Buy</p></div>
+          <div><span>1421</span><p>Total Buy</p></div>
           <div><span>9719</span><p>Product Income</p></div>
           <div><span>4592</span><p>Pending Income</p></div>
           <div><span>835</span><p>Tasks Reward</p></div>

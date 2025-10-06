@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { registerUser } from "../api"; // Import API
+import { registerUser,SECRET_KEY } from "../api"; // Import API
 import "./Register.css";
-
+import CryptoJS from "crypto-js";
+ import Cookies from "js-cookie";
 const Register = () => {
   const navigate = useNavigate();
 
@@ -10,26 +11,43 @@ const Register = () => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [refCode, setRefCode] = useState("");
+  const [TradePassword, setTradePassword] = useState("");
   const [otp, setOtp] = useState("");
 
-  const handleRegister = async () => {
-    if (!phone || !password) return alert("Phone and password are required");
 
-    const userData = {
-      phone,
-      password,
-      refCode: refCode || null,
-      otp: otp || "12345", // example OTP
-    };
+const handleRegister = async () => {
+  if (!phone || !password || !TradePassword) return alert("Phone,Trade Password and Password are required");
 
-    try {
-      const response = await registerUser(userData);
-      alert(response.message || "Registered successfully");
-      navigate("/login");
-    } catch (err) {
-      alert(err.response?.data?.message || "Registration failed");
-    }
+  const userData = {
+    phone,
+    password,
+    refCode: refCode || null,
+    otp: otp || "12345", // example OTP
+    tradePassword:TradePassword
   };
+
+  try {
+    const response = await registerUser(userData);
+
+    // Save token in cookies
+    if (response.token) {
+      const encryptedUser = CryptoJS.AES.encrypt(
+  JSON.stringify(response.user),
+  SECRET_KEY
+).toString();
+
+      // expires in 7 days, secure flag optional for HTTPS
+      Cookies.set("tredingWeb", response.token, { expires: 7 });
+      Cookies.set("tredingWebUser", encryptedUser, { expires: 7 }); 
+    }
+
+    alert(response.message || "Registered successfully");
+    navigate("/home");
+  } catch (err) {
+    alert(err.response?.data?.message || "Registration failed");
+  }
+};
+
 
   return (
     <div id="register-container">
@@ -66,7 +84,14 @@ const Register = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-
+<div id="input-group">
+          <input
+            type="password"
+            placeholder="Please enter your trade password"
+            value={TradePassword}
+            onChange={(e) => setTradePassword(e.target.value)}
+          />
+        </div>
         <div id="input-group">
           <input
             type="text"

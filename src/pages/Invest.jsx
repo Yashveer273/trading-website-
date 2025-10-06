@@ -1,82 +1,19 @@
-import React, { useState } from "react";
+import React, {  useState } from "react";
 import { motion } from "framer-motion";
 import "./Invest.css";
 import { useNavigate } from "react-router-dom";
-import { Home, Users, MessageCircle, User, DollarSign } from "lucide-react";
+import { Home, Users, User, DollarSign } from "lucide-react";
 
-const allPlans = {
-  stable: [
-    {
-      id: "VIP1 VivoY100",
-      img: "https://hamariweb.com/mobiles/LargeImages/6496_01.jpg",
-      price: "₹280.00",
-      revenue: "42 Days",
-      daily: "₹229.6",
-      total: "₹9643.2",
-    },
-    {
-      id: "VIP1 VivoY02t",
-      img: "https://tse1.mm.bing.net/th/id/OIP.n9jd7Sqi6Zd2lcvmiKg5ZQHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
-      price: "₹2840.00",
-      revenue: "42 Days",
-      daily: "₹2357.2",
-      total: "₹9002.4",
-    },
-    {
-      id: "VIP1 Welfare",
-      img: "https://asia-exstatic-vivofs.vivo.com/PSee2l50xoirPK7y/1661953062718/d01966f5058d31376339106458fadac2.png",
-      price: "₹8840.00",
-      revenue: "42 Days",
-      daily: "₹7425.6",
-      total: "₹311875.2",
-    },
-    {
-      id: "VIP1 VivoY35",
-      img: "https://in-exstatic-vivofs.vivo.com/gdHFRinHEMrj3yPG/1692691698575/c0f180bba865685a87025f8ff514ab13.png",
-      price: "₹19440.00",
-      revenue: "42 Days",
-      daily: "₹16524",
-      total: "₹694008",
-    },
-  ],
-  daily: [
-    {
-      id: "VIP1 VivoY15",
-      img: "https://tse2.mm.bing.net/th/id/OIP.TAUDPB-olrcDl7BIsgNgBAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
-      price: "₹34440.00",
-      revenue: "42 Days",
-      daily: "₹29618.4",
-      total: "₹1243972.8",
-    },
-    {
-      id: "VIP1 VivoY22",
-      img: "https://in-exstatic-vivofs.vivo.com/gdHFRinHEMrj3yPG/1702983367485/d0467cb4099841dae725d707fce48b51.png",
-      price: "₹64440.00",
-      revenue: "42 Days",
-      daily: "₹56062.8",
-      total: "₹2354637.6",
-    },
-  ],
-  welfare: [
-    {
-      id: "VIP1 VivoY55",
-      img: "https://tse2.mm.bing.net/th/id/OIP.Qlf_F8asPv5GssddWns4xAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
-      price: "₹144400.00",
-      revenue: "42 Days",
-      daily: "₹127072",
-      total: "₹5337024",
-    },
-  ],
-};
 
-const Invest = () => {
+const Invest = ({ products }) => {
+
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("Stable Fund");
+  const [activeTab, setActiveTab] = useState("Stable Fund");  
 
   const tabs = [
     { name: "Home", icon: <Home size={22} />, path: "/home" },
     { name: "invest", icon: <DollarSign size={22} />, path: "/invest" },
-    { name: "Mail", icon: <MessageCircle size={22} />, path: "/mail" },
+
     { name: "Teams", icon: <Users size={22} />, path: "/teams" },
     { name: "Profile", icon: <User size={22} />, path: "/account" },
   ];
@@ -94,14 +31,57 @@ const Invest = () => {
   const getProducts = () => {
     switch (activeTab) {
       case "Stable Fund":
-        return allPlans.stable;
+        return products.filter(
+          (item) => item.badge === "popular" || item.badge === "non"
+        );
+
       case "Daily Fund":
-        return allPlans.daily;
+        return products.filter((item) => item.badge === "new");
+
       case "Welfare Fund":
-        return allPlans.welfare;
+        return products.filter((item) => item.badge === "limited");
+
       default:
-        return allPlans.stable;
+        return products.filter(
+          (item) => item.badge === "popular" || item.badge === "non"
+        );
     }
+  };
+  const buyitem = async (product) => {
+    navigate("/ProductInfo",{state:product})
+    return;
+
+    //     setIsLoading(true);
+    //     setMessage({ text: "Submitting UTR for verification...", type: "info" });
+    //     try {
+    //        const payload = {
+    //     productId: product._id,
+    //     amount: product.price,
+    //     userId:user?._id,
+    //     purchaseType:product.purchaseType
+    //   };
+    //       const res = await RechargeBalence(payload);
+    //       if (!res.status) {
+    //         throw new Error("Payment request failed");
+    //       }
+    // else{
+    //  setMessage({
+    //         text: "Payment submitted successfully! Awaiting approval.",
+    //         type: "success",
+    //       });
+    //       setUtr("");
+    //       setTimeout(() => {
+    //         navigate(-1);
+    //       }, 1000);
+    // }
+    //     } catch (error) {
+    //       setMessage({
+    //         text: `Submission failed: ${error.message || "Server error."}`,
+    //         type: "error",
+    //       });
+    //     } finally {
+    //       setIsLoading(false);
+    //     }
   };
 
   return (
@@ -135,7 +115,7 @@ const Invest = () => {
         <div className="product-list-container">
           {getProducts().map((product, index) => (
             <motion.div
-              key={product.id}
+              key={product._id}
               className="product-card"
               variants={cardVariants}
               initial="hidden"
@@ -143,44 +123,65 @@ const Invest = () => {
               transition={{ delay: index * 0.1 }}
             >
               {/* Product Image */}
-              <div className="product-image-placeholder">
-                <img
-                  src={product.img}
-                  alt={product.id}
-                  className="product-image"
-                />
-              </div>
 
-              {/* Product details */}
               <div className="product-details">
-                <h3 className="product-title">{product.id}</h3>
-                <p className="product-price">Each Price: {product.price}</p>
-
                 <div className="product-stats">
-                  <button className="stat-button">
-                    Revenue{" "}
-                    <span className="stat-value">{product.revenue}</span>
-                  </button>
-                  <button className="stat-button">
-                    Daily Earnings{" "}
-                    <span className="stat-value">{product.daily}</span>
-                  </button>
-                  <button className="stat-button">
-                    Total Revenue{" "}
-                    <span className="stat-value">{product.total}</span>
-                  </button>
+                  <div
+                    style={{
+                      display: "",
+                      
+                      alignItems: "start",
+                    }}
+                  >
+                    <div className="product-image-placeholder">
+                      <img
+                        src={`http://localhost:5004${product.imageUrl}`}
+                        alt={product._id}
+                        className="product-image"
+                      />
+                    </div>
+                    <h3>{product.productName}</h3>
+                  </div>
+                  <div className="stat-row">
+                    <span className="stat-name">Price</span>
+                    <span className="stat-value">₹{product.price}</span>
+                  </div>
+
+                  <div className="stat-row">
+                    <span className="stat-name">Revenue Duration</span>
+                    <span className="stat-value">
+                      {product.cycleValue}{" "}
+                      {product.cycleType === "hour" ? "Hours" : "Days"}
+                    </span>
+                  </div>
+
+                  <div className="stat-row">
+                    <span className="stat-name">Daily Earnings</span>
+                    <span className="stat-value">
+                      ₹
+                      {product.cycleType === "hour"
+                        ? product.hour
+                        : product.daily}
+                    </span>
+                  </div>
+
+                  <div className="stat-row">
+                    <span className="stat-name">Total Revenue</span>
+                    <span className="stat-value">
+                      ₹
+                      {product.cycleType === "hour"
+                        ? product.totalIncomeHour
+                        : product.totalIncomeDay}
+                    </span>
+                  </div>
                 </div>
+
+                <button className="buy-button" onClick={()=>{buyitem(product)}}>
+                  Buy
+                </button>
               </div>
 
               {/* Buy button */}
-              <button
-                className="buy-button"
-                onClick={() =>
-                  navigate(`/investbuy/${product.id}`, { state: product })
-                }
-              >
-                Buy
-              </button>
             </motion.div>
           ))}
         </div>

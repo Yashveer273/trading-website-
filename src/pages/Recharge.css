@@ -243,7 +243,7 @@
   font-weight: 700;
   color: white;
   cursor: pointer;
-  transition: 0.3s;
+ 
   box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
 
   display: block;      /* ensures it's a block element */
@@ -253,7 +253,7 @@
 
 .recharge-btn:hover {
   background: #e68900;
-  transform: translateX(-50%) translateY(-2px);
+ 
   box-shadow: 0 8px 18px rgba(255, 152, 0, 0.5);
 }
 

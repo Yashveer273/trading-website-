@@ -3,7 +3,7 @@ import {
   Home,
 
   Users,
-  MessageCircle,
+
   User,
   DollarSign,
   ChevronRight,
@@ -11,7 +11,7 @@ import {
 import "./Teams.css";
 import { useNavigate } from "react-router-dom";
 
-const App = () => {
+const Teams = () => {
   // Mock data for the teams
   const navigate = useNavigate();
   const teamData = [
@@ -20,7 +20,7 @@ const App = () => {
       totalRecharge: "476.60",
       myCommission: "476.60",
       referral: "6/4",
-      commissionRate: "0%",
+      commissionRate: "25%",
       path: "/teamonelevel",
     },
     {
@@ -28,7 +28,7 @@ const App = () => {
       totalRecharge: "8.40",
       myCommission: "8.40",
       referral: "1/2",
-      commissionRate: "0%",
+      commissionRate: "8%",
       path: "/teamtwolevel",
     },
     {
@@ -36,7 +36,7 @@ const App = () => {
       totalRecharge: "0",
       myCommission: "0",
       referral: "3/0",
-      commissionRate: "0%",
+      commissionRate: "4%",
       path: "/teamthreelevel",
     },
   ];
@@ -213,7 +213,7 @@ const App = () => {
    const tabs = [
     { name: "Home", icon: <Home size={22} />, path: "/home" },
     { name: "invest", icon: <DollarSign size={22} />, path: "/invest" },
-    { name: "Mail", icon: <MessageCircle size={22} />, path: "/mail" },
+   
     { name: "Teams", icon: <Users size={22} />, path: "/teams" },
     { name: "Profile", icon: <User size={22} />, path: "/account" },
   ];
@@ -299,4 +299,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Teams;

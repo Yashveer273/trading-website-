@@ -142,10 +142,12 @@ h1 {
 }
 
 .icon-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-  text-align: center;
+
+display: flex;
+justify-content: center;
+text-align: center;
+
+  gap: 2rem;
 }
 
 .grid-item {
@@ -158,6 +160,7 @@ h1 {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  width: 15vh;
 }
 
 .grid-icon {

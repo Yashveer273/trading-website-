@@ -36,6 +36,41 @@
 .spacer {
   width: 1.5rem;
 }
+.response-card {
+  padding: 1rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.response-card.success {
+  background-color: #eafcf4;
+  border: 1px solid #22c55e;
+  color: #166534;
+}
+
+.response-card.error {
+  background-color: #fff0f1;
+  border: 1px solid #ef4444;
+  color: #b91c1c;
+}
+
+.bank-form input,
+.bank-info input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid #d1d5db;
+}
+
+.bank-form,
+.bank-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
 
 /* Content */
 .main-content {

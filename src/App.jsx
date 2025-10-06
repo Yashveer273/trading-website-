@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // Import pages
@@ -28,8 +28,33 @@ import Invest from "./pages/Invest";
 import LuckyDraw from "./pages/LuckyDraw";
 import OrderDetails from "./pages/OrderDetails";
 import InvestBuy from "./pages/InvestBuy";
+import { productGet } from "./api";
+import Pay from "./pages/pay";
+import ProductInfo from "./pages/ProductInfo";
 
 function App() {
+   const [products, setproducts] = useState([
+   
+  ]);
+useEffect(() => {
+  const fetchData = async () => {
+try{
+  const res=await productGet();
+
+        if (!res.status===200) return;
+
+
+        const selectedItem = await res.json();
+            setproducts(selectedItem.products);
+}catch(e){}       
+   
+  };
+
+  fetchData();
+}, []);
+
+
+ 
   return (
     <Router>
       <Routes>
@@ -49,6 +74,7 @@ function App() {
         <Route path="/vip" element={<VIP />} />
         <Route path="/bankcard" element={<BankCard />} />
         <Route path="/about" element={<About />} />
+        <Route path="/pay" element={<Pay />} />
         <Route path="/bill" element={<Bill />} />
         <Route path="/mail" element={<Mail />} />
         <Route path="/notice" element={<Notice />} />
@@ -57,18 +83,15 @@ function App() {
         <Route path="/tradepassword" element={<TradePassword />} />
         <Route path="/password" element={<Password />} />
         <Route path="/messages" element={<Mail />} />
-        <Route path="/invest" element={<Invest />} />
+        <Route path="/invest" element={<Invest products={products}/>} />
+        <Route path="/ProductInfo" element={<ProductInfo/>} />
         <Route path="/luckydraw" element={<LuckyDraw />} />
         <Route path="/investbuy/:id" element={<InvestBuy />} />
 
         {/* Shared Order Details Page */}
         <Route path="/orderdetails" element={<OrderDetails />} />
 
-        {/* Placeholder Routes */}
-        <Route path="/search" element={<div>Search Page</div>} />
-        <Route path="/stats" element={<div>Stats Page</div>} />
-        <Route path="/profile" element={<div>Profile Page</div>} />
-        <Route path="/settings" element={<div>Settings Page</div>} />
+        
       </Routes>
     </Router>
   );

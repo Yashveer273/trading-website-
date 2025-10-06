@@ -1,7 +1,13 @@
 import React ,{useState}from "react";
 import {  useNavigate } from "react-router-dom";
+import CryptoJS from "crypto-js";
+
+ import Cookies from "js-cookie";
+import { loginUser,SECRET_KEY } from "../api";
 import "./Login.css";
+
 const Login = () => {
+
   const [mobileNumber, setMobileNumber] = useState('');
   const [password, setPassword] = useState('');
 
@@ -11,10 +17,36 @@ const Login = () => {
     navigate("/register");
   };
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    navigate("/home"); 
-  };
+
+
+const handleLogin = async (e) => {
+  e.preventDefault();
+
+  if (!mobileNumber || !password) return alert("Phone and password are required");
+
+  const credentials = { phone:mobileNumber, password };
+
+  try {
+    const response = await loginUser(credentials);
+
+    // Save token in cookies
+    if (response.token) {
+      const encryptedUser = CryptoJS.AES.encrypt(
+  JSON.stringify(response.user),
+  SECRET_KEY
+).toString();
+
+      Cookies.set("tredingWeb", response.token, { expires: 7 }); 
+      Cookies.set("tredingWebUser", encryptedUser, { expires: 7 }); 
+    }
+
+    alert(response.message || "Login successful");
+    navigate("/home");
+  } catch (err) {
+    alert(err.response?.data?.message || "Login failed");
+  }
+};
+
 
 
   return (
