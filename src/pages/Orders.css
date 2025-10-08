@@ -177,3 +177,169 @@
   background: #ffb84d;
   color: #000;
 }
+
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Claim Modal */
+.claim-modal {
+  background: #fff8e1;
+  padding: 25px 20px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+.claim-btn {
+  padding: 4px 10px;
+  background: #fb923c;
+  color: white;
+  font-weight: 400;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s;
+  font-size: 12px;
+}
+
+.claim-btn:hover {
+  background: #fcd34d;
+  color: #341539;
+}
+
+/* Modal Header */
+.claim-modal h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #341539;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* Claim List */
+.claim-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.claim-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #fb923c;
+  background: white;
+  font-weight: 500;
+}
+
+.claim-item.available {
+  border-color: #34d399;
+  background: #dcfce7;
+}
+
+.claim-item.locked {
+  border-color: #f87171;
+  background: #fee2e2;
+  opacity: 0.8;
+}
+
+/* Claim Now Button */
+.claim-now-btn {
+  background: #fb923c;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 5px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.claim-now-btn:hover {
+  background: #ffb84d;
+  color: #000;
+}
+
+/* Close Modal Button */
+.close-modal {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #f87171;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.close-modal:hover {
+  background: #fb923c;
+  color: white;
+}
+
+/* Scrollbar for Claim Modal */
+.claim-modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.claim-modal::-webkit-scrollbar-thumb {
+  background: #fb923c;
+  border-radius: 3px;
+}
+.order-title b {
+  font-size: 14px;
+  color: #341539;
+  font-weight: 600;
+  max-width: 60%;      /* adjust width based on your layout */
+  white-space: nowrap;  /* prevent wrapping */
+  overflow: hidden;    /* hide overflow text */
+
+  text-overflow: ellipsis; /* show ... for overflow */
+}
+.claim-status {
+  position: fixed;
+  top: 20px;
+  left: 40%;
+  transform: translateX(-50%);
+  padding: 12px 20px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.claim-status.success {
+  background-color: #22c55e; /* green */
+}
+
+.claim-status.fail {
+  background-color: #ef4444; /* red */
+}

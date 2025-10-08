@@ -1,47 +1,19 @@
-import React,{useState} from "react";
-import {
-  Home,
-
-  Users,
-
-  User,
-  DollarSign,
-  ChevronRight,
-} from "lucide-react";
-import "./Teams.css";
+import React, { useState, useEffect } from "react";
+import { Home, Users, User, DollarSign, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import CryptoJS from "crypto-js";
+import {  getTeamOverview, SECRET_KEY } from "../api"; // Your API function & key
+import "./Teams.css";
 
 const Teams = () => {
-  // Mock data for the teams
   const navigate = useNavigate();
-  const teamData = [
-    {
-      level: 1,
-      totalRecharge: "476.60",
-      myCommission: "476.60",
-      referral: "6/4",
-      commissionRate: "25%",
-      path: "/teamonelevel",
-    },
-    {
-      level: 2,
-      totalRecharge: "8.40",
-      myCommission: "8.40",
-      referral: "1/2",
-      commissionRate: "8%",
-      path: "/teamtwolevel",
-    },
-    {
-      level: 3,
-      totalRecharge: "0",
-      myCommission: "0",
-      referral: "3/0",
-      commissionRate: "4%",
-      path: "/teamthreelevel",
-    },
-  ];
+  const [activeTab, setActiveTab] = useState("Teams");
+  const [teamData, setTeamData] = useState([]);
 
-  const styles = {
+  const [totalTeams, settotalTeams] = useState(0);
+
+const styles = {
     appContainer: {
       fontFamily: "Arial, sans-serif",
       backgroundColor: "#f5f5f5",
@@ -210,53 +182,81 @@ const Teams = () => {
     },
   };
 
-   const tabs = [
-    { name: "Home", icon: <Home size={22} />, path: "/home" },
-    { name: "invest", icon: <DollarSign size={22} />, path: "/invest" },
+  useEffect(() => {
+    const fetchUserTeam = async () => {
+      const encryptedUser = Cookies.get("tredingWebUser");
+      if (!encryptedUser) return navigate("/login");
+
+      const bytes = CryptoJS.AES.decrypt(encryptedUser, SECRET_KEY);
+      const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+      const userData = JSON.parse(decrypted);
+      if (!userData?._id) return navigate("/login");
+const res = await getTeamOverview(userData._id);
+
+const levels = [1, 2, 3];
+const teamResults = levels.map((level) => {
+  const teamKey = `team${level}`;
+  const team = res.overview[teamKey] || {};
+ settotalTeams(res?.overview?.totalTeams);
+  return {
+    level,
+    userid:userData?._id,
+    totalRecharge: team.totalRecharge || 0,
+    myCommission: team.totalCommission || 0,
    
+    commissionRate: team.commissionRate ? `${team.commissionRate}%` : "0%",
+    path: level===1?"/teamonelevel" :level===2?"/teamtwolevel":"/teamthreelevel",
+  };
+});
+
+
+      setTeamData(teamResults);
+
+      
+    };
+
+    fetchUserTeam();
+  }, [navigate]);
+
+  const tabs = [
+    { name: "Home", icon: <Home size={22} />, path: "/home" },
+    { name: "Invest", icon: <DollarSign size={22} />, path: "/invest" },
     { name: "Teams", icon: <Users size={22} />, path: "/teams" },
     { name: "Profile", icon: <User size={22} />, path: "/account" },
   ];
- const [activeTab, setActiveTab] = useState("Teams");
+
   return (
     <div style={styles.appContainer}>
-      {/* Top Header Section */}
+      {/* Header */}
       <div style={styles.header}>
         <div style={styles.headerContent}>
-          <div style={styles.vivoLogo}>
-            <span style={{ fontWeight: "bold" }}>vivo</span>
-          </div>
+          <div style={styles.vivoLogo}>vivo</div>
         </div>
         <div style={styles.headerText}>Team</div>
-        <div style={styles.commissionRate}>Total Commission Rate: 0%</div>
+        <div style={styles.commissionRate}>Total Team Member: {totalTeams}</div>
       </div>
 
-      {/* Team Cards Section */}
+      {/* Team Cards */}
       {teamData.map((team, index) => (
-        <div key={index} style={styles.card}>
-          <div style={styles.cardHeader}>Level {team.level} teams</div>
-          <div style={styles.cardContent} onClick={() => navigate(team.path)}>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
+        <div key={index} style={styles.card} onClick={() => navigate(team.path, {state:{userid:team.userid, level:team.level}})}>
+          <div style={styles.cardHeader}>Level {team.level} Teams</div>
+          <div style={styles.cardContent}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
               <div
                 style={{
                   ...styles.goldImage,
-                  backgroundImage: "url('https://img.freepik.com/free-vector/gradient-gold-coin_78370-4508.jpg?semt=ais_incoming&w=740&q=80')",
+                  backgroundImage:
+                    "url('https://img.freepik.com/free-vector/gradient-gold-coin_78370-4508.jpg?semt=ais_incoming&w=740&q=80')",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
-              ></div>  
-              
+              ></div>
               <div style={styles.rateContainer}>
                 <div style={styles.rateValue}>{team.commissionRate}</div>
                 <div style={styles.rateLabel}>Commission Rate</div>
               </div>
             </div>
+
             <div style={styles.teamInfo}>
               <div style={styles.teamDetail}>
                 <span>Total Recharge:</span>
@@ -266,21 +266,16 @@ const Teams = () => {
                 <span>My Commission:</span>
                 <span style={styles.coloredValue}>₹ {team.myCommission}</span>
               </div>
-              <div style={styles.teamDetail}>
-                <span>Referral (Valid/Total):</span>
-                <span>{team.referral}</span>
-              </div>
+             
             </div>
-            <ChevronRight
-              style={styles.arrowIcon}
-              onClick={() => navigate(team.path)}
-            />
+
+            <ChevronRight style={styles.arrowIcon} />
           </div>
         </div>
       ))}
 
       {/* Bottom Navigation */}
-     <div className="bottom-nav">
+      <div className="bottom-nav">
         {tabs.map((tab) => (
           <button
             key={tab.name}

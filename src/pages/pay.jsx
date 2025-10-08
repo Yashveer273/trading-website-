@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import CryptoJS from "crypto-js";
 
 import Cookies from "js-cookie";
-const encryptedUser = Cookies.get("tredingWebUser");
+
 let user = null;
 const QRCode = async () => {
   const res = await QRrandom();
@@ -77,6 +77,7 @@ const Pay = () => {
     }
   };
   const getUserData = () => {
+    const encryptedUser = Cookies.get("tredingWebUser");
     if (encryptedUser) {
       const bytes = CryptoJS.AES.decrypt(encryptedUser, SECRET_KEY);
       const decrypted = bytes.toString(CryptoJS.enc.Utf8);
@@ -142,6 +143,7 @@ const Pay = () => {
     setIsLoading(true);
     setMessage({ text: "Submitting UTR for verification...", type: "info" });
     try {
+
       const payload = { userId: user?._id,amount: price, utr, qrImageName };
       const res = await RechargeBalence(payload);
 
@@ -232,10 +234,10 @@ else{
               )
             )}
           </div>
-          <p className="qr-warning">
+          <div className="qr-warning">
             ⚠️ Do not use the same QR code multiple times
-            <h4>userId:= {user?._id}</h4>
-          </p>
+            <span>userId:= {user?._id}</span>
+          </div>
         </section>
 
         <section className="utr-section">

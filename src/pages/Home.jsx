@@ -16,7 +16,7 @@ import CryptoJS from "crypto-js";
 import Cookies from "js-cookie";
 import { getUserInfo, SECRET_KEY } from "../api";
 
-const encryptedUser = Cookies.get("tredingWebUser");
+
 const HomePage = () => {
   const [activeTab, setActiveTab] = useState("Home");
    const [UserData, setUserData] = useState({});
@@ -25,14 +25,14 @@ const HomePage = () => {
   const navigate = useNavigate();
 useEffect(() => {
   const fetchUser = async () => {
+    const encryptedUser = Cookies.get("tredingWebUser");
     if (encryptedUser) {
       const bytes = CryptoJS.AES.decrypt(encryptedUser, SECRET_KEY);
       const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-      const UserData = JSON.parse(decrypted);
+      const UserData =await JSON.parse(decrypted);
 
       if (!UserData?._id) {
-        navigate("/login");
-        return;
+        navigate("/login");  
       }
 
       setUserData(UserData);
@@ -49,8 +49,10 @@ useEffect(() => {
       navigate("/login");
     }
   };
+    setTimeout(() => {
+       fetchUser();
+    }, 2000);
 
-  fetchUser();
 }, []); // ✅ empty array ensures it runs only once
 
   const copyLink = () => {

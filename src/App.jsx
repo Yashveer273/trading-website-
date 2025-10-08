@@ -66,9 +66,9 @@ try{
         <Route path="/recharge" element={<Recharge />} />
         <Route path="/withdraw" element={<Withdraw />} />
         <Route path="/teams" element={<Teams />} />
-        <Route path="/teamonelevel" element={<Teamonelevel />} />
+        <Route path="/teamonelevel" element={<Teamtwolevel />} />
         <Route path="/teamtwolevel" element={<Teamtwolevel />} />
-        <Route path="/teamthreelevel" element={<Teamthreelevel />} />
+        <Route path="/teamthreelevel" element={<Teamtwolevel />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/account" element={<Account />} />
         <Route path="/vip" element={<VIP />} />

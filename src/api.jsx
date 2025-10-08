@@ -116,3 +116,55 @@ export const getUserInfo = async (userId) => {
  
  return res;
 }
+
+export const sendClaim = async (userId, productId, cycleIndex, claimAmount) => {
+  try {
+    const res = await axios.post(`${API_BASE_URL}api/claimROI/add`, {
+      userId,
+      productId,
+      cycleIndex,
+      claimAmount
+    });
+    return res;
+  } catch (err) {
+    console.error("Claim request failed:", err);
+    throw err;
+  }
+};
+
+export const getTeamData = async (userId, teamLevel) => {
+  try {
+    const res = await axios.post(`${API_BASE_URL}api/users/get-team`, {
+      _id: userId,
+      teamLevel,
+    });
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching team:", err);
+    return { success: false, message: "Request failed" };
+  }
+};
+
+export const getTeamOverview = async (userId) => {
+  try {
+    const res = await axios.get(`${API_BASE_URL}api/users/team-overview`, {
+      params: { _id: userId }, // pass userId as query param
+    });
+    return res.data; // returns { success, message, overview }
+  } catch (err) {
+    console.error("Error fetching team overview:", err);
+    return { success: false, message: "Request failed" };
+  }
+};
+
+export const getTeamLevel = async (userId, level) => {
+  try {
+    const res = await axios.get(`${API_BASE_URL}api/users/team-level`, {
+      params: { _id: userId, level }, // pass userId and level
+    });
+    return res.data; // returns { success, message, team }
+  } catch (err) {
+    console.error("Error fetching team level:", err);
+    return { success: false, message: "Request failed" };
+  }
+};

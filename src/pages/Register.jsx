@@ -37,12 +37,13 @@ const handleRegister = async () => {
 ).toString();
 
       // expires in 7 days, secure flag optional for HTTPS
-      Cookies.set("tredingWeb", response.token, { expires: 7 });
+    Cookies.set("tredingWeb", response.token, { expires: 7 });
       Cookies.set("tredingWebUser", encryptedUser, { expires: 7 }); 
+       alert(response.message || "Registered successfully");
+    navigate("/home");
     }
 
-    alert(response.message || "Registered successfully");
-    navigate("/home");
+   
   } catch (err) {
     alert(err.response?.data?.message || "Registration failed");
   }
