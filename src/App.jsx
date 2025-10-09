@@ -9,9 +9,9 @@ import HomePage from "./pages/Home";
 import Recharge from "./pages/Recharge";
 import Withdraw from "./pages/Withdraw";
 import Teams from "./pages/Teams";
-import Teamonelevel from "./pages/Teamonelevel";
+
 import Teamtwolevel from "./pages/Teamtwolevel";
-import Teamthreelevel from "./pages/Teamthreelevel";
+
 import Orders from "./pages/Orders";
 import Account from "./pages/Account";
 import VIP from "./pages/VIP";
@@ -23,7 +23,7 @@ import HelpCenter from "./pages/HelpCenter";
 import Info from "./pages/Info";
 import TradePassword from "./pages/TradePassword";
 import Password from "./pages/Password";
-import BankCard from "./pages/BankCard";
+
 import Invest from "./pages/Invest";
 import LuckyDraw from "./pages/LuckyDraw";
 import OrderDetails from "./pages/OrderDetails";
@@ -72,7 +72,7 @@ try{
         <Route path="/orders" element={<Orders />} />
         <Route path="/account" element={<Account />} />
         <Route path="/vip" element={<VIP />} />
-        <Route path="/bankcard" element={<BankCard />} />
+        <Route path="/bankcard" element={<Withdraw />} />
         <Route path="/about" element={<About />} />
         <Route path="/pay" element={<Pay />} />
         <Route path="/bill" element={<Bill />} />

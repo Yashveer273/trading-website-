@@ -16,12 +16,11 @@ const menuItems = [
   { title: "Team", icon: "https://img.icons8.com/color/48/group.png", path: "/teams" },
   { title: "VIP", icon: "https://img.icons8.com/color/48/vip.png", path: "/vip" },
   { title: "BankCard", icon: "https://img.icons8.com/color/48/bank-card-back-side.png", path: "/bankcard" },
-  { title: "Bill", icon: "https://img.icons8.com/color/48/bill.png", path: "/bill" },
+
   { title: "About", icon: "https://img.icons8.com/color/48/user.png", path: "/about" },
-  { title: "Mail", icon: "https://img.icons8.com/color/48/speech-bubble.png", path: "/mail" },
-  { title: "Notice", icon: "https://img.icons8.com/color/48/administrative-tools.png", path: "/notice" },
-  { title: "HelpCenter", icon: "https://img.icons8.com/color/48/help.png", path: "/helpcenter" },
-  { title: "Info", icon: "https://img.icons8.com/color/48/info.png", path: "/info" },
+
+
+  { title: "User Info", icon: "https://img.icons8.com/color/48/info.png", path: "/info" },
   { title: "TradePassword", icon: "https://img.icons8.com/color/48/lock-2.png", path: "/tradepassword" },
   { title: "Password", icon: "https://img.icons8.com/color/48/key.png", path: "/password" },
 ];
@@ -69,7 +68,7 @@ const tabs = [
       <section className="quick-actions">
         <div className="action">
           <img src="https://img.icons8.com/color/48/money.png" alt="Recharge" />
-          <p>Recharge<br /><span>209.00</span></p>
+          <p>Balance<br/><span>209.00</span></p>
         </div>
         <div className="action">
           <img src="https://img.icons8.com/color/48/withdrawal.png" alt="Withdraw" />
