@@ -6,12 +6,12 @@
   justify-content: center;
   min-height: 100vh;
   padding: 1rem;
-  background-color: #f3f4f6; /* Tailwind's gray-100 */
+  background-color: #ffffff; /* Tailwind's gray-100 */
   font-family: 'Inter', sans-serif;
 }
 
 .splash-content {
-  max-width: 28rem; /* md width */
+  max-width: 45rem; /* md width */
   width: 100%;
   background-color: #ffffff;
   border-radius: 1.5rem; /* 3xl rounded */

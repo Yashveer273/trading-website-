@@ -1,107 +1,129 @@
-//muskan
-import React,{useState} from "react";
+import React, { useState, useEffect } from "react";
 import "./Account.css";
 import { useNavigate } from "react-router-dom";
 import {
   Home,
   Users,
-
   User,
   DollarSign,
-
+ 
 } from "lucide-react";
-
-import { ArrowLeft, ArrowDownRightFromSquare} from "lucide-react";
-const menuItems = [
-  { title: "Team", icon: "https://img.icons8.com/color/48/group.png", path: "/teams" },
-  { title: "VIP", icon: "https://img.icons8.com/color/48/vip.png", path: "/vip" },
-  { title: "BankCard", icon: "https://img.icons8.com/color/48/bank-card-back-side.png", path: "/bankcard" },
-
-  { title: "About", icon: "https://img.icons8.com/color/48/user.png", path: "/about" },
+import axios from "axios";
+import Cookies from "js-cookie";
+import CryptoJS from "crypto-js";
+import { API_BASE_URL, SECRET_KEY } from "../api";
+import Profile from "./Profile";
 
 
-  { title: "User Info", icon: "https://img.icons8.com/color/48/info.png", path: "/info" },
-  { title: "TradePassword", icon: "https://img.icons8.com/color/48/lock-2.png", path: "/tradepassword" },
-  { title: "Password", icon: "https://img.icons8.com/color/48/key.png", path: "/password" },
-];
 
 export default function AccountPage() {
   const navigate = useNavigate();
-const tabs = [
+  const [activeTab, setActiveTab] = useState("Profile");
+  
+
+  const [accountData, setAccountData] = useState({
+    totalBuy: 0,
+    productIncome: 0,
+    pendingIncome: 0,
+    tasksReward: 0,
+    Withdrawal: 0,
+    balance: 0,
+    ordersCount: 0,
+  });
+
+  const [userInfo, setUserInfo] = useState({
+    username: "",
+    phone: "",
+    userId: "",
+    UserData:{},
+    updatedData:{},
+    purchaseHistory:[],
+    rechargeHistory:[],
+    withdrawHistory:[],
+  });
+let updatedData = {};
+
+  useEffect(() => {
+    
+
+  fetchAccountData()
+  }, []);
+const fetchAccountData = async () => {
+      try {
+        // ✅ Step 1: Read encrypted user info from cookie
+        const encryptedUser = Cookies.get("tredingWebUser");
+        if (!encryptedUser) {
+          console.warn("No user cookie found — redirecting to login");
+          navigate("/login");
+          return;
+        }
+
+        // ✅ Step 2: Decrypt user data
+    
+        
+          const bytes = CryptoJS.AES.decrypt(encryptedUser, SECRET_KEY);
+          const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+         const UserData =await JSON.parse(decrypted);
+        console.log(UserData)
+
+        // ✅ Step 3: Set user info from cookie
+        setUserInfo({
+          phone: UserData.phone,
+          userId: UserData._id ,
+          UserData
+        });
+const userId=UserData._id;
+        // ✅ Step 4: Fetch account + purchase data from backend
+        const [accountRes, purchaseRes] = await Promise.all([
+            axios.get(`${API_BASE_URL}api/users/account_data`, { params: { userId } }),
+          axios.get(`${API_BASE_URL}api/users/purchase`,{ params: { userId } }).catch(() => ({ data: [] })),
+    ]);
+// if(accountRes.status)
+        console.log(accountRes);
+        if (accountRes.data.success) {updatedData = accountRes?.data?.data;
+
+        updatedData.ordersCount = purchaseRes?.data?.data?.purchases
+          ? purchaseRes?.data?.data?.purchases?.length
+          : 0;
+          
+setUserInfo({
+          phone: UserData.phone,
+          userId: UserData._id ,
+          UserData,updatedData,
+purchaseHistory:purchaseRes?.data?.data?.purchases,
+          rechargeHistory:purchaseRes?.data?.data?.rechargeHistory,
+          withdrawHistory:purchaseRes?.data?.data?.withdrawHistory,
+        });
+        setAccountData(updatedData);}
+      } catch (error) {
+if(error?.response?.data?.message==="User not found"){navigate("/login")}
+        console.error("Error fetching account data:", error.response.data);
+        // ✅ Do not redirect, just show empty data
+        setAccountData({
+          totalBuy: 0,
+          productIncome: 0,
+          pendingIncome: 0,
+          tasksReward: 0,
+          Withdrawal: 0,
+          balance: 0,
+          ordersCount: 0,
+        });
+      } 
+    };
+  const tabs = [
     { name: "Home", icon: <Home size={22} />, path: "/home" },
     { name: "invest", icon: <DollarSign size={22} />, path: "/invest" },
-  
     { name: "Teams", icon: <Users size={22} />, path: "/teams" },
     { name: "Profile", icon: <User size={22} />, path: "/account" },
   ];
-  const [activeTab, setActiveTab] = useState("Profile");
+
+ 
+
   return (
-    <div className="account-container">
-      {/* Header */}
-      <div style={{display:"flex", marginLeft:"20px",marginTop:"10px", justifyContent:"space-between"}}>
-     <button className="back-btnR" onClick={() => navigate(-1)}>
-          <ArrowLeft color="black"/>
-        </button>
-        <button className="logout-btn" onClick={() => navigate("/login")}>
-        Logout
-      </button>
-</div>
-      {/* Profile Card */}
-      <section className="profile-card">
-        <div className="profile-top">
-          <img src="https://img.icons8.com/color/96/user-male-circle.png" alt="Profile" />
-          <div>
-            <h2>Vivo VIP1</h2>
-            <p>95******32 | ID:458138</p>
-          </div>
-        </div>
-
-        <div className="stats">
-          <div><span>1421</span><p>Total Buy</p></div>
-          <div><span>9719</span><p>Product Income</p></div>
-          <div><span>4592</span><p>Pending Income</p></div>
-          <div><span>835</span><p>Tasks Reward</p></div>
-        </div>
-      </section>
-
-      {/* Quick Actions */}
-      <section className="quick-actions">
-        <div className="action">
-          <img src="https://img.icons8.com/color/48/money.png" alt="Recharge" />
-          <p>Balance<br/><span>209.00</span></p>
-        </div>
-        <div className="action">
-          <img src="https://img.icons8.com/color/48/withdrawal.png" alt="Withdraw" />
-          <p>Withdrawal<br /><span>963214</span></p>
-        </div>
-        <div className="action">
-          <img src="https://img.icons8.com/color/48/order-history.png" alt="Orders" />
-          <p>Orders<br /><span>4</span></p>
-        </div>
-      </section>
-
-      {/* Menu List */}
-      <section className="menu-list">
-        {menuItems.map((item, i) => (
-          <div
-            className="menu-item"
-            key={i}
-            onClick={() => navigate(item.path)}
-          >
-            <div className="menu-left">
-              <img src={item.icon} alt={item.title} />
-              <span>{item.title}</span>
-            </div>
-            <span className="arrow"><ArrowDownRightFromSquare size={18}/></span>
-          </div>
-        ))}
-      </section>
-
-      {/* Logout Button */}
-      <button className="logout-btn2">
-        
-      </button>
-    <div className="bottom-nav">
+    <div >
+     
+  <Profile userInfo={userInfo} accountData={accountData}/>
+      <div className="bottom-nav">
         {tabs.map((tab) => (
           <button
             key={tab.name}
@@ -116,6 +138,8 @@ const tabs = [
           </button>
         ))}
       </div>
-    </div>
+     </div>
+  
   );
 }
+

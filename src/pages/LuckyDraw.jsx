@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
+import { ArrowLeft } from "lucide-react";
 import { fetchLuckySpinPrizes, spinItem } from "../api";
+import { useNavigate } from "react-router-dom";
 
- 
-
-const mockWinnings = [
-];
+const mockWinnings = [];
 
 const Reel = ({ prizes, isSpinning, finalValue }) => {
   const [position, setPosition] = useState(0);
@@ -15,7 +14,7 @@ const Reel = ({ prizes, isSpinning, finalValue }) => {
   useEffect(() => {
     if (isSpinning) {
       const duration = 4000;
-      const totalRotations = prizes.length * 5; // 5 full rotations
+      const totalRotations = prizes.length * 5;
       const targetPosition = (totalRotations + finalValue) * itemHeight;
 
       startTimeRef.current = performance.now();
@@ -70,7 +69,6 @@ const Reel = ({ prizes, isSpinning, finalValue }) => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          transition: "transform 0s ease-in-out",
           transform: `translateY(${position}px)`,
         }}
       >
@@ -86,37 +84,27 @@ const Reel = ({ prizes, isSpinning, finalValue }) => {
               alignItems: "center",
               justifyContent: "center",
               padding: "1rem",
-              border: "2px solid transparent",
-              borderRadius: "0.5rem",
               backgroundColor: "white",
+              borderRadius: "1rem",
+              margin: "6px",
             }}
           >
             <img
               src={prize.image}
-              alt={`Prize ${prize.value}`}
+              alt={prize.name}
               style={{
                 width: "6rem",
                 height: "6rem",
                 borderRadius: "9px",
-                marginBottom: "3rem",
+                marginBottom: "1rem",
               }}
             />
-            <h2
-              style={{
-                color: "black",
-                fontSize: "1.25rem",
-                fontWeight: "bold",
-                marginBottom: "0.5rem",
-                textAlign: "center",
-              }}
-            >
+            <h2 style={{ color: "#1f2937", fontWeight: "bold" }}>
               {prize.name}
             </h2>
-            <h1
-              style={{ color: "black", fontSize: "1.5rem", fontWeight: "bold" }}
-            >
+            <h3 style={{ color: "#d97706", fontWeight: "bold" }}>
               {prize.value}
-            </h1>
+            </h3>
           </div>
         ))}
       </div>
@@ -124,338 +112,320 @@ const Reel = ({ prizes, isSpinning, finalValue }) => {
   );
 };
 
-const PrizeModal = ({ prize, onClose }) => {
-  return (
+const PrizeModal = ({ prize, onClose }) => (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      backgroundColor: "rgba(0,0,0,0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 10,
+    }}
+  >
     <div
       style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgba(0,0,0,0.5)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 10,
+        backgroundColor: "#fef3c7",
+        padding: "2rem",
+        borderRadius: "1.5rem",
+        textAlign: "center",
+        maxWidth: "20rem",
+        width: "90%",
       }}
     >
-      <div
+      <h3 style={{ fontSize: "2rem", fontWeight: "bold", color: "#f59e0b" }}>
+        🎉 Congratulations!
+      </h3>
+      <p style={{ marginBottom: "1rem" }}>You have won:</p>
+      <img
+        src={prize.image}
+        alt={prize.name}
         style={{
-          backgroundColor: "#fef3c7",
-          padding: "2rem",
-          borderRadius: "1.5rem",
-          textAlign: "center",
-          maxWidth: "20rem",
-          width: "90%",
-          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+          width: "6rem",
+          height: "6rem",
+          borderRadius: "50%",
+          marginBottom: "1rem",
+        }}
+      />
+      <h2 style={{ fontWeight: "bold", color: "#1f2937" }}>{prize.name}</h2>
+      <p
+        style={{ color: "#d97706", fontWeight: "bold", marginBottom: "1.5rem" }}
+      >
+        {prize.value}
+      </p>
+      <button
+        onClick={onClose}
+        style={{
+          padding: "0.75rem 2rem",
+          backgroundColor: "#f59e0b",
+          color: "white",
+          borderRadius: "9999px",
+          fontWeight: "bold",
         }}
       >
-        <h3
-          style={{
-            fontSize: "2rem",
-            fontWeight: "extrabold",
-            color: "#f59e0b",
-            marginBottom: "1rem",
-          }}
-        >
-          Congratulations!
-        </h3>
-        <p style={{ fontSize: "1rem", marginBottom: "1.5rem" }}>
-          You have won:
-        </p>
-        <img
-          src={prize.image}
-          alt={prize.name}
-          style={{
-            width: "8rem",
-            height: "8rem",
-            borderRadius: "9999px",
-            marginBottom: "1rem",
-          }}
-        />
-        <h2
-          style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#1f2937" }}
-        >
-          {prize.name}
-        </h2>
-        <p
-          style={{
-            fontSize: "1.25rem",
-            fontWeight: "bold",
-            color: "#d97706",
-            marginBottom: "1.5rem",
-          }}
-        >
-          {prize.value}
-        </p>
-        <button
-          onClick={onClose}
-          style={{
-            padding: "0.75rem 2rem",
-            backgroundColor: "#f59e0b",
-            color: "white",
-            fontWeight: "bold",
-            fontSize: "1.125rem",
-            borderRadius: "9999px",
-          }}
-        >
-          OK
-        </button>
-      </div>
+        OK
+      </button>
     </div>
-  );
-};
+  </div>
+);
 
 const LuckyDraw = () => {
+  const navigate = useNavigate();
   const [isSpinning, setIsSpinning] = useState(false);
   const [result, setResult] = useState(0);
   const [winnings, setWinnings] = useState(mockWinnings);
   const [showModal, setShowModal] = useState(false);
-   const [prizes, setPrizes] = useState([
- 
-]);
+  const [prizes, setPrizes] = useState([]);
   const [winningPrizeDetails, setWinningPrizeDetails] = useState(null);
-  const fetchLuckySpinData = async () => {
-    let data = await fetchLuckySpinPrizes();
-    setPrizes(data);
-  };
+
   useEffect(() => {
-    fetchLuckySpinData();
-  });
- const startSpin = async () => {
-  if (isSpinning) return;
-  setIsSpinning(true);
+    const fetchData = async () => {
+      const data = await fetchLuckySpinPrizes();
+      setPrizes(data);
+    };
+    fetchData();
+  }, []);
 
-  try {
-    const res =await spinItem(); // call backend
-    if (!res.ok) throw new Error("Failed to fetch item");
-    const selectedItem = await res.json();
+  const startSpin = async () => {
+    if (isSpinning) return;
+    setIsSpinning(true);
 
-    const newResult = prizes.findIndex(p => p.name === selectedItem.itemName);
-    if (newResult === -1) {
-      console.error("Selected item not in local prizes");
+    try {
+      const res = await spinItem();
+      const selectedItem = await res.json();
+      const newResult = prizes.findIndex(
+        (p) => p.name === selectedItem.itemName
+      );
+
+      if (newResult === -1) {
+        console.error("Prize not found");
+        setIsSpinning(false);
+        return;
+      }
+
+      setResult(newResult);
+
+      setTimeout(() => {
+        setIsSpinning(false);
+        setWinningPrizeDetails(prizes[newResult]);
+        setShowModal(true);
+        setWinnings((prev) => [
+          {
+            id: Date.now(),
+            title: prizes[newResult].name,
+            value: prizes[newResult].value,
+            image: prizes[newResult].image,
+            date: new Date().toLocaleString(),
+          },
+          ...prev,
+        ]);
+      }, 4500);
+    } catch (err) {
+      console.error(err);
       setIsSpinning(false);
-      return;
     }
-
-    setResult(newResult);
-
-    setTimeout(() => {
-      setIsSpinning(false);
-      setWinningPrizeDetails(prizes[newResult]);
-      setShowModal(true);
-
-      const newWin = {
-        id: Date.now(),
-        title: prizes[newResult].name,
-        date: new Date().toLocaleString(),
-        value: prizes[newResult].value,
-        image: prizes[newResult].image,
-      };
-      setWinnings(prev => [newWin, ...prev]);
-    }, 4500);
-  } catch (err) {
-    console.error(err);
-    setIsSpinning(false);
-  }
-};
-
+  };
 
   return (
     <div
       style={{
+        backgroundColor: "#f9fafb",
+        minHeight: "100vh",
+        maxHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
-        minHeight: "100vh",
-        backgroundColor: "#f3f4f6",
-        overflow: "hidden",
-        color: "#111827",
-        padding: "1rem",
       }}
     >
+      {/* Header */}
       <div
         style={{
           width: "100%",
-          maxWidth: "32rem",
-          backgroundColor: "#f1f5f9",
-          borderRadius: "1.5rem",
-          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-          border: "1px solid #f59e0b",
-          padding: "1.5rem",
+          backgroundColor: "#f59e0b",
+          padding: "1rem",
           display: "flex",
-          flexDirection: "column",
           alignItems: "center",
+          justifyContent: "space-between",
+          color: "white",
+          position: "sticky",
+          top: 0,
+          zIndex: 5,
         }}
       >
-        {/* Slot Machine Section */}
-        <h2
+        <button
+          onClick={() => navigate(-1)}
           style={{
-            fontSize: "2.25rem",
-            fontWeight: "800",
-            color: "#1f2937",
-            marginBottom: "2rem",
+            background: "none",
+            border: "none",
+            color: "white",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
           }}
         >
-          Slot Machine
-        </h2>
+          <ArrowLeft size={24} style={{ marginRight: "0.25rem" }} />
+        </button>
+        <h2 style={{ fontWeight: "bold", fontSize: "1.25rem" }}>Lucky Draw</h2>
+        <div style={{ width: "2rem" }}></div>
+      </div>
+
+      {/* Main Container */}
+      <div
+        style={{
+          width: "90%",
+          height: "90vh",
+          backgroundColor: "white",
+          borderRadius: "1.25rem",
+          marginTop: "1.5rem",
+
+          overflow: "hidden",
+          padding: "1.5rem",
+
+          paddingTop: ".5rem",
+          boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+        }}
+      >
+        {/* Slot Machine */}
         <div
           style={{
             display: "flex",
-            gap: "1rem",
-            marginBottom: "2rem",
-            backgroundColor: "#fef3c7",
-            padding: "1rem",
-            borderRadius: "0.75rem",
-            borderWidth: "4px",
-            borderColor: "#fde68a",
-            boxShadow:
-              "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+            justifyContent: "center",
+            marginBottom: "1.5rem",
           }}
         >
           <div
             style={{
               width: "12rem",
               height: "12rem",
-              backgroundColor: "#ffffff",
-              borderRadius: "0.5rem",
+              border: "3px solid #f5800bff",
+              borderRadius: "1rem",
               overflow: "hidden",
-              borderWidth: "2px",
-              borderColor: "#fcd34d",
-              boxShadow:
-                "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+              backgroundColor: "#fff8e1",
             }}
           >
             <Reel prizes={prizes} isSpinning={isSpinning} finalValue={result} />
           </div>
         </div>
-        <button
-          onClick={startSpin}
-          style={{
-            padding: "0.75rem 2rem",
-            backgroundColor: "#f59e0b",
-            color: "white",
-            fontWeight: "bold",
-            fontSize: "1.125rem",
-            borderRadius: "9999px",
-            boxShadow:
-              "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
-            transition: "transform 0.2s",
-            transform: isSpinning ? "scale(0.95)" : "scale(1)",
-            cursor: isSpinning ? "not-allowed" : "pointer",
-          }}
-          disabled={isSpinning}
+
+        <div
+          style={{ display: "flex", justifyContent: "center", width: "100%" }}
         >
-          {isSpinning ? "Spinning..." : "Spin"}
-        </button>
-        {/* Available Rewards Section */}
+          <button
+            onClick={startSpin}
+            disabled={isSpinning}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "50%",
+              backgroundColor: isSpinning ? "#febb8cff" : "#fb9246ff",
+              color: "white",
+              borderRadius: "20px",
+              padding: "0.75rem 1rem",
+              fontWeight: "bold",
+              fontSize: "1rem",
+              cursor: isSpinning ? "not-allowed" : "pointer",
+              border: "2px solid gray",
+
+              transition: "all 0.3s ease-in-out",
+            }}
+          >
+            {isSpinning ? "Spinning..." : "🎯 Start Spin"}
+          </button>
+        </div>
+
+        {/* Rewards */}
+        <h3
+          style={{ marginTop: "2rem", textAlign: "center", fontWeight: "bold" }}
+        >
+          🎁 Rewards
+        </h3>
         <div
           style={{
-            width: "100%",
             display: "flex",
-            justifyContent: "center",
             flexWrap: "wrap",
+            justifyContent: "center",
             gap: "1rem",
-            margin: "1.5rem 0",
+            marginTop: "1rem",
+
+            overflow: "scroll",
           }}
         >
-          {prizes.map((prize, index) => (
+          {prizes.map((p, i) => (
             <div
-              key={index}
+              key={i}
               style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                padding: "0.5rem",
+                textAlign: "center",
+                border: "1px solid #f3f4f6",
                 borderRadius: "0.75rem",
-                borderWidth: "2px",
-                borderColor: "#e5e7eb",
+                padding: "0.5rem",
+                width: "5rem",
               }}
             >
               <img
-                src={prize.image}
-                alt={prize.name}
-                style={{
-                  width: "4rem",
-                  height: "4rem",
-                  borderRadius: "50%",
-                  marginBottom: "0.25rem",
-                }}
+                src={p.image}
+                alt={p.name}
+                style={{ width: "3rem", height: "3rem", borderRadius: "50%" }}
               />
-              <p
-                style={{
-                  fontSize: "0.75rem",
-                  fontWeight: "600",
-                  textAlign: "center",
-                }}
-              >
-                {prize.value}
+              <p style={{ fontSize: "0.75rem", marginTop: "0.25rem" }}>
+                {p.value}
               </p>
             </div>
           ))}
         </div>
 
-        {/* Winning Record Section */}
-        <div style={{ width: "100%", marginTop: "2.5rem" }}>
-          <h3
-            style={{
-              fontSize: "1.5rem",
-              fontWeight: "800",
-              color: "#1f2937",
-              marginBottom: "1rem",
-              textAlign: "center",
-            }}
-          >
-            My Winning Record
-          </h3>
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
-          >
-            {winnings.map((win) => (
-              <div
-                key={win.id}
+        {/* Winning Record */}
+        <h3
+          style={{ marginTop: "2rem", textAlign: "center", fontWeight: "bold" }}
+        >
+          🏆 My Winning Record
+        </h3>
+        <div
+          style={{
+            marginTop: "1rem",
+            maxHeight: "35vh",
+            minHeight: "35vh",
+
+            overflow: "scroll",
+          }}
+        >
+          {winnings.map((win) => (
+            <div
+              key={win.id}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: "#fff8e1",
+                padding: "0.75rem",
+                borderRadius: "0.75rem",
+                marginBottom: "0.5rem",
+              }}
+            >
+              <img
+                src={win.image}
+                alt="win"
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  padding: "1rem",
-                  backgroundColor: "#fef3c7",
-                  borderRadius: "0.75rem",
-                  boxShadow:
-                    "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                  width: "3rem",
+                  height: "3rem",
+                  borderRadius: "50%",
+                  marginRight: "0.75rem",
                 }}
-              >
-                <img
-                  src={win.image}
-                  alt="Bonus"
-                  style={{
-                    width: "3rem",
-                    height: "3rem",
-                    borderRadius: "9999px",
-                    marginRight: "1rem",
-                  }}
-                />
-                <div style={{ flex: "1 1 0%" }}>
-                  <p style={{ fontWeight: "bold", color: "#1f2937" }}>
-                    {win.title}
-                  </p>
-                  <p style={{ fontSize: "0.75rem", color: "#6b7280" }}>
-                    {win.date}
-                  </p>
-                  <p
-                    style={{
-                      fontWeight: "600",
-                      fontSize: "0.875rem",
-                      color: "#d97706",
-                    }}
-                  >
-                    {win.value}
-                  </p>
-                </div>
+              />
+              <div>
+                <p style={{ fontWeight: "bold" }}>{win.title}</p>
+                <p style={{ fontSize: "0.75rem", color: "#6b7280" }}>
+                  {win.date}
+                </p>
+                <p style={{ color: "#d97706", fontWeight: "600" }}>
+                  {win.value}
+                </p>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
 

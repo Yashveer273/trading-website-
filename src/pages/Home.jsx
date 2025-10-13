@@ -27,6 +27,7 @@ useEffect(() => {
   const fetchUser = async () => {
     const encryptedUser = Cookies.get("tredingWebUser");
     if (encryptedUser) {
+       try {
       const bytes = CryptoJS.AES.decrypt(encryptedUser, SECRET_KEY);
       const decrypted = bytes.toString(CryptoJS.enc.Utf8);
       const UserData =await JSON.parse(decrypted);
@@ -37,7 +38,7 @@ useEffect(() => {
 
       setUserData(UserData);
 
-      try {
+     
         const res = await getUserInfo(UserData._id); // fetch user info
       console.log(UserData._id);
         // alert(UserData._id);
@@ -197,12 +198,8 @@ useEffect(() => {
             ))}
           </div>
 
-          <div style={{ height: "100px" }}></div>
-        </div>
-      </div>
-
-      {/* --- Bottom Navigation --- */}
-      <div className="bottom-nav">
+      
+          <div className="bottom-navH">
         {tabs.map((tab) => (
           <button
             key={tab.name}
@@ -217,6 +214,11 @@ useEffect(() => {
           </button>
         ))}
       </div>
+        </div>
+      </div>
+
+      {/* --- Bottom Navigation --- */}
+      
     </>
   );
 };

@@ -147,7 +147,7 @@ export default function ProductInfo() {
     maxShare: 10,
     dailyIncomePerShare: dailyIncome,
     revenueDurationDays: product.cycleValue,
-    productImageUrl: `http://localhost:5004${product.imageUrl}`,
+    productImageUrl: `https://bdgwin.com.co${product.imageUrl}`,
     needLevel: "VIP",
   };
 

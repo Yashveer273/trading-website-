@@ -9,11 +9,16 @@
 }
 
 .orders-page {
-  padding: 30px;
+ 
   background: linear-gradient(135deg, #ffffff, rgb(253, 253, 204), rgb(248, 248, 160));
   animation: bgFlow 10s infinite alternate;
   width: 100%;
-  max-width: 480px;
+   
+
+   max-height: 100vh;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 10px;
   margin: 0 auto;
 }
 
@@ -44,14 +49,14 @@
 
 .tabs {
   display: flex;
-  justify-content: center;
+  justify-content:space-evenly;
   gap: 15px;
   margin-top: 25px;
   margin-bottom: 25px;
 }
 
 .tabs button {
-  padding: 10px 20px;
+  padding: 10px 45px;
   border: 2px solid #fb923c;
   border-radius: 25px;
   background: transparent;

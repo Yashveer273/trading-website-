@@ -17,7 +17,7 @@ import Account from "./pages/Account";
 import VIP from "./pages/VIP";
 import About from "./pages/About";
 import Bill from "./pages/Bill";
-import Mail from "./pages/Mail";
+
 import Notice from "./pages/Notice";
 import HelpCenter from "./pages/HelpCenter";
 import Info from "./pages/Info";
@@ -31,7 +31,9 @@ import InvestBuy from "./pages/InvestBuy";
 import { productGet } from "./api";
 import Pay from "./pages/pay";
 import ProductInfo from "./pages/ProductInfo";
-
+import "./App.css";
+import RechargeHistory from "./pages/RechargeHistory";
+import WithdrawalHistory from "./pages/withdrawHistory";
 function App() {
    const [products, setproducts] = useState([
    
@@ -64,6 +66,8 @@ try{
         <Route path="/login" element={<Login />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/recharge" element={<Recharge />} />
+        <Route path="/RechargeHistory" element={<RechargeHistory />} />
+        <Route path="/WithdrawHistory" element={<WithdrawalHistory />} />
         <Route path="/withdraw" element={<Withdraw />} />
         <Route path="/teams" element={<Teams />} />
         <Route path="/teamonelevel" element={<Teamtwolevel />} />
@@ -76,13 +80,13 @@ try{
         <Route path="/about" element={<About />} />
         <Route path="/pay" element={<Pay />} />
         <Route path="/bill" element={<Bill />} />
-        <Route path="/mail" element={<Mail />} />
+      
         <Route path="/notice" element={<Notice />} />
         <Route path="/helpcenter" element={<HelpCenter />} />
         <Route path="/info" element={<Info />} />
         <Route path="/tradepassword" element={<TradePassword />} />
         <Route path="/password" element={<Password />} />
-        <Route path="/messages" element={<Mail />} />
+        
         <Route path="/invest" element={<Invest products={products}/>} />
         <Route path="/ProductInfo" element={<ProductInfo/>} />
         <Route path="/luckydraw" element={<LuckyDraw />} />

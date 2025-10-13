@@ -3,12 +3,13 @@ import { motion } from "framer-motion";
 import "./Invest.css";
 import { useNavigate } from "react-router-dom";
 import { Home, Users, User, DollarSign } from "lucide-react";
+import ProductCard from "./prod";
 
 
 const Invest = ({ products }) => {
 
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("Stable Fund");  
+  const [activeTab, setActiveTab] = useState("Normal");  
 
   const tabs = [
     { name: "Home", icon: <Home size={22} />, path: "/home" },
@@ -30,15 +31,15 @@ const Invest = ({ products }) => {
 
   const getProducts = () => {
     switch (activeTab) {
-      case "Stable Fund":
+      case "Normal":
         return products.filter(
           (item) => item.badge === "popular" || item.badge === "non"
         );
 
-      case "Daily Fund":
+      case "Welfare":
         return products.filter((item) => item.badge === "new");
 
-      case "Welfare Fund":
+      case "Offers":
         return products.filter((item) => item.badge === "limited");
 
       default:
@@ -51,39 +52,9 @@ const Invest = ({ products }) => {
     navigate("/ProductInfo",{state:product})
     return;
 
-    //     setIsLoading(true);
-    //     setMessage({ text: "Submitting UTR for verification...", type: "info" });
-    //     try {
-    //        const payload = {
-    //     productId: product._id,
-    //     amount: product.price,
-    //     userId:user?._id,
-    //     purchaseType:product.purchaseType
-    //   };
-    //       const res = await RechargeBalence(payload);
-    //       if (!res.status) {
-    //         throw new Error("Payment request failed");
-    //       }
-    // else{
-    //  setMessage({
-    //         text: "Payment submitted successfully! Awaiting approval.",
-    //         type: "success",
-    //       });
-    //       setUtr("");
-    //       setTimeout(() => {
-    //         navigate(-1);
-    //       }, 1000);
-    // }
-    //     } catch (error) {
-    //       setMessage({
-    //         text: `Submission failed: ${error.message || "Server error."}`,
-    //         type: "error",
-    //       });
-    //     } finally {
-    //       setIsLoading(false);
-    //     }
+  
   };
-
+console.log(products)
   return (
     <>
       <div className="invest-page-container">
@@ -100,7 +71,7 @@ const Invest = ({ products }) => {
 
         {/* Tabs section */}
         <div className="tabs-container">
-          {["Stable Fund", "Daily Fund", "Welfare Fund"].map((tab) => (
+          {["Normal", "Welfare", "Offers"].map((tab) => (
             <button
               key={tab}
               className={`tab-button ${activeTab === tab ? "active-tab" : ""}`}
@@ -124,71 +95,37 @@ const Invest = ({ products }) => {
             >
               {/* Product Image */}
 
-              <div className="product-details">
-                <div className="product-stats">
-                  <div
-                    style={{
-                      display: "",
-                      
-                      alignItems: "start",
-                    }}
-                  >
-                    <div className="product-image-placeholder">
-                      <img
-                        src={`http://localhost:5004${product.imageUrl}`}
-                        alt={product._id}
-                        className="product-image"
-                      />
-                    </div>
-                    <h3>{product.productName}</h3>
-                  </div>
-                  <div className="stat-row">
-                    <span className="stat-name">Price</span>
-                    <span className="stat-value">₹{product.price}</span>
-                  </div>
+              <div className="product-details">   
 
-                  <div className="stat-row">
-                    <span className="stat-name">Revenue Duration</span>
-                    <span className="stat-value">
-                      {product.cycleValue}{" "}
-                      {product.cycleType === "hour" ? "Hours" : "Days"}
-                    </span>
-                  </div>
+<ProductCard
+  productData={{
+    img:product.imageUrl,
+    title: product.productName,
+    price: product.price,
+    dailyEarnings:
+      product.cycleType === "hour" ? product.hour : product.daily,
+    totalGain:
+      product.cycleType === "hour"
+        ? product.totalIncomeHour
+        : product.totalIncomeDay,
+    durationDays: product.cycleValue,
+    cycleType: product.cycleType,
+  }}
+  onBuy={() => buyitem(product)}  // ✅ pass buy action here
+/>
 
-                  <div className="stat-row">
-                    <span className="stat-name">Daily Earnings</span>
-                    <span className="stat-value">
-                      ₹
-                      {product.cycleType === "hour"
-                        ? product.hour
-                        : product.daily}
-                    </span>
-                  </div>
-
-                  <div className="stat-row">
-                    <span className="stat-name">Total Revenue</span>
-                    <span className="stat-value">
-                      ₹
-                      {product.cycleType === "hour"
-                        ? product.totalIncomeHour
-                        : product.totalIncomeDay}
-                    </span>
-                  </div>
-                </div>
-
-                <button className="buy-button" onClick={()=>{buyitem(product)}}>
-                  Buy
-                </button>
               </div>
 
               {/* Buy button */}
             </motion.div>
           ))}
+          
+  
         </div>
       </div>
 
       {/* Bottom Navigation */}
-      <div className="bottom-nav">
+      <div className="bottom-navH">
         {tabs.map((tab) => (
           <button
             key={tab.name}

@@ -17,18 +17,20 @@ const styles = {
     appContainer: {
       fontFamily: "Arial, sans-serif",
       backgroundColor: "#f5f5f5",
-      minHeight: "100vh",
+      minHeight: "110vh",
+      maxHeight: "110vh",
+      overview:"scroll",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      paddingBottom: "80px", // Space for the bottom nav
+     marginBottom:"4vh"
     },
     header: {
       width: "100%",
       background: "linear-gradient(to bottom, #ffc900, #ff9900)", // Stronger yellow to orange gradient
       paddingTop: "20px",
       paddingBottom: "34px",
-      position: "relative",
+  
       textAlign: "center",
       display: "flex",
       justifyContent: "space-evenly",
@@ -81,9 +83,8 @@ const styles = {
       margin: "15px 15px",
       padding: "20px",
       width: "90%",
-      maxWidth: "450px",
-      position: "relative",
-      top: "-40px",
+      maxWidth: "90%",
+     
       zIndex: 2,
     },
     cardHeader: {
@@ -138,48 +139,9 @@ const styles = {
       color: "#ffc900", // Yellow color for the values
       fontWeight: "bold",
     },
-    bottomNav: {
-      position: "fixed",
-      bottom: 0,
-      width: "100%",
-      backgroundColor: "white",
-      display: "flex",
-      justifyContent: "space-around",
-      alignItems: "center",
-      height: "70px",
-      borderTop: "1px solid #eee",
-      boxShadow: "0 -2px 8px rgba(0, 0, 0, 0.05)",
-      zIndex: 10,
-    },
-    navItem: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      color: "#888",
-      fontSize: "12px",
-      textDecoration: "none",
-      cursor: "pointer",
-    },
-    activeNavItem: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      color: "#ff9900", // Stronger orange for active tab text and icon
-      fontSize: "12px",
-      fontWeight: "bold",
-      position: "relative",
-      padding: "10px 20px",
-      borderRadius: "30px",
-      background: "linear-gradient(to right, #ffeb99, #ffc900)", // Stronger yellow gradient for active tab background
-      boxShadow: "0 2px 8px rgba(255, 185, 0, 0.3)",
-      transform: "translateY(-10px)",
-    },
-    activeIcon: {
-      color: "#ff9900", // Stronger orange for active icon
-    },
-    inactiveIcon: {
-      color: "#888",
-    },
+    
+   
+  
   };
 
   useEffect(() => {
@@ -192,11 +154,11 @@ const styles = {
       const userData = JSON.parse(decrypted);
       if (!userData?._id) return navigate("/login");
 const res = await getTeamOverview(userData._id);
-
+console.log(res.success)
 const levels = [1, 2, 3];
 const teamResults = levels.map((level) => {
   const teamKey = `team${level}`;
-  const team = res.overview[teamKey] || {};
+  const team =res.success? res?.overview[teamKey] || {}:{};
  settotalTeams(res?.overview?.totalTeams);
   return {
     level,

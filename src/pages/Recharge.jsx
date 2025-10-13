@@ -76,6 +76,12 @@ navigate("/pay",{ state: amount })
      
         
 
+        
+
+        {/* Recharge Button */}
+        <button className="recharge-btn" onClick={handleRecharge}>
+          Recharge Now
+        </button>
         {/* 4. Explain */}
         <div className="explain-box">
           <h3>Explain</h3>
@@ -85,11 +91,6 @@ navigate("/pay",{ state: amount })
             ))}
           </ol>
         </div>
-
-        {/* Recharge Button */}
-        <button className="recharge-btn" onClick={handleRecharge}>
-          Recharge Now
-        </button>
       </div>
     </div>
   );

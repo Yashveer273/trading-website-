@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate,  } from "react-router-dom";
 import "./InvestBuy.css";
 
 const InvestBuy = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
+ 
   const location = useLocation();
   const product = location.state;
 

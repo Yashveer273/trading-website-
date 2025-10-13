@@ -1,6 +1,11 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:5004/"; // Backend URL
+// ✅ Exported base URL (so other files like Account.jsx can import it)
+// export const API_BASE_URL = "https://bdgwin.com.co/";
+export const API_BASE_URL = "http://localhost:5004/";
+
+// ✅ Shared secret key (must match backend)
+export const SECRET_KEY = "SECRET_KEY12356789";
 
 // Register a new user
 export const registerUser = async (userData) => {
@@ -23,63 +28,52 @@ export const loginUser = async (credentials) => {
     throw err;
   }
 };
-export  const SECRET_KEY = "your_secret_key_here";
 
 export const fetchLuckySpinPrizes = async () => {
   try {
-    const res = await fetch(`${API_BASE_URL}api/luckySpin/items`); // Adjust your API route
+    const res = await fetch(`${API_BASE_URL}api/luckySpin/items`);
     const data = await res.json();
-
     const mappedPrizes = data.map((item) => ({
       name: item.itemName,
       value: item.reward,
-      image: `http://localhost:5004${item.imageUrl}`,
+      image: `https://bdgwin.com.co${item.imageUrl}`,
     }));
-
     return mappedPrizes;
   } catch (err) {
     console.error("Failed to fetch prizes:", err);
     return {};
   }
 };
+
 export const spinItem = async () => {
   const data = await fetch(`${API_BASE_URL}api/luckySpin/spinItem`);
   return data;
 };
+
 export const productGet = async () => {
   const data = await fetch(`${API_BASE_URL}api/products`);
   return data;
 };
+
 export const QRrandom = async () => {
   const data = await fetch(`${API_BASE_URL}QR/api/qr/random`);
   return data;
 };
 
-
 export const BuyProduct = async (payload) => {
-
- 
-    const res = await axios.post(`${API_BASE_URL}QR/api/payments`, payload);
-    console.log(res);
-    return res;
-  
+  const res = await axios.post(`${API_BASE_URL}QR/api/payments`, payload);
+  return res;
 };
 
 export const RechargeBalence = async (payload) => {
-
- 
-    const res = await axios.post(`${API_BASE_URL}QR/api/recharge`, payload);
-    console.log(res);
-    return res;
-  
+  const res = await axios.post(`${API_BASE_URL}QR/api/recharge`, payload);
+  return res;
 };
 
 export const GetBankDetails = async (userId) => {
-
- const res= await axios.get(`${API_BASE_URL}api/withdraw/bank`,{params:{userId}});
- 
- return res;
-}
+  const res = await axios.get(`${API_BASE_URL}api/withdraw/bank`, { params: { userId } });
+  return res;
+};
 
 export const addBankDetails = async (payload) => {
   try {
@@ -91,7 +85,7 @@ export const addBankDetails = async (payload) => {
   }
 };
 
-export const updateBankDetails = async ( payload) => {
+export const updateBankDetails = async (payload) => {
   try {
     const res = await axios.put(`${API_BASE_URL}api/withdraw/bank-details/${payload.userId}`, payload);
     return res;
@@ -106,16 +100,15 @@ export const withdrawReq = async (payload) => {
     const res = await axios.post(`${API_BASE_URL}api/withdraw`, payload);
     return res;
   } catch (err) {
-    console.error("Add Bank Details Error:", err);
+    console.error("Withdraw Request Error:", err);
     throw err.response?.data || err;
   }
 };
-export const getUserInfo = async (userId) => {
 
- const res= await axios.get(`${API_BASE_URL}api/users/user`,{params:{userId}});
- 
- return res;
-}
+export const getUserInfo = async (userId) => {
+  const res = await axios.get(`${API_BASE_URL}api/users/user`, { params: { userId } });
+  return res;
+};
 
 export const sendClaim = async (userId, productId, cycleIndex, claimAmount) => {
   try {
@@ -123,7 +116,7 @@ export const sendClaim = async (userId, productId, cycleIndex, claimAmount) => {
       userId,
       productId,
       cycleIndex,
-      claimAmount
+      claimAmount,
     });
     return res;
   } catch (err) {
@@ -134,10 +127,7 @@ export const sendClaim = async (userId, productId, cycleIndex, claimAmount) => {
 
 export const getTeamData = async (userId, teamLevel) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}api/users/get-team`, {
-      _id: userId,
-      teamLevel,
-    });
+    const res = await axios.post(`${API_BASE_URL}api/users/get-team`, { _id: userId, teamLevel });
     return res.data;
   } catch (err) {
     console.error("Error fetching team:", err);
@@ -147,10 +137,8 @@ export const getTeamData = async (userId, teamLevel) => {
 
 export const getTeamOverview = async (userId) => {
   try {
-    const res = await axios.get(`${API_BASE_URL}api/users/team-overview`, {
-      params: { _id: userId }, // pass userId as query param
-    });
-    return res.data; // returns { success, message, overview }
+    const res = await axios.get(`${API_BASE_URL}api/users/team-overview`, { params: { _id: userId } });
+    return res.data;
   } catch (err) {
     console.error("Error fetching team overview:", err);
     return { success: false, message: "Request failed" };
@@ -159,10 +147,8 @@ export const getTeamOverview = async (userId) => {
 
 export const getTeamLevel = async (userId, level) => {
   try {
-    const res = await axios.get(`${API_BASE_URL}api/users/team-level`, {
-      params: { _id: userId, level }, // pass userId and level
-    });
-    return res.data; // returns { success, message, team }
+    const res = await axios.get(`${API_BASE_URL}api/users/team-level`, { params: { _id: userId, level } });
+    return res.data;
   } catch (err) {
     console.error("Error fetching team level:", err);
     return { success: false, message: "Request failed" };

@@ -1,73 +1,189 @@
-import React, { useState } from "react";
-import "./Info.css";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import {
+  Phone,
+  Clipboard,
+  DollarSign,
+  Wallet,
+  ShoppingCart,
+  TrendingDown,
+  CalendarDays,
+  Copy,
+} from "lucide-react";
+import "./Info.css";
+
+const UserAvatar = () => {
+  
+
+  return (
+    <div className="avatar">
+      <img
+  src="/avatar.jpg"
+  alt="Profile"
+  style={{
+    width: "120px",
+    height: "120px",
+    borderRadius: "50%",
+    objectFit: "cover",
+    border: "3px solid #fbbf24",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+  
+  }}
+/>
+
+    </div>
+  );
+};
+
+const DetailItem = ({ icon: Icon, label, value, monetary = false }) => {
+  const displayValue = monetary
+    ? `₹${value?.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+    : value || "N/A";
+
+  return (
+    <div className="detail-item">
+      <div className="detail-label">
+        <Icon size={18} className="detail-icon" />
+        <span>{label}</span>
+      </div>
+      <span className={monetary ? "detail-value money" : "detail-value"}>
+        {displayValue}
+      </span>
+    </div>
+  );
+};
+
 function Info() {
-  const navigate = useNavigate();
-  const [nickname, setNickname] = useState("");
-  const [email, setEmail] = useState("");
-  const [profilePic, setProfilePic] = useState("/vivo-logo.png");
+ 
+const navigate= useNavigate();
+  const [copiedKey, setCopiedKey] = useState(null);
 
-  const handleImageChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setProfilePic(URL.createObjectURL(e.target.files[0]));
+  const [user, setUser] = useState({
+    name: "",
+    phone: "",
+    userId: "",
+    referralCode: "",
+    balance: 0,
+    pendingIncome: 0,
+    totalBuy: 0,
+    withdrawal: 0,
+    registrationDate: "",
+  });
+ const location = useLocation();
+  const userData = location.state || {};
+  console.log(userData)
+  userData.rechargeHistory.type="Recharge History";userData.withdrawHistory.type="Withdraw History";
+  useEffect(() => {
+    if (userData) {
+      setUser({
+       
+        phone: userData?.phone || "N/A",
+        userId: userData?.userId || "-",
+        referralCode: userData?.UserData?.referralCode || "-",
+        balance: userData?.updatedData?.balance || 0,
+        pendingIncome: userData?.updatedData?.pendingIncome || 0,
+        totalBuy: userData?.updatedData?.totalBuy || 0,
+        withdrawal: userData?.updatedData?.withdrawal || 0,
+        registrationDate: userData?.UserData?.registrationDate || new Date(),
+      });
     }
-  };
+  }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert(`Saved: ${nickname}, ${email}`);
+  const handleCopy = async (text, key) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedKey(key);
+      setTimeout(() => setCopiedKey(null), 1500);
+    } catch (err) {
+      console.error("Copy failed", err);
+    }
   };
 
   return (
     <div className="info-container">
-      <button className="back-btnR" onClick={() => navigate(-1)}>
-                  <ArrowLeft color="black"/>
-                </button>
-      <header className="info-header">Settings Info</header>
-     
+      <div className="infocard">
+        <header className="info-header">
+          <UserAvatar  />
+         
+          <p className="member-date">
+            <CalendarDays size={16} /> Member Since:{" "}
+            {new Date(user.registrationDate).toLocaleDateString()}
+          </p>
 
-      <form className="info-card" onSubmit={handleSubmit}>
-        {/* Profile Upload */}
-        <label className="profile-pic-label">
-          <img src={profilePic} alt="Profile" className="profile-pic" />
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="file-input"
-          />
-          <p className="change-text">Click to change picture</p>
-          <span className="recommend-text">
-            It is recommended to upload 1:1 images larger than 100px
-          </span>
-        </label>
+          <div className="user-id-box">
+            <span className="label">USER ID</span>
+            <div className="user-id-row">
+              <span className="id-text">{user.userId}</span>
+              <button
+                onClick={() => handleCopy(user.userId, "userId")}
+                className="copy-btn"
+              >
+                <Copy size={14} />
+                {copiedKey === "userId" && <span className="copied">Copied!</span>}
+              </button>
+            </div>
+          </div>
+        </header>
 
-        {/* Nickname */}
-        <label className="input-label">NickName</label>
-        <input
-          type="text"
-          className="info-input"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
-          placeholder="Enter nickname"
-        />
+        <section className="info-section">
+          <h2>Account Details</h2>
+          <DetailItem icon={Phone} label="Phone" value={user.phone} />
 
-        {/* Email */}
-        <label className="input-label">E-mail</label>
-        <input
-          type="email"
-          className="info-input"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter email"
-        />
+          <div className="detail-item">
+            <div className="detail-label">
+              <Clipboard size={18} className="detail-icon" />
+              <span>Referral Code</span>
+            </div>
+            <div className="detail-value">
+              <span>{user.referralCode}</span>
+              <button
+                onClick={() => handleCopy(user.referralCode, "referral")}
+                className="copy-btn gray"
+              >
+                <Copy size={14} />
+                {copiedKey === "referral" && (
+                  <span className="copied green">Copied!</span>
+                )}
+              </button>
+            </div>
+          </div>
+        </section>
 
-        {/* Save Button */}
-        <button type="submit" className="save-btn">
-          Save Info
-        </button>
-      </form>
+        <section className="info-section">
+          <h2>Financial Summary</h2>
+          <div className="grid">
+            <div className="summary-card orange" onClick={()=>navigate("/RechargeHistory",{state:userData.rechargeHistory})}>
+              <p>
+                <Wallet size={16} /> Check Balance 
+              </p>
+              <h3>₹{user.balance.toFixed(2)}</h3>
+            </div>
+            <div className="summary-card yellow">
+              <p>
+                <DollarSign size={16} /> Pending Income
+              </p>
+              <h3>₹{user.pendingIncome.toFixed(2)}</h3>
+            </div>
+            <div className="summary-card gray" onClick={()=>navigate("/orders",{state:userData.withdrawHistory})}>
+              <p>
+                <ShoppingCart size={16} /> Total Buy
+              </p>
+              <h3>₹{user.totalBuy.toFixed(2)}</h3>
+            </div>
+            <div className="summary-card gray" onClick={()=>navigate("/WithdrawHistory",{state:userData.withdrawHistory})}>
+              <p>
+                <TrendingDown size={16} />Check Withdrawal
+              </p>
+              <h3>₹{user.withdrawal.toFixed(2)}</h3>
+            </div>
+          </div>
+        </section>
+
+        <div className="footer-btn">
+          <button>Your Profile</button>
+        </div>
+      </div>
     </div>
   );
 }
