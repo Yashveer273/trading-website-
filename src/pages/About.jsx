@@ -9,21 +9,23 @@ function AboutPage() {
   return (
     <div className="about-page">
       {/* Header with back arrow */}
-      <div className="header">
-        <button className="back-btn" onClick={() => navigate(-1)}>
-          <ArrowLeft size={24} />
-        </button>
-        <h1>About Vivo</h1>
-      </div>
+      <div className="header2">
+              <button className="back-btnR" onClick={() => navigate(-1)}>
+                <ArrowLeft color="black" />
+              </button>
+              <h1 className="header-title">About</h1>
+              <div className="spacer"></div>
+            </div>
 
       {/* Section: About */}
-      <div className="info-card slide-up">
+      <div className="info-card slide-up"
+      >
         <h2>About vivo</h2>
-        <img
+        {/* <img
           src="https://i.pinimg.com/1200x/4d/b6/70/4db6709fc3814c08d167a5869717a7df.jpg"
           alt="About Vivo"
           className="info-img"
-        />
+        /> */}
         <p>
           vivo is a technology company that creates great products based on a
           design-driven value, with smart devices and intelligent services as

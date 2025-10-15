@@ -40,6 +40,7 @@ export default function AccountPage() {
     purchaseHistory:[],
     rechargeHistory:[],
     withdrawHistory:[],
+    totalAmount:0
   });
 let updatedData = {};
 
@@ -64,7 +65,7 @@ const fetchAccountData = async () => {
           const bytes = CryptoJS.AES.decrypt(encryptedUser, SECRET_KEY);
           const decrypted = bytes.toString(CryptoJS.enc.Utf8);
          const UserData =await JSON.parse(decrypted);
-        console.log(UserData)
+     
 
         // ✅ Step 3: Set user info from cookie
         setUserInfo({
@@ -79,7 +80,7 @@ const userId=UserData._id;
           axios.get(`${API_BASE_URL}api/users/purchase`,{ params: { userId } }).catch(() => ({ data: [] })),
     ]);
 // if(accountRes.status)
-        console.log(accountRes);
+     
         if (accountRes.data.success) {updatedData = accountRes?.data?.data;
 
         updatedData.ordersCount = purchaseRes?.data?.data?.purchases
@@ -93,7 +94,11 @@ setUserInfo({
 purchaseHistory:purchaseRes?.data?.data?.purchases,
           rechargeHistory:purchaseRes?.data?.data?.rechargeHistory,
           withdrawHistory:purchaseRes?.data?.data?.withdrawHistory,
+          totalAmount:{totalRechargeAmount:purchaseRes?.data?.totalRechargeAmount,  totalWithdrawAmount:purchaseRes?.data?.totalWithdrawAmount}
+         
         });
+        console.log(purchaseRes?.data?.data?.rechargeHistory)
+      
         setAccountData(updatedData);}
       } catch (error) {
 if(error?.response?.data?.message==="User not found"){navigate("/login")}

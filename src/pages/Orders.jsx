@@ -29,7 +29,7 @@ export default function Orders() {
 
     try {
       const res = await getUserInfo(Data._id);
-      const userPurchases = res?.data?.users?.purchases || [];
+   const userPurchases = (res?.data?.users?.purchases || []).slice().reverse();
       setOrders(userPurchases);
     } catch (err) {
       console.error("Failed to fetch user info:", err);
@@ -118,12 +118,13 @@ const handleClaim = async (productId, cycleIndex, claimAmount) => {
 
   return (
     <div className="orders-page">
-      <header className="orders-header">
-        <button className="back-btnR" onClick={() => navigate(-1)}>
-          <ArrowLeft color="white" />
-        </button>
-        <h1 className="orders-title">My Orders</h1>
-      </header>
+      <div className="header2">
+              <button className="back-btnR" onClick={() => navigate(-1)}>
+                <ArrowLeft color="black" />
+              </button>
+              <h1 className="header-title">My Order</h1>
+              <div className="spacer"></div>
+            </div>
 
       <div className="tabs">
         <button className={filter === "all" ? "active" : ""} onClick={() => setFilter("all")}>All</button>

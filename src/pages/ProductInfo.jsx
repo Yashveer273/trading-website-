@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import "./ProductInfo.css";
 import Cookies from "js-cookie";
-import { BuyProduct, getUserInfo, SECRET_KEY } from "../api";
+import { API_BASE_URL2, BuyProduct, getUserInfo, SECRET_KEY } from "../api";
 
 let user = null;
 let balance = null;
@@ -147,7 +147,7 @@ export default function ProductInfo() {
     maxShare: 10,
     dailyIncomePerShare: dailyIncome,
     revenueDurationDays: product.cycleValue,
-    productImageUrl: `https://bdgwin.com.co${product.imageUrl}`,
+    productImageUrl: `${API_BASE_URL2}${product.imageUrl}`,
     needLevel: "VIP",
   };
 
@@ -177,14 +177,15 @@ export default function ProductInfo() {
 
   return (
     <div className="app-container">
-      <header className="header">
-        <div className="header-content">
+      <header className="header2">
+        
           <ChevronLeft className="w-6 h-6 color-gray-800" style={{ cursor: "pointer" }} onClick={() => navigate(-1)} />
           <h1 className="text-xl font-semibold color-gray-800">Buy Product</h1>
           <span>
             Balance <h3>{balance ?? 0}</h3>
           </span>
-        </div>
+        
+        
       </header>
 
       <main className="main-content">

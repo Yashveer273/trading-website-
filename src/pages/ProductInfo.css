@@ -8,10 +8,10 @@
         .bg-orange-500 { background-color: #f97316; }
 
         /* --- Layout & Typography --- */
-        .app-container { min-height: 100vh; background-color: #f9fafb; font-family: sans-serif; }
-        .main-content { max-width: 42rem; margin: 0 auto; padding: 1.5rem 1rem; }
-        .header { position: sticky; top: 0; z-index: 60; background-color: white; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); }
-        .header-content { max-width: 42rem; margin: 0 auto; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .app-container { min-height: 100vh; overflow-y: scroll;width: 100%; background-color: #f9fafb; font-family: sans-serif; }
+        .main-content {  margin: 0 auto; padding: 1.5rem 1rem; }
+        .header { width: 100%;  background-color: white; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); }
+        .header-content {  margin: 0 auto; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
         .font-semibold { font-weight: 600; }
         .font-bold { font-weight: 700; }
         .text-xl { font-size: 1.25rem; }
@@ -98,7 +98,7 @@
   border-radius: 1rem;
   font-weight: 600;
   text-align: center;
-  z-index: 999;
+ 
   animation: fadeInOut 2.5s ease forwards;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }

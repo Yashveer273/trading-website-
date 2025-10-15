@@ -8,10 +8,10 @@
    max-height: 100vh;
   margin: 0 auto;
   min-height: 100vh;
-  padding: 10px;
- 
 
-  position: relative;
+ 
+    margin-bottom: 228.5px;
+  position: absolute;
   /* left: 15px; */
 
   display: flex;
@@ -21,48 +21,16 @@
 }
 
 .background-gradient {
-  position: absolute;
-  top: 0;
-  left: 0;
+  
 
   height: 100%;
   background: linear-gradient(to right, #fb923c, #fcd34d);
   z-index: -1;
 }
 
-.header1 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 0.5rem;
-}
 
-.header-content {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
 
-.header-logo {
-  position: absolute;
-  left: 0;
-  border-radius: 9999px;
-  background-color: #fff;
-  padding: 0.5rem;
-  color: #f97316;
-  font-weight: 700;
-  font-size: 1.125rem;
-  line-height: 1.75rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
 
-.header-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  line-height: 2rem;
-}
 
 .bell-icon {
   color: #4b5563;
@@ -77,7 +45,8 @@
   border-radius: 9999px;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+ 
+   margin: 10px;
 }
 
 .tab-button {
@@ -103,16 +72,19 @@
 
 .product-list-container {
   background-color: #fff;
-
-  border-radius: 1.5rem;
+overflow-y: scroll;
+  border-radius: 0.5rem;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  margin-top: 1rem;
-  padding: 10px;
+  
 
-  margin-bottom: 4.5rem;
+  padding: 10px;
+  padding-bottom: 30px;
+
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin: 10px;
+  margin-bottom: 8.5vh;
 }
 
 .product-card {

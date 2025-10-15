@@ -290,7 +290,7 @@ const STYLES = `
 
 // Main App component
 const Profile = ({ userInfo, accountData }) => {
-   
+     console.log(userInfo)
     const navigate=useNavigate();
   // Simple state to simulate page navigation
   const [activeScreen, setActiveScreen] = useState("home");

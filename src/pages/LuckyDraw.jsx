@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
-import { fetchLuckySpinPrizes, spinItem } from "../api";
-import { useNavigate } from "react-router-dom";
+import { checkLuckySpinValidation, createLuckySpin, fetchLuckySpinPrizes, spinItem } from "../api";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const mockWinnings = [];
 
@@ -175,9 +175,12 @@ const PrizeModal = ({ prize, onClose }) => (
 
 const LuckyDraw = () => {
   const navigate = useNavigate();
+   const location = useLocation();
+    const userId = location.state || {};
   const [isSpinning, setIsSpinning] = useState(false);
   const [result, setResult] = useState(0);
   const [winnings, setWinnings] = useState(mockWinnings);
+  const [IsLuckyAllow, setIsLuckyAllow] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [prizes, setPrizes] = useState([]);
   const [winningPrizeDetails, setWinningPrizeDetails] = useState(null);
@@ -186,6 +189,21 @@ const LuckyDraw = () => {
     const fetchData = async () => {
       const data = await fetchLuckySpinPrizes();
       setPrizes(data);
+      try {
+  const data2 = await checkLuckySpinValidation(userId);
+  console.log(data2);
+
+  if (data2.canSpin) {
+    setIsLuckyAllow(data2);
+  } else {
+    alert(`Daily Spin Limit ${data2.SpinLimit} has been reached!`);
+  }
+} catch (err) {
+  console.error("Error checking LuckySpin:", err);
+  alert(err?.message || "Something went wrong while checking spin");
+}
+
+     
     };
     fetchData();
   }, []);
@@ -210,6 +228,18 @@ const LuckyDraw = () => {
       setResult(newResult);
 
       setTimeout(() => {
+      }, 4000);
+    
+        
+     const res2=  await createLuckySpin(userId, prizes[newResult].value,);
+     try{
+     console.log(res2) }catch(e){
+alert(e?.message || "Something went wrong");
+  console.error("LuckySpin API error:", e);
+  return;
+     }
+   
+        setIsLuckyAllow(false);
         setIsSpinning(false);
         setWinningPrizeDetails(prizes[newResult]);
         setShowModal(true);
@@ -223,7 +253,6 @@ const LuckyDraw = () => {
           },
           ...prev,
         ]);
-      }, 4500);
     } catch (err) {
       console.error(err);
       setIsSpinning(false);
@@ -240,38 +269,13 @@ const LuckyDraw = () => {
         flexDirection: "column",
         alignItems: "center",
       }}
-    >
-      {/* Header */}
-      <div
-        style={{
-          width: "100%",
-          backgroundColor: "#f59e0b",
-          padding: "1rem",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          color: "white",
-          position: "sticky",
-          top: 0,
-          zIndex: 5,
-        }}
-      >
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: "none",
-            border: "none",
-            color: "white",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <ArrowLeft size={24} style={{ marginRight: "0.25rem" }} />
-        </button>
-        <h2 style={{ fontWeight: "bold", fontSize: "1.25rem" }}>Lucky Draw</h2>
-        <div style={{ width: "2rem" }}></div>
-      </div>
+    ><div className="header2">
+            <button className="back-btnR" onClick={() => navigate(-1)}>
+              <ArrowLeft color="black" />
+            </button>
+            <h1 className="header-title">Lucky Draw</h1>
+            <div className="spacer"></div>
+          </div>
 
       {/* Main Container */}
       <div
@@ -316,7 +320,7 @@ const LuckyDraw = () => {
         >
           <button
             onClick={startSpin}
-            disabled={isSpinning}
+            disabled={!IsLuckyAllow && isSpinning}
             style={{
               display: "flex",
               justifyContent: "center",

@@ -6,7 +6,7 @@
   animation: bgFlow 10s infinite alternate;
   background-size: 400% 400%;
   width: 100%;
-  max-width: 480px;
+
   margin: 0 auto;
  
   min-height: 100vh;
@@ -46,6 +46,7 @@
   border-radius: 15px;
   padding: 20px;
   margin-bottom: 20px;
+  margin-top: 10px;
   box-shadow: 0 0 15px rgba(52, 20, 57, 0.2);
   transition: transform 0.3s, box-shadow 0.3s;
   border: 1px solid white;
@@ -70,7 +71,7 @@
 }
 
 .info-img {
-  width: 100%;
+  width: 15%;
   border-radius: 10px;
   margin: 15px 0;
 }

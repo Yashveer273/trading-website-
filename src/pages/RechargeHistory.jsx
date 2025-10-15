@@ -101,10 +101,10 @@ const RechargeItem = ({ record }) => {
 const RechargeHistory = () => {
     const navigate=useNavigate();
     const location = useLocation();
-      const data = location.state || [];
+      const data = location.state.data || [];
       console.log(data)
     //   const Recharge = location.type || {};
-       const totalAmount = data.reduce((sum, record) => sum + record.amount, 0);
+       const totalAmount = location.state.totalAmount??0;
     return (
         <div>
             {/* Header */}

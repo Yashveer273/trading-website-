@@ -1,8 +1,10 @@
 import axios from "axios";
 
 // ✅ Exported base URL (so other files like Account.jsx can import it)
-// export const API_BASE_URL = "https://bdgwin.com.co/";
-export const API_BASE_URL = "http://localhost:5004/";
+export const API_BASE_URL = "https://bdgwin.com.co/";
+export const API_BASE_URL2 = "https://bdgwin.com.co";
+// export const API_BASE_URL = "http://localhost:5004/";
+// export const API_BASE_URL2 = "http://localhost:5004";
 
 // ✅ Shared secret key (must match backend)
 export const SECRET_KEY = "SECRET_KEY12356789";
@@ -36,7 +38,7 @@ export const fetchLuckySpinPrizes = async () => {
     const mappedPrizes = data.map((item) => ({
       name: item.itemName,
       value: item.reward,
-      image: `https://bdgwin.com.co${item.imageUrl}`,
+      image: `${API_BASE_URL2}${item.imageUrl}`,
     }));
     return mappedPrizes;
   } catch (err) {
@@ -49,7 +51,45 @@ export const spinItem = async () => {
   const data = await fetch(`${API_BASE_URL}api/luckySpin/spinItem`);
   return data;
 };
-
+export const checkLuckySpinValidation = async (userId) => {
+  try {
+    const res = await fetch(`${API_BASE_URL}api/users/user-luckySpin-validationcheck`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId }),
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Validation API error:", err);
+    return { success: false, message: err.message };
+  }
+};
+export const createLuckySpin = async (userId,amount) => {
+  try {
+    const res = await fetch(`${API_BASE_URL}api/users/user-luckySpin-dataCreate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId,amount }),
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Create Spin API error:", err);
+    return { success: false, message: err.message };
+  }
+};
+export const getLuckySpinData = async (userId) => {
+  try {
+    const res = await fetch(`${API_BASE_URL}api/users/user-luckySpin-dataGet`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId }),
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Get Spin Data API error:", err);
+    return { success: false, message: err.message };
+  }
+};
 export const productGet = async () => {
   const data = await fetch(`${API_BASE_URL}api/products`);
   return data;

@@ -10,6 +10,7 @@ import {
   TrendingDown,
   CalendarDays,
   Copy,
+  ArrowLeft,
 } from "lucide-react";
 import "./Info.css";
 
@@ -103,7 +104,14 @@ const navigate= useNavigate();
   return (
     <div className="info-container">
       <div className="infocard">
+        
         <header className="info-header">
+      
+        <button className="back-btnR" onClick={() => navigate(-1)}>
+          <ArrowLeft color="black" />
+        </button>
+       
+     
           <UserAvatar  />
          
           <p className="member-date">
@@ -153,11 +161,16 @@ const navigate= useNavigate();
         <section className="info-section">
           <h2>Financial Summary</h2>
           <div className="grid">
-            <div className="summary-card orange" onClick={()=>navigate("/RechargeHistory",{state:userData.rechargeHistory})}>
+            <div className="summary-card orange" onClick={()=>navigate("/RechargeHistory",{state:{data:userData.rechargeHistory,totalAmount:userData?.totalAmount?.totalRechargeAmount}})}>
               <p>
-                <Wallet size={16} /> Check Balance 
+                <Wallet size={16} /> Balance 
+            
               </p>
               <h3>₹{user.balance.toFixed(2)}</h3>
+              <div className="footer-btn">
+          <button>Recharge History</button>
+        </div>
+               
             </div>
             <div className="summary-card yellow">
               <p>
@@ -170,19 +183,24 @@ const navigate= useNavigate();
                 <ShoppingCart size={16} /> Total Buy
               </p>
               <h3>₹{user.totalBuy.toFixed(2)}</h3>
+             
+               <div className="footer-btn">
+          <button>Orders History</button>
+        </div>
             </div>
-            <div className="summary-card gray" onClick={()=>navigate("/WithdrawHistory",{state:userData.withdrawHistory})}>
+            <div className="summary-card gray" onClick={()=>navigate("/WithdrawHistory",{state:{data:userData.withdrawHistory,totalAmount:userData?.totalAmount?.totalWithdrawAmount}})}>
               <p>
                 <TrendingDown size={16} />Check Withdrawal
               </p>
               <h3>₹{user.withdrawal.toFixed(2)}</h3>
+              <div className="footer-btn">
+          <button>Withdrawal History</button>
+        </div>
             </div>
           </div>
         </section>
 
-        <div className="footer-btn">
-          <button>Your Profile</button>
-        </div>
+        
       </div>
     </div>
   );

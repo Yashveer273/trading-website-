@@ -102,19 +102,9 @@ const handleRegister = async () => {
           />
         </div>
 
-        <div id="verification-row">
-          <input
-            type="text"
-            placeholder="Enter verification code"
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-          />
-          <button id="send-btn">Send</button>
-        </div>
+        
 
-        <button id="login-btn" onClick={handleRegister}>
-          Register
-        </button>
+        
 
         <p id="login-text">
           Already have an account?{" "}
@@ -123,6 +113,9 @@ const handleRegister = async () => {
           </span>
         </p>
       </div>
+      <button id="Register-btn" onClick={handleRegister}>
+          Register
+        </button>
     </div>
   );
 };

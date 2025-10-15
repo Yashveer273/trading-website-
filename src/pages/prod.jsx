@@ -1,4 +1,5 @@
 import React from "react";
+import { API_BASE_URL2 } from "../api";
 
 const MetricItem = ({
   label,
@@ -108,7 +109,7 @@ const ProductCard = ({ productData, onBuy }) => {
             }}
           >
             <img
-               src={`https://bdgwin.com.co${img}`}
+               src={`${API_BASE_URL2}${img}`}
               alt="Product"
               style={{ width: "100%", height: "100%", objectFit: "contain" }}
               onError={(e) => {

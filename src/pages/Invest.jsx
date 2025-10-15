@@ -2,7 +2,7 @@ import React, {  useState } from "react";
 import { motion } from "framer-motion";
 import "./Invest.css";
 import { useNavigate } from "react-router-dom";
-import { Home, Users, User, DollarSign } from "lucide-react";
+import { Home, Users, User, DollarSign, ArrowLeft } from "lucide-react";
 import ProductCard from "./prod";
 
 
@@ -62,12 +62,11 @@ console.log(products)
         <div className="background-gradient"></div>
 
         {/* Header */}
-        <header className="header1">
-          <div className="header-content">
-            <div className="header-logo">vivo</div>
-            <span className="header-title">Invest</span>
-          </div>
-        </header>
+        <div className="header2">
+             
+              <h1 className="header-title">My Order</h1>
+              <div className="spacer"></div>
+            </div>
 
         {/* Tabs section */}
         <div className="tabs-container">

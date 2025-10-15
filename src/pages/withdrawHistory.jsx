@@ -103,15 +103,16 @@ const WithdrawalItem = ({ record }) => {
 
 // Component for the Withdrawal History list view
 const WithdrawalHistory = () => { 
-    const navigate=useNavigate();
+const navigate=useNavigate();
     const location = useLocation();
-    const data = location.state || [];
+      const data = location.state.data || [];
+      console.log(data)
+    //   const Recharge = location.type || {};
+       const totalAmount = location.state.totalAmount??0;
     // The component expects the header type to be present on location object (mocked above)
-    const type = location.type || "Withdraw History";
+    const type = "Withdraw History";
       
-    const totalAmount = (Array.isArray(data) ? data : []).reduce((sum, record) => sum + (record.amount || 0), 0);
-    
-  
+   
 
     return (
         <div className="app-container"> {/* Using app-container from CSS for centering */}

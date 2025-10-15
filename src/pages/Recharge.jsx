@@ -37,16 +37,13 @@ navigate("/pay",{ state: amount })
 
   return (
     <div className="recharge-container">
-      <div className="recharge-header">
-        <button
-          className="back-btnR"
-          onClick={() => navigate(-1)}
-          aria-label="Back"
-        >
-          <ArrowLeft />
-        </button>
-        <h2>Recharge</h2>
-      </div>
+      <div className="header2">
+              <button className="back-btnR" onClick={() => navigate(-1)}>
+                <ArrowLeft color="black" />
+              </button>
+              <h1 className="header-title">Recharge</h1>
+              <div className="spacer"></div>
+            </div>
 
       {/* Recharge Box */}
       <div className="recharge-box">

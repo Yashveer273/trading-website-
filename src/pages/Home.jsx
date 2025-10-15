@@ -15,6 +15,7 @@ import "./Home.css";
 import CryptoJS from "crypto-js";
 import Cookies from "js-cookie";
 import { getUserInfo, SECRET_KEY } from "../api";
+import Support from "./Support";
 
 
 const HomePage = () => {
@@ -85,6 +86,7 @@ useEffect(() => {
   return (
     <>
       <div>
+        
         <div className="page-container">
           <div className="topbar1">
             <div className="logo-circle1">
@@ -111,6 +113,7 @@ useEffect(() => {
             <div className="button-row">
                <button onClick={() => navigate("/recharge")} className="card-button">Recharge</button>
               <button onClick={() => navigate("/withdraw")} className="card-button">Withdraw</button>
+             
             </div>
           </div>
 
@@ -161,7 +164,7 @@ useEffect(() => {
           <div className="card1 lucky-draw-card">
             <h3>Lucky Draw</h3>
             <p className="label">The lucky wheel keeps spinning with great gifts</p>
-            <button onClick={() => navigate("/luckydraw")} className="full-button go-button">
+            <button onClick={() => navigate("/luckydraw",{state:UserData?._id})} className="full-button go-button">
               Go
             </button>
           </div>
@@ -216,7 +219,7 @@ useEffect(() => {
       </div>
         </div>
       </div>
-
+ <Support/>
       {/* --- Bottom Navigation --- */}
       
     </>
