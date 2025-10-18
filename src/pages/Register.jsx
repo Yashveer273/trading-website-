@@ -1,54 +1,105 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { registerUser,SECRET_KEY } from "../api"; // Import API
-import "./Register.css";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { registerUser, SECRET_KEY, sendOtpNoCheck } from "../api";
 import CryptoJS from "crypto-js";
- import Cookies from "js-cookie";
+import Cookies from "js-cookie";
+import "./Register.css";
+
 const Register = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // Form state
+  // --- State ---
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [refCode, setRefCode] = useState("");
-  const [TradePassword, setTradePassword] = useState("");
+  const [tradePassword, setTradePassword] = useState("");
   const [otp, setOtp] = useState("");
+  const [generatedOtp, setGeneratedOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [loading, setLoading] = useState(false);
 
+  // --- Auto fill referral code from URL ---
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const invite = params.get("invitation_code");
+    if (invite) setRefCode(invite);
+  }, [location.search]);
 
-const handleRegister = async () => {
-  if (!phone || !password || !TradePassword) return alert("Phone,Trade Password and Password are required");
+  // --- Send OTP ---
+  const handleSendOtp = async () => {
+    if (!phone) return alert("Please enter your phone number");
 
-  const userData = {
-    phone,
-    password,
-    refCode: refCode || null,
-    otp: otp || "12345", // example OTP
-    tradePassword:TradePassword
+    try {
+      setLoading(true);
+      const res = await sendOtpNoCheck(phone,);
+      const data = await res.json();
+      console.log("OTP Response:", data);
+
+      if (data.success) {
+        setOtpSent(true);
+        setGeneratedOtp(data?.data?.otp || "123456");
+        alert("OTP sent successfully!");
+      } else {
+        alert(data?.data?.message || "Failed to send OTP");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error sending OTP");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  try {
-    const response = await registerUser(userData);
-
-    // Save token in cookies
-    if (response.token) {
-      const encryptedUser = CryptoJS.AES.encrypt(
-  JSON.stringify(response.user),
-  SECRET_KEY
-).toString();
-
-      // expires in 7 days, secure flag optional for HTTPS
-    Cookies.set("tredingWeb", response.token, { expires: 7 });
-      Cookies.set("tredingWebUser", encryptedUser, { expires: 7 }); 
-       alert(response.message || "Registered successfully");
-    navigate("/home");
+  // --- Verify OTP ---
+  const handleVerifyOtp = () => {
+    if (!otp) return alert("Enter OTP");
+    if (otp == generatedOtp) {
+      setOtpVerified(true);
+      alert("OTP verified successfully!");
+    } else {
+      alert("Invalid OTP");
     }
+  };
 
-   
-  } catch (err) {
-    alert(err.response?.data?.message || "Registration failed");
-  }
-};
+  // --- Register ---
+  const handleRegister = async () => {
+    if (!otpVerified) return alert("Please verify OTP first");
+    if (!password || !tradePassword)
+      return alert("Password and Trade Password are required");
 
+    const userData = {
+      phone,
+      password,
+      tradePassword,
+      refCode: refCode || null,
+      otp,
+    };
+
+    try {
+      setLoading(true);
+      const response = await registerUser(userData);
+
+      if (response.token) {
+        const encryptedUser = CryptoJS.AES.encrypt(
+          JSON.stringify(response.user),
+          SECRET_KEY
+        ).toString();
+
+        Cookies.set("tredingWeb", response.token, { expires: 7 });
+        Cookies.set("tredingWebUser", encryptedUser, { expires: 7 });
+
+        alert(response.message || "Registered successfully!");
+        navigate("/home");
+      }
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div id="register-container">
@@ -59,52 +110,116 @@ const handleRegister = async () => {
           id="logo"
         />
       </div>
+
       <img
-        src="https://img.freepik.com/free-vector/hand-drawn-stock-market-concept-with-analysts_23-2149163670.jpg?semt=ais_incoming&w=740&q=80"
-        alt="Bar Chart Graphic"
+        src="/fe9af9f2fc1bb01a72b9e6dc233b320ba46ce7ff.png"
+        alt="real estate"
         id="chart-img"
+        style={{
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          width: "94%",
+          borderRadius: "20px",
+          height: "200px",
+        }}
       />
 
       <div id="card">
         <h2 id="register-title">Register</h2>
 
+        {/* Phone + Send OTP */}
         <div id="input-group">
           <input
             type="text"
             placeholder="Please enter your number"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
+            disabled={otpVerified}
           />
+          <button
+  onClick={handleSendOtp}
+  disabled={loading || otpSent || otpVerified}
+  style={{
+    backgroundColor: otpVerified
+      ? "#ffaf25ff" // green when verified
+      : otpSent
+      ? "#f59e0b" // yellow when sent
+      : "#000000ff", // blue default
+    color: "#fff",
+    border: "none",
+    borderRadius: "6px",
+    padding: "5px 14px",
+    fontSize: "14px",
+    cursor: loading || otpSent || otpVerified ? "not-allowed" : "pointer",
+    opacity: loading || otpSent || otpVerified ? 0.6 : 1,
+    transition: "all 0.2s ease-in-out",
+    marginLeft: "8px",
+  }}
+>
+  {loading ? "Sending..." : otpVerified ? "Verified" : "Send OTP"}
+</button>
+
         </div>
 
+        {/* OTP Input */}
+       {otpSent && !otpVerified && (
+  <div id="input-group">
+    <input
+      type="text"
+      placeholder="Enter OTP"
+      value={otp}
+      onChange={(e) => setOtp(e.target.value)}
+    />
+    <button
+      onClick={handleVerifyOtp}
+      style={{
+        backgroundColor: "#ffaf25ff",
+        color: "#fff",
+        border: "none",
+        borderRadius: "6px",
+        padding: "8px 14px",
+        fontSize: "14px",
+        cursor: "pointer",
+        marginLeft: "8px",
+      }}
+    >
+      Verify
+    </button>
+  </div>
+)}
+
+
+        {/* Password Fields (disabled until OTP verified) */}
         <div id="input-group">
           <input
             type="password"
             placeholder="Please enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            disabled={!otpVerified}
           />
         </div>
-<div id="input-group">
+
+        <div id="input-group">
           <input
             type="password"
             placeholder="Please enter your trade password"
-            value={TradePassword}
+            value={tradePassword}
             onChange={(e) => setTradePassword(e.target.value)}
+            disabled={!otpVerified}
           />
         </div>
+
         <div id="input-group">
           <input
             type="text"
-            placeholder="Enter Invitation code"
+            placeholder="Enter Invitation Code"
             value={refCode}
             onChange={(e) => setRefCode(e.target.value)}
+            disabled={!otpVerified}
           />
         </div>
-
-        
-
-        
 
         <p id="login-text">
           Already have an account?{" "}
@@ -113,9 +228,14 @@ const handleRegister = async () => {
           </span>
         </p>
       </div>
-      <button id="Register-btn" onClick={handleRegister}>
-          Register
-        </button>
+
+      <button
+        id="Register-btn"
+        onClick={handleRegister}
+        disabled={!otpVerified || loading}
+      >
+        {loading ? "Please wait..." : "Register"}
+      </button>
     </div>
   );
 };

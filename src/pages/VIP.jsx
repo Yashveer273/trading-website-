@@ -22,7 +22,7 @@ const formatCurrency = (amount) => {
 };
 
 // --- Component for the Dynamic VIP Badge (Used as the 'Image') ---
-const VIPBadge = ({ levelData, size = 'large', isCurrent = false, isUnlocked = true }) => {
+export const VIPBadge = ({ levelData, size = 'large', isCurrent = false, isUnlocked = true }) => {
   
   // Ring classes are simplified to custom classes now
   const ringClass = isCurrent 

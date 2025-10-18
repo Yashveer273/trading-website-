@@ -59,7 +59,18 @@ Cookies.set("tredingWebUser", encryptedUser, { expires: 7, path: "/" });
           className="logo"
         />
       </div>
-
+ <img
+        src="https://i.pinimg.com/736x/21/fa/e8/21fae80dd33394b8c7622e6d136f9597.jpg"
+        alt="real state"
+        id="chart-img"
+   style={{  backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    width: "94%",
+    
+    borderRadius:"20px",
+    height: "200px", }}
+      />
       <div className="login-card">
         <div className="card-header">
           <h2 className="login-title">Login</h2>

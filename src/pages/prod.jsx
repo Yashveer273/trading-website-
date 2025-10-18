@@ -124,7 +124,7 @@ const ProductCard = ({ productData, onBuy }) => {
           <div style={{ flexGrow: 1 }}>
             <h3>     {title}</h3>
             <MetricItem
-              label="Each Price"
+              label="Plan Price"
               value={price}
               valueColor="text-green-800"
               isPrimary
@@ -135,7 +135,7 @@ const ProductCard = ({ productData, onBuy }) => {
               valueColor="text-green-600"
             />
             <MetricItem
-              label="Total Gain"
+              label="Tota Earning"
               value={totalGain}
               valueColor="text-red-600"
               isPrimary

@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import "./Home.css";
 import CryptoJS from "crypto-js";
 import Cookies from "js-cookie";
-import { getUserInfo, SECRET_KEY } from "../api";
+import { getUserInfo, SECRET_KEY, tokenVerify } from "../api";
 import Support from "./Support";
 
 
@@ -23,10 +23,12 @@ const HomePage = () => {
    const [UserData, setUserData] = useState({});
   const [copied, setCopied] = useState(false);
   const [balance, setBalance] = useState("0");
+  const [TeamSize, setTeamSize] = useState(0);
   const navigate = useNavigate();
-useEffect(() => {
-  const fetchUser = async () => {
+   const fetchUser = async () => {
+    
     const encryptedUser = Cookies.get("tredingWebUser");
+     const token = Cookies.get("tredingWeb");
     if (encryptedUser) {
        try {
       const bytes = CryptoJS.AES.decrypt(encryptedUser, SECRET_KEY);
@@ -38,12 +40,39 @@ useEffect(() => {
       }
 
       setUserData(UserData);
+console.log(token)
+
 
      
         const res = await getUserInfo(UserData._id); // fetch user info
-      console.log(UserData._id);
-        // alert(UserData._id);
+      console.log(res?.data?.users?.team1
+);
+        setTeamSize(res?.data?.users?.team1?.length);
         setBalance(res.data.users.balance || "0");
+        try {
+    const res = await tokenVerify(token,UserData?.phone);
+
+    if (res.status === 200 && res.data.success) {
+      // ✅ Token valid, user data in res.data.data
+      return res.data.data;
+    }
+  } catch (err) {
+    console.error(err);
+
+    // 🔹 If server returns 403 → token mismatch
+    if (err.response?.status === 403) {
+      // Clear cookies and local storage
+      Cookies.remove("tredingWeb");
+      Cookies.remove("tredingWebUser");
+      localStorage.removeItem("userData");
+
+      // Redirect to login
+      navigate("/login");
+    } else {
+      // Optional: handle other errors
+      alert("Session expired or server error.");
+    }
+  }
       } catch (err) {
         console.error("Failed to fetch user info:", err);
       }
@@ -51,9 +80,12 @@ useEffect(() => {
       navigate("/login");
     }
   };
-    setTimeout(() => {
+useEffect(() => {
+ 
+  
+           
        fetchUser();
-    }, 2000);
+    
 
 }, []); // ✅ empty array ensures it runs only once
 
@@ -186,7 +218,7 @@ useEffect(() => {
                     <div
                       className="quest-progress-bar-fill"
                       style={{
-                        width: `${(quest.progress.current / quest.progress.total) * 100}%`,
+                        width: `${(TeamSize / quest.progress.total) * 100}%`,
                       }}
                     ></div>
                   </div>
@@ -194,7 +226,7 @@ useEffect(() => {
                 <div className="quest-reward-info">
                   <p className="quest-reward">{quest.reward}</p>
                   <p className="quest-progress">
-                    {quest.progress.current}/{quest.progress.total}
+                    {TeamSize}/{quest.progress.total}
                   </p>
                 </div>
               </div>

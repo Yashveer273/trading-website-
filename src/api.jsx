@@ -1,10 +1,10 @@
 import axios from "axios";
 
 // ✅ Exported base URL (so other files like Account.jsx can import it)
-export const API_BASE_URL = "https://bdgwin.com.co/";
-export const API_BASE_URL2 = "https://bdgwin.com.co";
-// export const API_BASE_URL = "http://localhost:5004/";
-// export const API_BASE_URL2 = "http://localhost:5004";
+// export const API_BASE_URL = "https://bdgwin.com.co/";
+// export const API_BASE_URL2 = "https://bdgwin.com.co";
+export const API_BASE_URL = "http://localhost:5004/";
+export const API_BASE_URL2 = "http://localhost:5004";
 
 // ✅ Shared secret key (must match backend)
 export const SECRET_KEY = "SECRET_KEY12356789";
@@ -149,14 +149,19 @@ export const getUserInfo = async (userId) => {
   const res = await axios.get(`${API_BASE_URL}api/users/user`, { params: { userId } });
   return res;
 };
+export const tokenVerify = async (token,phone) => {
+  const res = await axios.get(`${API_BASE_URL}api/users/tokenVerify`, { params: { token,phone } });
 
-export const sendClaim = async (userId, productId, cycleIndex, claimAmount) => {
+  return res;
+};
+export const sendClaim = async (userId, productId, cycleIndex, claimAmount,isCycleComplete) => {
   try {
     const res = await axios.post(`${API_BASE_URL}api/claimROI/add`, {
       userId,
       productId,
       cycleIndex,
       claimAmount,
+      isCycleComplete
     });
     return res;
   } catch (err) {
@@ -194,3 +199,26 @@ export const getTeamLevel = async (userId, level) => {
     return { success: false, message: "Request failed" };
   }
 };
+export const fetchExplanationsApi = async () => {
+  const res = await fetch(`${API_BASE_URL}QR/api/explanations`);
+  const data = await res.json();
+
+  return data;
+};
+
+export const sendOtp=async(phone)=>{ const res = await fetch(`${API_BASE_URL}api/users/verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone }),
+      });
+      return res;
+    }
+    
+
+    export const sendOtpNoCheck=async(phone)=>{ const res = await fetch(`${API_BASE_URL}api/users/sendOtp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone }),
+      });
+      return res;
+    }

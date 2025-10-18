@@ -74,11 +74,11 @@ export default function Orders() {
     return `${hours}h ${minutes}m ${seconds}s`;
   };
 
-const handleClaim = async (productId, cycleIndex, claimAmount) => {
+const handleClaim = async (productId, cycleIndex, claimAmount,isCycleComplete) => {
   if (!UserData?._id) return;
 
   try {
-    const res = await sendClaim(UserData._id, productId, cycleIndex, claimAmount);
+    const res = await sendClaim(UserData._id, productId, cycleIndex, claimAmount ,isCycleComplete);
 
     if (res.data.success) {
       setClaimStatus({ type: "success", message: `Claimed ₹${claimAmount} successfully!` });
@@ -153,9 +153,33 @@ const handleClaim = async (productId, cycleIndex, claimAmount) => {
                 <div className="order-title">
                   <b>{order.productName}</b>
                   <button className="claim-btn" onClick={() => setModalOrder(order)}>
-                    Claim ({claimableCount}/{totalCycles})
+                    Claim Record ({claimableCount}/{totalCycles})
                   </button>
                 </div>
+<button
+  className="claim-btn"
+  style={{
+    backgroundColor:
+      order.claim === "waiting" && claimableCount === totalCycles
+        ? "black"
+        : "gray",
+    color: "white",
+    cursor:
+      order.claim === "waiting" && claimableCount === totalCycles
+        ? "pointer"
+        : "not-allowed",
+  }}
+  disabled={!(order.claim === "waiting" && claimableCount === totalCycles)}
+  onClick={() => handleClaim(order.productId, -1, 0, true)}
+>
+  {order.claim === "claimed" ? (
+    <>Claimed ✅</>
+  ) : order.claim === "waiting" && claimableCount === totalCycles ? (
+    <>Claim ₹{(order.cycleValue * order.dailyIncome * order.quantity).toFixed(2)} ({claimableCount}/{totalCycles})</>
+  ) : (
+    <>Claim Locked ₹{(order.cycleValue * order.dailyIncome * order.quantity).toFixed(2)}({claimableCount}/{totalCycles})</>
+  )}
+</button>
 
                 <div className="order-body">
                   <div className="order-row"><span className="order-label">Buy Share</span><span className="order-value">{order.quantity}</span></div>
@@ -164,6 +188,7 @@ const handleClaim = async (productId, cycleIndex, claimAmount) => {
                   <div className="order-row"><span className="order-label">Item Price</span><span className="order-value">₹{(order.TotalAmount/order.quantity).toFixed(2)}</span></div>
                   <div className="order-row"><span className="order-label">Total Amount</span><span className="order-value">₹{order.TotalAmount}</span></div>
                 </div>
+               
               </motion.div>
             );
           })
@@ -199,7 +224,7 @@ const handleClaim = async (productId, cycleIndex, claimAmount) => {
                   <li key={i} className={`claim-item ${isAvailable ? "available" : "locked"}`}>
                     <span>{modalOrder.cycleType === "hour" ? `Hour ${i+1}` : `Day ${i+1}`}</span>
                     <span>₹{incomePerCycle.toFixed(2)} - {renderTimeLeft(modalOrder, i)}</span>
-                    {isAvailable && <button className="claim-now-btn" onClick={() => handleClaim(modalOrder.productId, i, incomePerCycle)}>Claim Now</button>}
+                    {isAvailable && <button className="claim-now-btn" onClick={() => handleClaim(modalOrder.productId, i, incomePerCycle,false)}>Claim Now</button>}
                   </li>
                 );
               })}

@@ -8,10 +8,15 @@ import {
   AtSign,
   Phone,
   LogOut,
+  TrendingDown,
+  ShoppingCart,
+  DollarSign,
+  Wallet,
 
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { VIPBadge } from "./VIP";
 // --- Color and Style Constants ---
 const YELLOW_ORANGE_GRADIENT =
   "linear-gradient(rgb(255, 201, 0), rgb(255, 153, 0))";
@@ -32,7 +37,17 @@ const copyToClipboard = (text) => {
   }
   document.body.removeChild(textarea);
 };
-
+const VIP_LEVELS = [
+  { level: 0, name: 'V₀', investment: 0, invites: 0, badgeText: 'FREE', color: 'gray' },
+  { level: 1, name: 'V₁', investment: 5000, invites: 0, badgeText: 'V1', color: 'slate' },
+  { level: 2, name: 'V₂', investment: 10000, invites: 0, badgeText: 'V2', color: 'amber' },
+  { level: 3, name: 'V₃', investment: 15000, invites: 0, badgeText: 'V3', color: 'blue' },
+  { level: 4, name: 'V₄', investment: 19440, invites: 0, badgeText: 'V4', color: 'purple' },
+  { level: 5, name: 'V₅', investment: 34440, invites: 0, badgeText: 'V5', color: 'pink' },
+  { level: 6, name: 'V₆', investment: 64440, invites: 0, badgeText: 'V6', color: 'emerald' },
+  { level: 7, name: 'V₇', investment: 144400, invites: 0, badgeText: 'V7', color: 'red' },
+  { level: 8, name: 'V₈', investment: 180000, invites: 0, badgeText: 'V8', color: 'yellow' },
+];
 // Define all CSS styles as a single string
 const STYLES = `
   :root {
@@ -101,6 +116,9 @@ const STYLES = `
     display: flex;
     align-items: center;
     gap: 0.75rem;
+        justify-content: space-between;
+    width: 100%;
+    
   }
   .user-icon-border {
     position: relative;
@@ -286,11 +304,102 @@ const STYLES = `
       flex-grow: 1;
       text-align: right;
   }
+      
+/* Financial Summary Grid */
+.info-section1 {
+  padding-bottom: 10px;
+  border-top: 1px solid #eee;
+}
+
+.info-section1 h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #444;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #f1f1f1;
+  padding-bottom: 6px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+
+}
+
+.summary-card {
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+   cursor: pointer;
+  
+}
+
+.summary-card.orange {
+  background: #fff6ec;
+  border-color: #ffd3a6;
+}
+
+.summary-card.yellow {
+  background: #fff8e6;
+  border-color: #ffe7a6;
+}
+
+.summary-card.gray {
+  background: #f9f9f9;
+}
+
+.summary-card p {
+  color: #666;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.summary-card h3 {
+  font-size: 1.3rem;
+  margin-top: 5px;
+  color: #333;
+  font-weight: 700;
+}
+
+/* Button */
+.footer-btn {
+  padding: 5px;
+}
+
+.footer-btn button {
+  width: 100%;
+  padding: 12px;
+  background: #ff7a00;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.footer-btn button:hover {
+  background: #ff9500;
+}
+
+
 `;
 
 // Main App component
 const Profile = ({ userInfo, accountData }) => {
-     console.log(userInfo)
+     const [user, setUser] = useState({
+       phone: userInfo?.phone || "N/A",
+        userId: userInfo?.userId || "-",
+        referralCode: userInfo?.userInfo?.referralCode || "-",
+        balance: userInfo?.updatedData?.balance || 0,
+        pendingIncome: userInfo?.updatedData?.pendingIncome || 0,
+        totalBuy: userInfo?.updatedData?.totalBuy || 0,
+        withdrawal: userInfo?.updatedData?.withdrawal || 0,
+        registrationDate: userInfo?.userInfo?.registrationDate || new Date(),
+       });
+       
     const navigate=useNavigate();
   // Simple state to simulate page navigation
   const [activeScreen, setActiveScreen] = useState("home");
@@ -316,6 +425,7 @@ const accountpaloadData=[
     { name: "TradePassword", icon: "https://img.icons8.com/color/48/lock-2.png", screen: "home",path: "/tradepassword",userInfo},
     { name: "Password", icon: "https://img.icons8.com/color/48/key.png", screen: "home",path: "/password",userInfo },
   ];
+  
   return (
     <div className="app-container">
       {/* Inject the styles into the head of the document */}
@@ -326,10 +436,53 @@ const accountpaloadData=[
           <>
             <HeaderBackground />
             <div className="content-padding">
-              <ProfileHeader userId={userInfo.userId} />
+              <ProfileHeader userId={userInfo.userId} userInfo={userInfo} />
               <BalanceSummary accountData={accountpaloadData} />
               <BalanceSummary accountData={accountpaloadData2} />
+                   <section className="info-section1">
+          <h2>Financial Summary</h2>
+          <div className="grid">
+            <div className="summary-card orange" onClick={()=>navigate("/RechargeHistory",{state:{data:userInfo.rechargeHistory,totalAmount:userInfo?.totalAmount?.totalRechargeAmount}})}>
+              <p>
+                <Wallet size={16} /> Balance 
+            
+              </p>
+              <h3>₹{user.balance.toFixed(2)}</h3>
+              <div className="footer-btn">
+          <button>Recharge History</button>
+        </div>
+               
+            </div>
+            <div className="summary-card yellow">
+              <p>
+                <DollarSign size={16} /> Pending Income
+              </p>
+              <h3>₹{user.pendingIncome.toFixed(2)}</h3>
+            </div>
+            <div className="summary-card orange" onClick={()=>navigate("/orders",{state:userInfo?.withdrawHistory})}>
+              <p>
+                <ShoppingCart size={16} /> Total Buy
+              </p>
+              <h3>₹{user.totalBuy.toFixed(2)}</h3>
+             
+               <div className="footer-btn">
+          <button>Orders History</button>
+        </div>
+            </div>
+            <div className="summary-card yellow" onClick={()=>navigate("/WithdrawHistory",{state:{data:userInfo?.withdrawHistory,totalAmount:userInfo?.totalAmount?.totalWithdrawAmount}})}>
+              <p>
+                <TrendingDown size={16} />Check Withdrawal
+              </p>
+              <h3>₹{user.withdrawal.toFixed(2)}</h3>
+              <div className="footer-btn">
+          <button>Withdrawal History</button>
+        </div>
+            </div>
+          </div>
+        </section>
               <ServicesList navigate={navigate}services={services} />
+          
+
               <SignOutButton navigate={navigate}/>
             </div>
           </> 
@@ -351,8 +504,13 @@ const HeaderBackground = () => (
   <div
     className="header-bg"
     style={{
-      backgroundImage: `url('https://placehold.co/400x160/a0522d/fff?text=Britannia+Background')`,
-    }}
+    backgroundImage: `url('https://i.pinimg.com/736x/21/fa/e8/21fae80dd33394b8c7622e6d136f9597.jpg')`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    width: "100%",
+    height: "200px", // adjust as you like
+  }}
   >
     <div className="logo-wrapper">
       {/* Placeholder for Britannia logo */}
@@ -368,18 +526,30 @@ const HeaderBackground = () => (
 );
 
 // Component for the profile section (ID and New tag)
-const ProfileHeader = ({userId}) => {
+const ProfileHeader = ({userId,userInfo}) => {
 
   const displayLength = 7;
   const truncatedId =
     userId.length > displayLength
       ? userId.substring(0, displayLength) + ".."
       : userId;
-
+const  currentInvestment =userInfo?.totalAmount?.totalRechargeAmount ||0 ;
+   let current = VIP_LEVELS[0];
+ for (let i = VIP_LEVELS.length - 1; i >= 0; i--) {
+      if (currentInvestment >= VIP_LEVELS[i].investment) {
+        current = VIP_LEVELS[i];
+       
+        break;
+      }
+    }
+  // Memoize the calculation of current and next VIP level
+ 
   return (
     <div className="profile">
       <div className="user-icon-wrapper">
-        <div className="user-icon-border">
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-around"}}>
+   <div style={{display:"flex",alignItems:"center",gap:"14px"}}>
+          <div className="user-icon-border">
           <User
             style={{ width: "3rem", height: "3rem", color: "#4b5563" }}
             strokeWidth={1.5}
@@ -396,7 +566,12 @@ const ProfileHeader = ({userId}) => {
           >
             <Copy style={{ width: "1rem", height: "1rem" }} />
           </button>
+          
+        </div></div>
         </div>
+     <div style={{display:"flex",gap:"14px",alignItems:"center"}}><h3>VIP Level</h3><VIPBadge levelData={current} size="badge-small" isCurrent={true} /></div>
+        
+         
       </div>
     </div>
   );

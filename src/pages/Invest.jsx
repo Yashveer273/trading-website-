@@ -9,7 +9,7 @@ import ProductCard from "./prod";
 const Invest = ({ products }) => {
 
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("Normal");  
+  const [activeTab, setActiveTab] = useState("Basic");  
 
   const tabs = [
     { name: "Home", icon: <Home size={22} />, path: "/home" },
@@ -31,15 +31,15 @@ const Invest = ({ products }) => {
 
   const getProducts = () => {
     switch (activeTab) {
-      case "Normal":
+      case "Basic":
         return products.filter(
           (item) => item.badge === "popular" || item.badge === "non"
         );
 
-      case "Welfare":
+      case "Normal":
         return products.filter((item) => item.badge === "new");
 
-      case "Offers":
+      case "Vip":
         return products.filter((item) => item.badge === "limited");
 
       default:
@@ -70,7 +70,7 @@ console.log(products)
 
         {/* Tabs section */}
         <div className="tabs-container">
-          {["Normal", "Welfare", "Offers"].map((tab) => (
+          {["Basic", "Normal", "Vip"].map((tab) => (
             <button
               key={tab}
               className={`tab-button ${activeTab === tab ? "active-tab" : ""}`}
@@ -109,6 +109,7 @@ console.log(products)
         : product.totalIncomeDay,
     durationDays: product.cycleValue,
     cycleType: product.cycleType,
+    Claim:product.claim
   }}
   onBuy={() => buyitem(product)}  // ✅ pass buy action here
 />

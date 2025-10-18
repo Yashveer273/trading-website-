@@ -1,72 +1,145 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Password.css";
 import { ArrowLeft } from "lucide-react";
-
+import "./Password.css";
+import { API_BASE_URL, sendOtp } from "../api";
+import Cookies from "js-cookie";
 function Password() {
   const navigate = useNavigate();
-  const [oldPassword, setOldPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
   const [newPassword, setNewPassword] = useState("");
-  const [showOld, setShowOld] = useState(false);
   const [showNew, setShowNew] = useState(false);
 
-  const handleSubmit = (e) => {
+  // Store OTP in a state variable
+  const [generatedOtp, setGeneratedOtp] = useState(0);
+
+  // Step 1: Send OTP
+  const handleSendOtp = async () => {
+    if (!phone) return alert("Please enter phone number");
+
+    try {
+      const res = await sendOtp(phone);
+      
+      const data = await res.json();
+console.log(data.data)
+   if (data.success) {
+         setOtpSent(true);
+         setGeneratedOtp(data?.data?.otp|| "123456"); // store OTP from API response
+         alert("OTP sent successfully!");
+       } else {
+         alert(data?.data?.data?.message[0] || "Failed to send OTP");
+       }
+    } catch (err) {
+      console.error(err);
+      alert("Error sending OTP");
+    }
+  };
+
+  // Step 2: Verify OTP (match with generatedOtp)
+  const handleVerifyOtp = () => {
+    if (!otp) return alert("Enter OTP");
+console.log(generatedOtp)
+    if (otp == generatedOtp) {
+      setOtpVerified(true);
+      alert("OTP verified! You can now set new password.");
+    } else {
+      alert("Invalid OTP");
+    }
+  };
+
+  // Step 3: Submit new password
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Password updated successfully!");
+    if (!newPassword) return alert("Enter new password");
+
+    try {
+      const res = await fetch(`${API_BASE_URL}api/users/update-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, type: "password", confirmPassword:newPassword }),
+        
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        alert("Password updated successfully!");
+        Cookies.remove("tredingWeb");
+                    Cookies.remove("tredingWebUser");
+                    localStorage.removeItem("userData");
+                    navigate("/login");
+        navigate("/login");
+      } else {
+        alert(data.message || "Failed to update password");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error updating password");
+    }
   };
 
   return (
     <div className="password-container">
-      {/* Header */}
       <div className="password-header">
-       <button className="back-btnR" onClick={() => navigate(-1)}>
-                  <ArrowLeft color="Black"/>
-                </button>
-        <h2>Update Password</h2>
+        <button className="back-btnR" onClick={() => navigate(-1)}>
+          <ArrowLeft color="Black" />
+        </button>
+        <h2>Forget Password</h2>
       </div>
 
-      {/* Form */}
       <form className="password-card" onSubmit={handleSubmit}>
-        {/* Old Password */}
-        <label className="input-label">Old Password</label>
-        <div className="password-input-wrapper">
-          <input
-            type={showOld ? "text" : "password"}
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-            placeholder="Please enter password"
-            className="password-input"
-          />
-          <span
-            className="toggle-visibility"
-            onClick={() => setShowOld(!showOld)}
-          >
-            
-          </span>
-        </div>
+        {!otpSent && (
+          <>
+            <label className="input-label">Phone Number</label>
+            <input
+              type="text"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Enter phone number"
+              className="password-input"
+            />
+            <button type="button" className="update-btn" onClick={handleSendOtp}>
+              Send OTP
+            </button>
+          </>
+        )}
 
-        {/* New Password */}
-        <label className="input-label">New Password</label>
-        <div className="password-input-wrapper">
-          <input
-            type={showNew ? "text" : "password"}
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="Please enter new password"
-            className="password-input"
-          />
-          <span
-            className="toggle-visibility"
-            onClick={() => setShowNew(!showNew)}
-          >
-           
-          </span>
-        </div>
+        {otpSent && !otpVerified && (
+          <>
+            <label className="input-label">Enter OTP</label>
+            <input
+              type="tel"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              placeholder="Enter OTP"
+              className="password-input"
+            />
+            <button type="button" className="update-btn" onClick={handleVerifyOtp}>
+              Verify OTP
+            </button>
+          </>
+        )}
 
-        {/* Submit Button */}
-        <button type="submit" className="update-btn">
-          Update Password
-        </button>
+        {otpVerified && (
+          <>
+            <label className="input-label">New Password</label>
+            <div className="password-input-wrapper">
+              <input
+                type={showNew ? "text" : "password"}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Enter new password"
+                className="password-input"
+              />
+              <span className="toggle-visibility" onClick={() => setShowNew(!showNew)}></span>
+            </div>
+            <button type="submit" className="update-btn">
+              Update Password
+            </button>
+          </>
+        )}
       </form>
     </div>
   );

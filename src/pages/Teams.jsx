@@ -17,13 +17,12 @@ const styles = {
     appContainer: {
       fontFamily: "Arial, sans-serif",
       backgroundColor: "#f5f5f5",
-      minHeight: "110vh",
-      maxHeight: "110vh",
+      minHeight: "130vh",
+      maxHeight: "130vh",
       overview:"scroll",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-     marginBottom:"4vh"
     },
     header: {
       width: "100%",

@@ -158,48 +158,7 @@ const navigate= useNavigate();
           </div>
         </section>
 
-        <section className="info-section">
-          <h2>Financial Summary</h2>
-          <div className="grid">
-            <div className="summary-card orange" onClick={()=>navigate("/RechargeHistory",{state:{data:userData.rechargeHistory,totalAmount:userData?.totalAmount?.totalRechargeAmount}})}>
-              <p>
-                <Wallet size={16} /> Balance 
-            
-              </p>
-              <h3>₹{user.balance.toFixed(2)}</h3>
-              <div className="footer-btn">
-          <button>Recharge History</button>
-        </div>
-               
-            </div>
-            <div className="summary-card yellow">
-              <p>
-                <DollarSign size={16} /> Pending Income
-              </p>
-              <h3>₹{user.pendingIncome.toFixed(2)}</h3>
-            </div>
-            <div className="summary-card gray" onClick={()=>navigate("/orders",{state:userData.withdrawHistory})}>
-              <p>
-                <ShoppingCart size={16} /> Total Buy
-              </p>
-              <h3>₹{user.totalBuy.toFixed(2)}</h3>
-             
-               <div className="footer-btn">
-          <button>Orders History</button>
-        </div>
-            </div>
-            <div className="summary-card gray" onClick={()=>navigate("/WithdrawHistory",{state:{data:userData.withdrawHistory,totalAmount:userData?.totalAmount?.totalWithdrawAmount}})}>
-              <p>
-                <TrendingDown size={16} />Check Withdrawal
-              </p>
-              <h3>₹{user.withdrawal.toFixed(2)}</h3>
-              <div className="footer-btn">
-          <button>Withdrawal History</button>
-        </div>
-            </div>
-          </div>
-        </section>
-
+       
         
       </div>
     </div>
