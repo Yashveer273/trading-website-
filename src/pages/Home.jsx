@@ -90,7 +90,7 @@ useEffect(() => {
 }, []); // ✅ empty array ensures it runs only once
 
   const copyLink = () => {
-    const link = `https://m.india1188.com/?invitation_code=${UserData.referralCode}`;
+    const link = `http://realstateinvest.in/?invitation_code=${UserData.referralCode}`;
     navigator.clipboard.writeText(link).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -183,7 +183,7 @@ useEffect(() => {
               <div>
                 <p className="label">Promotional Links</p>
                 <p className="link-text">
-                  https://m.india1188.com/?invitation_code={UserData.referralCode}
+                  http://realstateinvest.in/?invitation_code={UserData.referralCode}
                 </p>
               </div>
             </div>
