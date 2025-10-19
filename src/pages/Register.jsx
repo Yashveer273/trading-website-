@@ -103,12 +103,14 @@ const Register = () => {
 
   return (
     <div id="register-container">
-      <div id="top-bar">
-        <img
-          src="https://latestlogo.com/wp-content/uploads/2024/02/vivo.png"
-          alt="Vivo Logo"
-          id="logo"
-        />
+      <div id="top-bar"style={{    height: "135px"}}>
+        <div className="logo-circle1">
+              <img
+              src="/logo.jpg"
+              alt="Logo"
+              className="logo-img"
+               />
+            </div>
       </div>
 
       <img

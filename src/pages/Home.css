@@ -43,24 +43,27 @@
   gap: 0.5rem;
 }
 
+/* Container circle */
 .logo-circle1 {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 9999px;
+  width: 110px;             /* adjust size as needed */
+  height: 110px;
+  border-radius: 50%;      /* makes it circular */
+  overflow: hidden;        /* crop image to circle */
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.25rem;
-  background-color: white;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  border: 1px solid #f59e0b;
+  border: 2px solid #fff;  /* optional border */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* optional shadow */
+  background-color: #fff;  /* fallback bg */
 }
 
-.logo-img {
+/* Image inside the circle */
+.logo-circle1 .logo-img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;       /* ensures image fills circle without distortion */
 }
+
 
 h1 {
   font-size: 1.25rem;

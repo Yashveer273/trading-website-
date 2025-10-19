@@ -123,8 +123,8 @@ useEffect(() => {
           <div className="topbar1">
             <div className="logo-circle1">
               <img
-              src="https://latestlogo.com/wp-content/uploads/2024/02/vivo.png"
-              alt="Vivo Logo"
+              src="/logo.jpg"
+              alt="Logo"
               className="logo-img"
                />
             </div>

@@ -152,6 +152,8 @@ const ProductCard = ({ productData, onBuy }) => {
           backgroundColor: "#fffef3",
           display: "flex",
           justifyContent: "center",
+          marginTop: "16px",
+               marginBottom: "3px",
         }}
       >
         <button className="buy-button" onClick={onBuy}>

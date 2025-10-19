@@ -1,20 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
-import { MessageCircle, MessageSquare, } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import "./Support.css";
-
-const USERNAME_LINK = "https://t.me/wowdevil512";
-const GROUP_LINK = "https://t.me/+X2XYg4dccFBkODll";
-const SUPPORT_ICON_URL =
-  "https://img.icons8.com/?size=100&id=RntMFwIniVlj&format=png&color=000000";
+import { getSocialLinks } from "../api";
 
 // ✅ Telegram logo (from Icons8)
-const TELEGRAM_ICON_URL =
-  "https://img.icons8.com/color/48/telegram-app--v1.png";
+const TELEGRAM_ICON_URL = "https://img.icons8.com/color/48/telegram-app--v1.png";
+
+
+
+// ✅ Support icon (custom or fallback)
+const SUPPORT_ICON_URL =
+  "https://img.icons8.com/?size=100&id=RntMFwIniVlj&format=png&color=000000";
 
 const SupportIcon = ({ className }) => {
   const [fail, setFail] = useState(false);
   return fail ? (
-    <MessageCircle className={className}  />
+    <MessageCircle className={className} />
   ) : (
     <img
       src={SUPPORT_ICON_URL}
@@ -29,7 +30,26 @@ const Support = () => {
   const [open, setOpen] = useState(false);
   const btnRef = useRef(null);
   const menuRef = useRef(null);
+  const [usernameLink, setUsernameLink] = useState("");
+  const [groupLink, setGroupLink] = useState("");
 
+  // ✅ Fetch dynamic links from backend
+  useEffect(() => {
+    const fetchLinks = async () => {
+      try {
+        const data = await getSocialLinks();
+        if (data && data.length > 0) {
+          setUsernameLink(data[0].telegramUsernameLink || "");
+          setGroupLink(data[0].telegramGroupLink || "");
+        }
+      } catch (err) {
+        console.error("Failed to fetch links:", err);
+      }
+    };
+    fetchLinks();
+  }, []);
+
+  // ✅ Click-outside menu close logic
   useEffect(() => {
     const close = (e) => {
       if (
@@ -45,6 +65,7 @@ const Support = () => {
 
   return (
     <div className="support-container">
+      {/* Floating Support Button */}
       <button
         ref={btnRef}
         className="support-btn"
@@ -54,22 +75,26 @@ const Support = () => {
         <div className="support-btn-content">
           <SupportIcon className="support-icon" />
         </div>
+        <div className="white-card">
+          <h3>Support</h3>
+        </div>
       </button>
 
+      {/* Support Dropdown */}
       <div ref={menuRef} className={`support-menu ${open ? "show" : ""}`}>
-        {/* Chat Icon */}
+        {/* Personal Chat */}
         <a
-          href={USERNAME_LINK}
+          href={usernameLink}
           target="_blank"
           rel="noreferrer"
-          title="Chat with User"
+          title="Chat with Support"
         >
-          <MessageCircle size={40} style={{paddingLeft:"10px"}}/>
+          <MessageCircle size={40} style={{ paddingLeft: "10px" }} />
         </a>
 
-        {/* Telegram Icon */}
+        {/* Telegram Group */}
         <a
-          href={GROUP_LINK}
+          href={groupLink}
           target="_blank"
           rel="noreferrer"
           title="Join Telegram Group"

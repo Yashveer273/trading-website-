@@ -222,3 +222,8 @@ export const sendOtp=async(phone)=>{ const res = await fetch(`${API_BASE_URL}api
       });
       return res;
     }
+
+    export const getSocialLinks = async () => {
+  const res = await axios.get(`${API_BASE_URL}api/SocialMedia`);
+  return res.data.data;
+};

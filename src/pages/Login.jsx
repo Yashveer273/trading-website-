@@ -53,11 +53,13 @@ Cookies.set("tredingWebUser", encryptedUser, { expires: 7, path: "/" });
   return (
     <div className="login-container">
       <div className="top-bar">
-        <img
-          src="https://latestlogo.com/wp-content/uploads/2024/02/vivo.png"
-          alt="Vivo Logo"
-          className="logo"
-        />
+         <div className="logo-circle1">
+              <img
+              src="/logo.jpg"
+              alt="Logo"
+              className="logo-img"
+               />
+            </div>
       </div>
  <img
         src="https://i.pinimg.com/736x/21/fa/e8/21fae80dd33394b8c7622e6d136f9597.jpg"
