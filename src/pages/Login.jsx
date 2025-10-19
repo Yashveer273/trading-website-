@@ -4,11 +4,13 @@ import CryptoJS from "crypto-js";
 import Cookies from "js-cookie";
 import { loginUser, SECRET_KEY } from "../api";
 import "./Login.css";
+import Password from "./Password";
 
 const Login = () => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [password1, setPassword1] = useState(false);
 
   const handleRegisterRedirect = () => navigate("/register");
 
@@ -74,10 +76,13 @@ Cookies.set("tredingWebUser", encryptedUser, { expires: 7, path: "/" });
     height: "200px", }}
       />
       <div className="login-card">
-        <div className="card-header">
+      {password1===false?(<><div className="card-header">
           <h2 className="login-title">Login</h2>
           <button className="register-link" onClick={handleRegisterRedirect}>
             Register
+          </button>
+           <button className="register-link" onClick={()=>{setPassword1(true)}}>
+            Forget Password
           </button>
         </div>
 
@@ -113,6 +118,13 @@ Cookies.set("tredingWebUser", encryptedUser, { expires: 7, path: "/" });
         <button className="login-btn" onClick={handleLogin}>
           Login
         </button>
+        
+        </>):(<> <button className="login-btn" onClick={() => setPassword1(false)}>
+       Back To Login
+        </button> <Password/></>)} 
+       
+       
+     
       </div>
     </div>
   );

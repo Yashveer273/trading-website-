@@ -1,10 +1,10 @@
 import axios from "axios";
 
 // ✅ Exported base URL (so other files like Account.jsx can import it)
-export const API_BASE_URL = "https://bdgwin.com.co/";
-export const API_BASE_URL2 = "https://bdgwin.com.co";
-// export const API_BASE_URL = "http://localhost:5004/";
-// export const API_BASE_URL2 = "http://localhost:5004";
+// export const API_BASE_URL = "https://bdgwin.com.co/";
+// export const API_BASE_URL2 = "https://bdgwin.com.co";
+export const API_BASE_URL = "http://localhost:5004/";
+export const API_BASE_URL2 = "http://localhost:5004";
 
 // ✅ Shared secret key (must match backend)
 export const SECRET_KEY = "SECRET_KEY12356789";

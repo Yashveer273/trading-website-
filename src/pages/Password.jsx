@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import "./Password.css";
-import { API_BASE_URL, sendOtp } from "../api";
+import { API_BASE_URL, SECRET_KEY, sendOtp } from "../api";
 import Cookies from "js-cookie";
+import CryptoJS from "crypto-js";
+
 function Password() {
   const navigate = useNavigate();
   const [phone, setPhone] = useState("");
@@ -56,7 +58,8 @@ console.log(generatedOtp)
     if (!newPassword) return alert("Enter new password");
 
     try {
-      const res = await fetch(`${API_BASE_URL}api/users/update-password`, {
+
+      const res = await fetch(`${API_BASE_URL}api/users/forget-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phone, type: "password", confirmPassword:newPassword }),
@@ -64,13 +67,41 @@ console.log(generatedOtp)
       });
       const data = await res.json();
 
-      if (data.success) {
-        alert("Password updated successfully!");
-        Cookies.remove("tredingWeb");
-                    Cookies.remove("tredingWebUser");
-                    localStorage.removeItem("userData");
-                    navigate("/login");
-        navigate("/login");
+      if (data.token && data.user) {
+
+        // Cookies.remove("tredingWeb");
+        //             Cookies.remove("tredingWebUser");
+        //             localStorage.removeItem("userData");
+        //             navigate("/login");
+      
+
+        //   try {
+        //       const response = await loginUser(credentials);
+        
+        //       if (response.token && response.user) {
+        //         // ✅ Encrypt user info
+                const encryptedUser = CryptoJS.AES.encrypt(
+                  JSON.stringify(data.user),
+                  SECRET_KEY
+                ).toString();
+        
+        //        // ✅ Store cookies globally (fixes redirect issue)
+        Cookies.set("tredingWeb", data.token, { expires: 7, path: "/" });
+        Cookies.set("tredingWebUser", encryptedUser, { expires: 7, path: "/" });
+        
+        //         // ✅ Save in localStorage
+                localStorage.setItem("userData", JSON.stringify(data.user));
+        
+                alert(data.message || "Login successful");
+        
+        //         // ✅ Wait a bit before navigating (ensures cookie save)
+                setTimeout(() => {
+                  navigate("/home");
+                }, 200);
+              
+        //     } catch (err) {
+        //       alert(err.response?.data?.message || "Login failed");
+        //     }
       } else {
         alert(data.message || "Failed to update password");
       }
@@ -81,13 +112,13 @@ console.log(generatedOtp)
   };
 
   return (
-    <div className="password-container">
-      <div className="password-header">
+    <div className="">
+      {/* <div className="password-header">
         <button className="back-btnR" onClick={() => navigate(-1)}>
           <ArrowLeft color="Black" />
         </button>
         <h2>Forget Password</h2>
-      </div>
+      </div> */}
 
       <form className="password-card" onSubmit={handleSubmit}>
         {!otpSent && (

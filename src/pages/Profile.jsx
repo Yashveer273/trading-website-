@@ -422,8 +422,8 @@ const accountpaloadData=[
     { name: "User Info", icon: "https://img.icons8.com/color/48/info.png", screen: "profit",path: "/info",userInfo },
     { name: "About", icon: "https://img.icons8.com/color/48/user.png", screen: "home",path: "/about",userInfo },
     { name: "VIP", icon: "https://img.icons8.com/color/48/vip.png", screen: "home",path: "/vip" ,userInfo},
-    { name: "TradePassword", icon: "https://img.icons8.com/color/48/lock-2.png", screen: "home",path: "/tradepassword",userInfo},
-    { name: "Password", icon: "https://img.icons8.com/color/48/key.png", screen: "home",path: "/password",userInfo },
+    { name: "Trade Password", icon: "https://img.icons8.com/color/48/lock-2.png", screen: "home",path: "/tradepassword",userInfo},
+    { name: "Change Password", icon: "https://img.icons8.com/color/48/key.png", screen: "home",path: "/ChangePassword",userInfo },
   ];
   
   return (

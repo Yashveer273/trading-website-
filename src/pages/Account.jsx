@@ -44,11 +44,7 @@ export default function AccountPage() {
   });
 let updatedData = {};
 
-  useEffect(() => {
-    
-
-  fetchAccountData()
-  }, []);
+ 
 const fetchAccountData = async () => {
       try {
         // ✅ Step 1: Read encrypted user info from cookie
@@ -102,7 +98,7 @@ purchaseHistory:purchaseRes?.data?.data?.purchases,
         setAccountData(updatedData);}
       } catch (error) {
 if(error?.response?.data?.message==="User not found"){navigate("/login")}
-        console.error("Error fetching account data:", error.response.data);
+        console.log("Error fetching account data:", error?.response?.data);
         // ✅ Do not redirect, just show empty data
         setAccountData({
           totalBuy: 0,
@@ -115,6 +111,11 @@ if(error?.response?.data?.message==="User not found"){navigate("/login")}
         });
       } 
     };
+     useEffect(() => {
+    
+
+  fetchAccountData()
+  }, []);
   const tabs = [
     { name: "Home", icon: <Home size={22} />, path: "/home" },
     { name: "invest", icon: <DollarSign size={22} />, path: "/invest" },

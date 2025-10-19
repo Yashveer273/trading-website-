@@ -34,6 +34,7 @@ import ProductInfo from "./pages/ProductInfo";
 import "./App.css";
 import RechargeHistory from "./pages/RechargeHistory";
 import WithdrawalHistory from "./pages/withdrawHistory";
+import ChangePassword from "./pages/ChangePassword";
 function App() {
    const [products, setproducts] = useState([
    
@@ -86,6 +87,7 @@ try{
         <Route path="/info" element={<Info />} />
         <Route path="/tradepassword" element={<TradePassword />} />
         <Route path="/password" element={<Password />} />
+        <Route path="/ChangePassword" element={<ChangePassword />} />
         
         <Route path="/invest" element={<Invest products={products}/>} />
         <Route path="/ProductInfo" element={<ProductInfo/>} />

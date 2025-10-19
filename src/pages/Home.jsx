@@ -40,7 +40,7 @@ const HomePage = () => {
       }
 
       setUserData(UserData);
-console.log(token)
+
 
 
      
@@ -50,6 +50,7 @@ console.log(token)
         setTeamSize(res?.data?.users?.team1?.length);
         setBalance(res.data.users.balance || "0");
         try {
+          
     const res = await tokenVerify(token,UserData?.phone);
 
     if (res.status === 200 && res.data.success) {
