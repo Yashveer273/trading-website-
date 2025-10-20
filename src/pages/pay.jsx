@@ -1,13 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { Smile, Loader2, CheckCircle, AlertTriangle } from "lucide-react";
-import "./pay.css"; // 👈 import external CSS
-import {  QRrandom, RechargeBalence, SECRET_KEY } from "../api";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Smile,
+  Loader2,
+  CheckCircle,
+  AlertTriangle,
+  Clock,
+  ChevronLeft,
+} from "lucide-react";
+import "./pay.css";
+import { QRrandom, RechargeBalence, SECRET_KEY } from "../api";
 import { useLocation, useNavigate } from "react-router-dom";
 import CryptoJS from "crypto-js";
-
 import Cookies from "js-cookie";
 
 let user = null;
+
 const QRCode = async () => {
   const res = await QRrandom();
   if (!res.ok) return;
@@ -19,43 +26,19 @@ const QRCode = async () => {
   };
 };
 
-// const SubmitPayment = async (payload) => {
-//   if (payload.utr.length < 5 ) {
-//     throw new Error("UTR must be at least 5 characters long.");
-//   }
-
-//   try {
-//     const res = await BuyProduct(payload);
-
-//     if (!res.status ) {
-//       throw new Error( "Payment request failed");
-//     }
-
-//     return {
-//       success: true,
-//     };
-//   } catch (err) {
-//     const status = err.response.status;
-//     if(status===409){
-//  throw new Error( "This is one time buy item & you have already buy this item");
-//     }else{
-//     throw new Error(err.message || "Network error");}
-//   }
-// };
-
-const Pay = () => {  
+const Pay = () => {
   const location = useLocation();
   const [qrCodeUrl, setQrCodeUrl] = useState("");
   const [qrImageName, setQrImageName] = useState("");
   const [utr, setUtr] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [price, setprice] = useState(location.state ?? 0);
-
   const [message, setMessage] = useState({ text: "", type: "" });
-
-  // const product = location.state;
-  
+  const [timer, setTimer] = useState(60); // countdown (in seconds)
   const navigate = useNavigate();
+  const timerRef = useRef(null);
+
+  // 🧩 Fetch new QR code
   const fetchQRCode = async () => {
     setIsLoading(true);
     setMessage({ text: "Fetching latest QR code...", type: "info" });
@@ -64,7 +47,7 @@ const Pay = () => {
       setQrCodeUrl(data.url);
       setQrImageName(data.filename);
       setMessage({
-        text: "QR Code loaded. Please complete payment.",
+        text: "QR Code loaded. Please complete payment within 1 minute.",
         type: "info",
       });
     } catch (error) {
@@ -76,91 +59,81 @@ const Pay = () => {
       setIsLoading(false);
     }
   };
+
+  // 🔐 Get user data
   const getUserData = () => {
     const encryptedUser = Cookies.get("tredingWebUser");
     if (encryptedUser) {
       const bytes = CryptoJS.AES.decrypt(encryptedUser, SECRET_KEY);
       const decrypted = bytes.toString(CryptoJS.enc.Utf8);
       user = JSON.parse(decrypted);
-      if (user?._id == null) {
-        navigate("/login");
-      }
+      if (!user?._id) navigate("/login");
     }
   };
+
+  // 🚀 Initial setup
   useEffect(() => {
     getUserData();
     fetchQRCode();
+    setTimer(60);
   }, []);
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
+  // ⏱ Countdown effect
+  useEffect(() => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
 
-  //   if (!utr.trim() || !qrImageName) {
-  //     setMessage({
-  //       text: "Please enter your UTR and ensure QR code is loaded.",
-  //       type: "error",
-  //     });
-  //     return;
-  //   }
+    return () => clearInterval(timerRef.current);
+  }, []);
 
-  //   const payload = {
-  //     productId: product._id,
-  //     amount: product.price,
-  //     utr: utr.trim(),
-  //     qrImageName,
-  //     userId:user?._id,
-  //     purchaseType:product.purchaseType
-  //   };
-  //   setIsLoading(true);
-  //   setMessage({ text: "Submitting UTR for verification...", type: "info" });
-  //   try {
-  //     const data = await SubmitPayment(payload);
+  // 🔁 When timer hits 0, fetch new QR and reset timer
+  useEffect(() => {
+    if (timer === 0) {
+      fetchQRCode(); // fetch new QR
+      setTimer(60); // restart countdown
+    }
+  }, [timer]);
 
-  //     if (data.success) {
-  //       setMessage({
-  //         text: "Payment submitted successfully! Awaiting approval.",
-  //         type: "success",
-  //       });
-  //       setUtr("");
-  //          setTimeout(() => {
-  //         navigate(-1);
-  //       }, 1000);
-  //     }
+  // Inline styles
+  const containerStyle = {
+    marginTop: "10px",
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "10px",
+  };
 
-  //   } catch (error) {
+  const itemStyle = {
+    backgroundColor: "#F4F4F5",
+    padding: "10px 12px",
+    borderRadius: "8px",
+    border: "1px solid #D1D1D6",
+    width: "48%",
+    cursor: "pointer",
+  };
 
-  //     setMessage({
-  //       text: `Submission failed: ${error.message || "Server error."}`,
-  //       type: "error",
-  //     });
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+  const innerFlex = { display: "flex", alignItems: "center", gap: "10px" };
+  const textStyle = { color: "#0F0F0F", fontSize: "12px", fontWeight: 500 };
+  const imageStyle = { width: "24px", height: "auto" };
+
+  // 🧾 Submit UTR
   const handleSubmit = async (e) => {
-      e.preventDefault();
-
+    e.preventDefault();
     setIsLoading(true);
     setMessage({ text: "Submitting UTR for verification...", type: "info" });
     try {
-
-      const payload = { userId: user?._id,amount: price, utr, qrImageName };
+      const payload = { userId: user?._id, amount: price, utr, qrImageName };
       const res = await RechargeBalence(payload);
 
-      if (!res.status) {
-        throw new Error("Payment request failed");
-      }
-else{
- setMessage({
+      if (!res.status) throw new Error("Payment request failed");
+
+      setMessage({
         text: "Payment submitted successfully! Awaiting approval.",
         type: "success",
       });
       setUtr("");
-      setTimeout(() => {
-        navigate(-1);
-      }, 1000); 
-}
-      
+      setTimeout(() => navigate(-1), 1000);
     } catch (error) {
       setMessage({
         text: `Submission failed: ${error.message || "Server error."}`,
@@ -170,6 +143,8 @@ else{
       setIsLoading(false);
     }
   };
+
+  // ✅ Message component
   const MessageDisplay = ({ text, type }) => {
     if (!text) return null;
     let icon, cssClass;
@@ -197,24 +172,51 @@ else{
   return (
     <div className="pay-container">
       <div>
-        <button
-          className="back-btn"
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
-          {" "}
-          Back
+        <button className="back-btn" onClick={() => navigate(-1)}>
+          <ChevronLeft />
         </button>
       </div>
+
       <div className="pay-card">
         <header className="pay-header">
-          <h1> ₹{price}</h1>
+          <h1>₹{price}</h1>
         </header>
 
+        {/* Payment Methods */}
+        <div style={containerStyle}>
+          <div style={itemStyle}>
+            <div style={innerFlex}>
+              <img
+                src="https://pay.topcashwallet.com/assets/paytm-iAXkRI72.png"
+                alt="Paytm"
+                style={imageStyle}
+              />
+              <p style={textStyle}>Paytm</p>
+            </div>
+          </div>
+
+          <div style={itemStyle}>
+            <div style={innerFlex}>
+              <img
+                src="https://pay.topcashwallet.com/assets/qr_phonepe-DfcDrNXK.png"
+                alt="PhonePe"
+                style={imageStyle}
+              />
+              <p style={textStyle}>PhonePe</p>
+            </div>
+          </div>
+        </div>
+
+        {/* QR Section */}
         <section className="qr-section">
-          <h2>Use Mobile Scan code to pay</h2>
-          <p>Or take screenshot and scan in your payment app</p>
+          <h2>Use Mobile Scan Code to Pay</h2>
+          <p>
+            Or take screenshot and scan in your payment app.
+            <br />
+            <Clock size={14} style={{ marginRight: 4 }} />
+            QR will expire in <strong>{timer}s</strong>
+          </p>
+
           <div className="qr-box">
             {isLoading && !qrCodeUrl ? (
               <div className="qr-loading">
@@ -234,12 +236,14 @@ else{
               )
             )}
           </div>
+
           <div className="qr-warning">
             ⚠️ Do not use the same QR code multiple times
-            <span>userId:= {user?._id}</span>
+            <span>userId: {user?._id}</span>
           </div>
         </section>
 
+        {/* UTR Section */}
         <section className="utr-section">
           <h3>Enter Ref No. and Submit</h3>
           <form onSubmit={handleSubmit}>

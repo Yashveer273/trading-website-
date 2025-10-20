@@ -6,13 +6,13 @@ body {
 }
 
 .pay-container {
-    display: flex
-;
-    justify-content: center;
-    align-items: center;
+   
+
     padding-left: 12px;
     padding-right: 12px;
     min-height: 100vh;
+    margin: .5rem;
+      max-width: 100%;
 }
 
 .pay-card {
@@ -21,8 +21,9 @@ body {
   border-radius: 1rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   padding: 2rem;
-  max-width: 480px;
+
   width: 100%;
+  margin-top: .5rem;
 }
 
 .pay-header {
@@ -130,9 +131,9 @@ body {
   box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.3);
 }
 .back-btn {
-    width: 11vh;
+    width: 15%;
   padding: 0.5rem 1rem;
-  background: #16a2f9;
+  background: #000000;
   color: #fff;
   border: none;
   border-radius: 0.5rem;
@@ -140,16 +141,15 @@ body {
   cursor: pointer;
   transition: 0.3s;
   
-  position: absolute;
-  top: 1rem;      /* distance from top of parent */
-  left: 1rem;     /* distance from left */
+ 
+    /* distance from left */
   display: flex;
   align-items: center;
   gap: 0.25rem;  /* space between icon and text */
 }
 
 .back-btn:hover {
-  background: #1280d1;
+  background: #19191a;
 }
 
 .utr-section form {
