@@ -8,15 +8,14 @@ body {
 .pay-container {
    
 
-    padding-left: 12px;
-    padding-right: 12px;
+    
     min-height: 100vh;
-    margin: .5rem;
+   
       max-width: 100%;
 }
 
 .pay-card {
-  background: #fff;
+ background: linear-gradient(rgb(255, 201, 0), rgb(255, 153, 0));
   border: 1px solid #e5e7eb;
   border-radius: 1rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -45,6 +44,7 @@ body {
 .qr-section {
   margin-top: 1.5rem;
   text-align: center;
+    
 }
 
 .qr-section h2 {
@@ -157,7 +157,7 @@ body {
 }
 .utr-section form button {
    padding: 0.5rem 1rem;
-  background: #f97316;
+  background: #0014ff;
   color: #fff;
   border: none;
   border-radius: 0.5rem;
@@ -170,11 +170,11 @@ body {
 }
 
 .utr-section form button:hover {
-background: #ea580c;
+background: #0014ff;
 }
 
 .utr-section form button:disabled {
-  background: #fca5a5;
+  background: #6d77e4;
   cursor: not-allowed;
 }
 

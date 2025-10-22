@@ -6,6 +6,7 @@ import {
   AlertTriangle,
   Clock,
   ChevronLeft,
+  ArrowLeft,
 } from "lucide-react";
 import "./pay.css";
 import { QRrandom, RechargeBalence, SECRET_KEY } from "../api";
@@ -34,7 +35,7 @@ const Pay = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [price, setprice] = useState(location.state ?? 0);
   const [message, setMessage] = useState({ text: "", type: "" });
-  const [timer, setTimer] = useState(60); // countdown (in seconds)
+  const [timer, setTimer] = useState(300); // countdown (in seconds)
   const navigate = useNavigate();
   const timerRef = useRef(null);
 
@@ -75,7 +76,7 @@ const Pay = () => {
   useEffect(() => {
     getUserData();
     fetchQRCode();
-    setTimer(60);
+    setTimer(300);
   }, []);
 
   // ⏱ Countdown effect
@@ -92,10 +93,11 @@ const Pay = () => {
   useEffect(() => {
     if (timer === 0) {
       fetchQRCode(); // fetch new QR
-      setTimer(60); // restart countdown
+      setTimer(300); // restart countdown
     }
   }, [timer]);
-
+const minutes = Math.floor(timer / 60);
+const seconds = timer % 60;
   // Inline styles
   const containerStyle = {
     marginTop: "10px",
@@ -171,11 +173,13 @@ const Pay = () => {
 
   return (
     <div className="pay-container">
-      <div>
-        <button className="back-btn" onClick={() => navigate(-1)}>
-          <ChevronLeft />
-        </button>
-      </div>
+       <div className="header2">
+              <button className="back-btnR" onClick={() => navigate(-1)}>
+                <ArrowLeft color="black" />
+              </button>
+              <h1 className="header-title">Recharge</h1>
+              <div className="spacer"></div>
+            </div>
 
       <div className="pay-card">
         <header className="pay-header">
@@ -214,7 +218,7 @@ const Pay = () => {
             Or take screenshot and scan in your payment app.
             <br />
             <Clock size={14} style={{ marginRight: 4 }} />
-            QR will expire in <strong>{timer}s</strong>
+            QR will expire in <strong>{minutes}:{seconds.toString().padStart(2, "0")} Minutes Left</strong>
           </p>
 
           <div className="qr-box">
