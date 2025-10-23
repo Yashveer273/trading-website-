@@ -69,7 +69,7 @@ const fetchAccountData = async () => {
           userId: UserData._id ,
           UserData
         });
-const userId=UserData._id;
+const userId=UserData.phone;
         // ✅ Step 4: Fetch account + purchase data from backend
         const [accountRes, purchaseRes] = await Promise.all([
             axios.get(`${API_BASE_URL}api/users/account_data`, { params: { userId } }),

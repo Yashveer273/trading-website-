@@ -71,7 +71,7 @@ function TradePassword() {
     e.preventDefault();
     if (tradePassword !== confirmPassword) return alert("⚠️ Passwords do not match!");
      try {
-          const res = await fetch(`${API_BASE_URL}api/users/update-password`, {
+          const res = await fetch(`${API_BASE_URL}api/users/Change-password`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ phone, type: "tradePassword", confirmPassword }),
@@ -80,7 +80,7 @@ function TradePassword() {
     
           if (data.success) {
             alert("tradePassword updated successfully!");
-            
+           navigate(-1);
           } else {
             alert(data.message || "Failed to update tradePassword");
           }

@@ -29,11 +29,11 @@ const styles = {
       background: "linear-gradient(to bottom, #ffc900, #ff9900)", // Stronger yellow to orange gradient
       paddingTop: "20px",
       paddingBottom: "34px",
-  
+  alignItems: "center",
       textAlign: "center",
       display: "flex",
       justifyContent: "space-evenly",
-      alignItems: "baseline",
+    
 
       borderBottomLeftRadius: "60% 30px",
       borderBottomRightRadius: "60% 30px",
@@ -46,7 +46,7 @@ const styles = {
       alignItems: "center",
       padding: "0 20px",
       color: "#444",
-      marginBottom: "20px",
+   
       position: "relative",
       zIndex: 2,
     },
@@ -191,7 +191,7 @@ const teamResults = levels.map((level) => {
       {/* Header */}
       <div style={styles.header}>
         <div style={styles.headerContent}>
-          <div style={styles.vivoLogo}>vivo</div>
+          <img src="/logo.jpg"alt="logo"style={styles.vivoLogo}/>
         </div>
         <div style={styles.headerText}>Team</div>
         <div style={styles.commissionRate}>Total Team Member: {totalTeams}</div>

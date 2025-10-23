@@ -33,7 +33,7 @@ const Withdraw = () => {
   const [tradePassword, setTradePassword] = useState(""); // For withdrawal
   const [BUpTRadePassword, setBUpTRadePassword] = useState(""); // For bank update
   const [withdrawalAmount, setWithdrawalAmount] = useState("");
-  const [balance, setBalance] = useState("0");
+  const [balance, setBalance] = useState(0);
   const [responseMessage, setResponseMessage] = useState(null);
 
   const getUserId = async () => {
@@ -62,7 +62,7 @@ const Withdraw = () => {
         setIfscCode(res.data.bankDetails.ifscCode || "");
         setBankName(res.data.bankDetails.bankName || "");
         setUpiId(res.data.bankDetails.upiId || "");
-        setBalance(res.data.balance || "0");
+        setBalance(res.data.Withdrawal || 0);
       } else {
         setHasBankDetails(false);
       }
@@ -83,11 +83,12 @@ const Withdraw = () => {
     try {
       const res = await addBankDetails({ userId, holderName, accountNumber, ifscCode, bankName, upiId });
       setHasBankDetails(true);
-      setBankDetails(res.data.bankDetails);
+           
+      setBankDetails(res?.bankDetails);
       setIsAdding(false);
-      setResponseMessage({ type: "success", message: res.data.message });
+      setResponseMessage({ type: "success", message: res.message });
     } catch (err) {
-      setResponseMessage({ type: "error", message: err.response?.data?.message || "Failed to add bank details" });
+      setResponseMessage({ type: "error", message: err.response?.message || "Failed to add bank details" });
     }
   };
 
@@ -99,7 +100,9 @@ const Withdraw = () => {
         tradePassword: BUpTRadePassword,
         bankDetails: { holderName, accountNumber, ifscCode, bankName, upiId },
       });
-      setBankDetails(res.data.bankDetails);
+      
+
+      setBankDetails(res?.data?.bankDetails);
       setResponseMessage({ type: "success", message: res.data.message });
       setBUpTRadePassword("");
       setIsEditing(false); // ✅ exit edit mode
@@ -180,11 +183,11 @@ const Withdraw = () => {
                   </>
                 ) : (
                   <>
-                    <p><b>Holder:</b> {bankDetails.holderName}</p>
-                    <p><b>Account:</b> {bankDetails.accountNumber}</p>
-                    <p><b>IFSC:</b> {bankDetails.ifscCode}</p>
-                    <p><b>Bank:</b> {bankDetails.bankName}</p>
-                    {bankDetails.upiId && <p><b>UPI:</b> {bankDetails.upiId}</p>}
+                    <p><b>Holder:</b> {bankDetails.holderName??""}</p>
+                    <p><b>Account:</b> {bankDetails.accountNumber??""}</p>
+                    <p><b>IFSC:</b> {bankDetails.ifscCode??""}</p>
+                    <p><b>Bank:</b> {bankDetails.bankName??""}</p>
+                    {bankDetails.upiId && <p><b>UPI:</b> {bankDetails.upiId??""}</p>}
                     <button onClick={() => setIsEditing(true)} className="apply-button">Edit</button>
                   </>
                 )}
@@ -205,7 +208,7 @@ const Withdraw = () => {
               <h2 className="explanation-title">Explain</h2>
               <ol className="rules-list">
                 <li>Daily marketing from 00:00:00 to 23:59:59.</li>
-                <li>Withdraw amount between 200000 and 999999.</li>
+                <li>Withdraw amount between 300 to 500000.</li>
                 <li>Only one withdrawal per day.</li>
                 <li>Withdrawal rate 5%.</li>
               </ol>

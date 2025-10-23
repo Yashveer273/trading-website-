@@ -516,8 +516,8 @@ const HeaderBackground = () => (
       {/* Placeholder for Britannia logo */}
       <div className="logo-circle">
         <img
-          src="https://placehold.co/40x40/dc2626/fff?text=B"
-          alt="Britannia Logo"
+          src="/logo.jpg"
+          alt="Logo"
           style={{ width: "2rem", height: "2rem", borderRadius: "9999px" }}
         />
       </div>
@@ -630,7 +630,7 @@ const ServiceItem = ({ service, onClick }) => (
 );
 
 // Component for the Sign Out button
-const SignOutButton = (navigate) => (
+const SignOutButton = ({navigate}) => (
   <button className="signout-btn" onClick={() => {Cookies.remove("tredingWeb");
             Cookies.remove("tredingWebUser");
             localStorage.removeItem("userData");
