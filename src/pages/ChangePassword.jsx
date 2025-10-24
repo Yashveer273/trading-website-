@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import "./Password.css";
-import { API_BASE_URL, SECRET_KEY } from "../api";
+import { API_BASE_URL, } from "../api";
 import Cookies from "js-cookie";
 
-import CryptoJS from "crypto-js";
+
 function ChangePassword() {
   const navigate = useNavigate();
   const [phone, setPhone] = useState("");

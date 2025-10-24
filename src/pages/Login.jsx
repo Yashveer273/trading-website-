@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import { loginUser, SECRET_KEY } from "../api";
 import "./Login.css";
 import Password from "./Password";
-
+import pako from "pako";
 const Login = () => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [password, setPassword] = useState("");
@@ -15,43 +15,57 @@ const Login = () => {
   const handleRegisterRedirect = () => navigate("/register");
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!mobileNumber || !password) return alert("Phone and password are required");
+  if (!mobileNumber || !password)
+    return alert("Phone and password are required");
 
-    const credentials = { phone: mobileNumber, password };
+  const credentials = { phone: mobileNumber, password };
 
-    try {
-      const response = await loginUser(credentials);
+  try {
+    const response = await loginUser(credentials);
 
-      if (response.token && response.user) {
-        // ✅ Encrypt user info
-        const encryptedUser = CryptoJS.AES.encrypt(
-          JSON.stringify(response.user),
-          SECRET_KEY
-        ).toString();
+    if (response.token && response.user) {
+      // ✅ 1. Convert to JSON string
+      const jsonString = JSON.stringify(response.user);
 
-       // ✅ Store cookies globally (fixes redirect issue)
-Cookies.set("tredingWeb", response.token, { expires: 7, path: "/" });
-Cookies.set("tredingWebUser", encryptedUser, { expires: 7, path: "/" });
+      // ✅ 2. Compress and get Uint8Array
+      const compressed = pako.deflate(jsonString);
 
-        // ✅ Save in localStorage
-        localStorage.setItem("userData", JSON.stringify(response.user));
+      // ✅ 3. Convert compressed binary → Base64 string
+      const compressedBase64 = btoa(
+        String.fromCharCode(...compressed)
+      );
 
-        alert(response.message || "Login successful");
+      // ✅ 4. Encrypt compressed Base64
+      const encryptedUser = CryptoJS.AES.encrypt(
+        compressedBase64,
+        SECRET_KEY
+      ).toString();
 
-        // ✅ Wait a bit before navigating (ensures cookie save)
-        setTimeout(() => {
-          navigate("/home");
-        }, 200);
-      } else {
-        alert("Invalid response from server");
-      }
-    } catch (err) {
-      alert(err.response?.data?.message || "Login failed");
+      // ✅ 5. Make Base64URL safe (optional)
+      const base64url = encryptedUser
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
+
+      // ✅ 6. Store securely
+      Cookies.set("tredingWeb", response.token, { expires: 7, path: "/" });
+      Cookies.set("tredingWebUser", base64url, { expires: 7, path: "/" });
+
+      localStorage.setItem("userData", JSON.stringify(response.user));
+
+      alert(response.message || "Login successful");
+
+      setTimeout(() => navigate("/"), 200);
+    } else {
+      alert("Invalid response from server");
     }
-  };
-
+  } catch (err) {
+    console.error(err);
+    alert(err.response?.data?.message || "Login failed");
+  }
+};
   return (
     <div className="login-container">
       <div className="top-bar">

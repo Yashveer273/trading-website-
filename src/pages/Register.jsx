@@ -4,7 +4,7 @@ import { registerUser, SECRET_KEY, sendOtpNoCheck } from "../api";
 import CryptoJS from "crypto-js";
 import Cookies from "js-cookie";
 import "./Register.css";
-
+import pako from "pako";
 const Register = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -82,13 +82,35 @@ const Register = () => {
       const response = await registerUser(userData);
 
       if (response.token) {
-        const encryptedUser = CryptoJS.AES.encrypt(
-          JSON.stringify(response.user),
-          SECRET_KEY
-        ).toString();
+       
 
-        Cookies.set("tredingWeb", response.token, { expires: 7 });
-        Cookies.set("tredingWebUser", encryptedUser, { expires: 7 });
+const jsonString = JSON.stringify(response.user);
+
+      // ✅ 2. Compress and get Uint8Array
+      const compressed = pako.deflate(jsonString);
+
+      // ✅ 3. Convert compressed binary → Base64 string
+      const compressedBase64 = btoa(
+        String.fromCharCode(...compressed)
+      );
+
+      // ✅ 4. Encrypt compressed Base64
+      const encryptedUser = CryptoJS.AES.encrypt(
+        compressedBase64,
+        SECRET_KEY
+      ).toString();
+
+      // ✅ 5. Make Base64URL safe (optional)
+      const base64url = encryptedUser
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
+
+      // ✅ 6. Store securely
+      Cookies.set("tredingWeb", response.token, { expires: 7, path: "/" });
+      Cookies.set("tredingWebUser", base64url, { expires: 7, path: "/" });
+
+      localStorage.setItem("userData", JSON.stringify(response.user));
 
         alert(response.message || "Registered successfully!");
         navigate("/home");

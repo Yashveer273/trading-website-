@@ -4,10 +4,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import "./ProductInfo.css";
 import Cookies from "js-cookie";
+import pako from "pako";
 import {
   API_BASE_URL2,
   BuyProduct,
-  fetchExplanationsApi,
+ 
   getUserInfo,
   SECRET_KEY,
 } from "../api";
@@ -244,9 +245,22 @@ export default function ProductInfo() {
 
   const getUserData = async () => {
     if (encryptedUser) {
-      const bytes = CryptoJS.AES.decrypt(encryptedUser, SECRET_KEY);
-      const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-      user = JSON.parse(decrypted);
+    const base64 = encryptedUser.replace(/-/g, "+").replace(/_/g, "/");
+           
+               // 🔹 3. AES decrypt (gives compressed Base64 string)
+               const decryptedBase64 = CryptoJS.AES.decrypt(base64, SECRET_KEY).toString(CryptoJS.enc.Utf8);
+               if (!decryptedBase64) return null;
+           
+               // 🔹 4. Convert Base64 → Uint8Array (binary bytes)
+               const binaryString = atob(decryptedBase64);
+               const bytes = new Uint8Array(binaryString.length);
+               for (let i = 0; i < binaryString.length; i++) {
+                 bytes[i] = binaryString.charCodeAt(i);
+               }
+           
+               // 🔹 5. Decompress (restore JSON string)
+               const decompressed = pako.inflate(bytes, { to: "string" });
+           const user = await JSON.parse(decompressed);
 
       if (!user?._id) {
         navigate("/login");

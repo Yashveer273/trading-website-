@@ -16,8 +16,10 @@
   align-items: center;
   justify-content: space-between;
   padding: 15px 20px;
-  background: #fff7e0;
+    background: linear-gradient(rgb(255, 201, 0), rgb(255, 153, 0));
   border-bottom: 1px solid #ddd;
+    border-bottom-left-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
 }
 
 .back-btnR {

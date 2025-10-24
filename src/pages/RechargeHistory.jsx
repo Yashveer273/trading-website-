@@ -25,7 +25,7 @@ const copyToClipboard = (text) => {
 
 // Component for a single Recharge List Item
 const RechargeItem = ({ record }) => {
-     
+     console.log(record.approved)
     const statusClass = `status-${record.approved}`;
     
     // Format ISO date string into a readable format

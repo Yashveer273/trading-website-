@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
  
   ChevronRight,
@@ -396,7 +396,7 @@ const Profile = ({ userInfo, accountData }) => {
         balance: userInfo?.updatedData?.balance || 0,
         pendingIncome: userInfo?.updatedData?.pendingIncome || 0,
         totalBuy: userInfo?.updatedData?.totalBuy || 0,
-        withdrawal: userInfo?.updatedData?.withdrawal || 0,
+        withdrawal: userInfo?.updatedData?.Withdrawal || 0,
         registrationDate: userInfo?.userInfo?.registrationDate || new Date(),
        });
        
@@ -410,13 +410,7 @@ const accountpaloadData=[
     { label: "Pending Income", value: accountData.pendingIncome },
     { label: "Tasks Reward", value: accountData.tasksReward },
   ]
-  const accountpaloadData2=[
-    { label: "Balance", value: accountData.balance },
-    { label: "Withdrawal", value: accountData.Withdrawal },
-
-    { label: "Orders", value: accountData.ordersCount },
-  
-  ]
+ 
     const services = [
     { name: "Team", icon: "https://img.icons8.com/color/48/group.png", screen: "home", path: "/teams",userInfo},
     { name: "User Info", icon: "https://img.icons8.com/color/48/info.png", screen: "profit",path: "/info",userInfo },
@@ -425,7 +419,17 @@ const accountpaloadData=[
     { name: "Trade Password", icon: "https://img.icons8.com/color/48/lock-2.png", screen: "home",path: "/tradepassword",userInfo},
     { name: "Change Password", icon: "https://img.icons8.com/color/48/key.png", screen: "home",path: "/ChangePassword",userInfo },
   ];
-  
+  useEffect(()=>{setUser({
+         phone: userInfo?.phone || "N/A",
+        userId: userInfo?.userId || "-",
+        referralCode: userInfo?.userInfo?.referralCode || "-",
+        balance: userInfo?.updatedData?.balance || 0,
+        pendingIncome: userInfo?.updatedData?.pendingIncome || 0,
+        totalBuy: userInfo?.updatedData?.totalBuy || 0,
+        withdrawal: userInfo?.updatedData?.Withdrawal || 0,
+        registrationDate: userInfo?.userInfo?.registrationDate || new Date(),
+             })},[userInfo?.phone, userInfo?.updatedData?.Withdrawal, userInfo?.updatedData?.balance, userInfo?.updatedData?.pendingIncome, userInfo?.updatedData?.totalBuy, userInfo?.userId, userInfo?.userInfo?.referralCode, userInfo?.userInfo?.registrationDate]);
+
   return (
     <div className="app-container">
       {/* Inject the styles into the head of the document */}
@@ -438,7 +442,7 @@ const accountpaloadData=[
             <div className="content-padding">
               <ProfileHeader userId={userInfo.userId} userInfo={userInfo} />
               <BalanceSummary accountData={accountpaloadData} />
-              <BalanceSummary accountData={accountpaloadData2} />
+             
                    <section className="info-section1">
           <h2>Financial Summary</h2>
           <div className="grid">
@@ -453,15 +457,18 @@ const accountpaloadData=[
         </div>
                
             </div>
-            <div className="summary-card yellow">
+            <div className="summary-card yellow"  onClick={()=>navigate("/orders",{state:userInfo?.withdrawHistory})}>
               <p>
-                <DollarSign size={16} /> Pending Income
+                <ShoppingCart size={16} /> Total Orders
               </p>
-              <h3>₹{user.pendingIncome.toFixed(2)}</h3>
+              <h3>{accountData.ordersCount}</h3>
+              <div className="footer-btn">
+          <button>Orders History</button>
+        </div>
             </div>
             <div className="summary-card orange" onClick={()=>navigate("/orders",{state:userInfo?.withdrawHistory})}>
               <p>
-                <ShoppingCart size={16} /> Total Buy
+                < DollarSign size={16} /> Total Buy
               </p>
               <h3>₹{user.totalBuy.toFixed(2)}</h3>
              
@@ -471,7 +478,7 @@ const accountpaloadData=[
             </div>
             <div className="summary-card yellow" onClick={()=>navigate("/WithdrawHistory",{state:{data:userInfo?.withdrawHistory,totalAmount:userInfo?.totalAmount?.totalWithdrawAmount}})}>
               <p>
-                <TrendingDown size={16} />Check Withdrawal
+                <TrendingDown size={16} />Withdrawal
               </p>
               <h3>₹{user.withdrawal.toFixed(2)}</h3>
               <div className="footer-btn">

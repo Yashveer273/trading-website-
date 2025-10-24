@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+
 import "./Password.css";
 import { API_BASE_URL, SECRET_KEY, sendOtp } from "../api";
 import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
-
+import pako from "pako";
 function Password() {
   const navigate = useNavigate();
   const [phone, setPhone] = useState("");
@@ -80,17 +80,41 @@ console.log(generatedOtp)
         
         //       if (response.token && response.user) {
         //         // ✅ Encrypt user info
-                const encryptedUser = CryptoJS.AES.encrypt(
-                  JSON.stringify(data.user),
-                  SECRET_KEY
-                ).toString();
+
+ const jsonString = JSON.stringify(data.user);
+
+      // ✅ 2. Compress and get Uint8Array
+      const compressed = pako.deflate(jsonString);
+
+      // ✅ 3. Convert compressed binary → Base64 string
+      const compressedBase64 = btoa(
+        String.fromCharCode(...compressed)
+      );
+
+      // ✅ 4. Encrypt compressed Base64
+      const encryptedUser = CryptoJS.AES.encrypt(
+        compressedBase64,
+        SECRET_KEY
+      ).toString();
+
+      // ✅ 5. Make Base64URL safe (optional)
+      const base64url = encryptedUser
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
+
+      // ✅ 6. Store securely
+      Cookies.set("tredingWeb", data.token, { expires: 7, path: "/" });
+      Cookies.set("tredingWebUser", base64url, { expires: 7, path: "/" });
+
+
+
+                
         
         //        // ✅ Store cookies globally (fixes redirect issue)
-        Cookies.set("tredingWeb", data.token, { expires: 7, path: "/" });
-        Cookies.set("tredingWebUser", encryptedUser, { expires: 7, path: "/" });
-        
+      
         //         // ✅ Save in localStorage
-                localStorage.setItem("userData", JSON.stringify(data.user));
+                localStorage.setItem("userData", JSON.stringify(base64url));
         
                 alert(data.message || "Login successful");
         

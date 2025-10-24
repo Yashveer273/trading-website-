@@ -5,7 +5,7 @@ import {
   CheckCircle,
   AlertTriangle,
   Clock,
-  ChevronLeft,
+
   ArrowLeft,
 } from "lucide-react";
 import "./pay.css";
@@ -13,7 +13,7 @@ import { QRrandom, RechargeBalence, SECRET_KEY } from "../api";
 import { useLocation, useNavigate } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import Cookies from "js-cookie";
-
+import pako from "pako";
 let user = null;
 
 const QRCode = async () => {
@@ -62,12 +62,25 @@ const Pay = () => {
   };
 
   // 🔐 Get user data
-  const getUserData = () => {
+  const getUserData = async() => {
     const encryptedUser = Cookies.get("tredingWebUser");
     if (encryptedUser) {
-      const bytes = CryptoJS.AES.decrypt(encryptedUser, SECRET_KEY);
-      const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-      user = JSON.parse(decrypted);
+     const base64 = encryptedUser.replace(/-/g, "+").replace(/_/g, "/");
+               
+                   // 🔹 3. AES decrypt (gives compressed Base64 string)
+                   const decryptedBase64 = CryptoJS.AES.decrypt(base64, SECRET_KEY).toString(CryptoJS.enc.Utf8);
+                   if (!decryptedBase64) return null;
+               
+                   // 🔹 4. Convert Base64 → Uint8Array (binary bytes)
+                   const binaryString = atob(decryptedBase64);
+                   const bytes = new Uint8Array(binaryString.length);
+                   for (let i = 0; i < binaryString.length; i++) {
+                     bytes[i] = binaryString.charCodeAt(i);
+                   }
+               
+                   // 🔹 5. Decompress (restore JSON string)
+                   const decompressed = pako.inflate(bytes, { to: "string" });
+               const user = await JSON.parse(decompressed);
       if (!user?._id) navigate("/login");
     }
   };
@@ -183,7 +196,7 @@ const seconds = timer % 60;
 
       <div className="pay-card">
         <header className="pay-header">
-          <h1>₹{price}</h1>
+          <h3>₹{price}</h3>
         </header>
 
         {/* Payment Methods */}

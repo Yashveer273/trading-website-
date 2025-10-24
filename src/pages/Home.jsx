@@ -14,7 +14,7 @@ import CryptoJS from "crypto-js";
 import Cookies from "js-cookie";
 import { getUserInfo, SECRET_KEY, tokenVerify } from "../api";
 import Support from "./Support";
-
+import pako from "pako";
 const HomePage = () => {
   const [activeTab, setActiveTab] = useState("Home");
   const [UserData, setUserData] = useState({});
@@ -27,9 +27,23 @@ const HomePage = () => {
     const token = Cookies.get("tredingWeb");
     if (encryptedUser) {
       try {
-        const bytes = CryptoJS.AES.decrypt(encryptedUser, SECRET_KEY);
-        const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-        const UserData = await JSON.parse(decrypted);
+         
+                  const base64 = encryptedUser.replace(/-/g, "+").replace(/_/g, "/");
+        
+            // 🔹 3. AES decrypt (gives compressed Base64 string)
+            const decryptedBase64 = CryptoJS.AES.decrypt(base64, SECRET_KEY).toString(CryptoJS.enc.Utf8);
+            if (!decryptedBase64) return null;
+        
+            // 🔹 4. Convert Base64 → Uint8Array (binary bytes)
+            const binaryString = atob(decryptedBase64);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+              bytes[i] = binaryString.charCodeAt(i);
+            }
+        
+            // 🔹 5. Decompress (restore JSON string)
+            const decompressed = pako.inflate(bytes, { to: "string" });
+        const UserData = await JSON.parse(decompressed);
 
         if (!UserData?._id) {
           navigate("/login");

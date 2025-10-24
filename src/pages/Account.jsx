@@ -14,7 +14,7 @@ import CryptoJS from "crypto-js";
 import { API_BASE_URL, SECRET_KEY } from "../api";
 import Profile from "./Profile";
 
-
+import pako from "pako";
 
 export default function AccountPage() {
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ export default function AccountPage() {
     purchaseHistory:[],
     rechargeHistory:[],
     withdrawHistory:[],
-    totalAmount:0
+    totalAmount:{}
   });
 let updatedData = {};
 
@@ -58,9 +58,23 @@ const fetchAccountData = async () => {
         // ✅ Step 2: Decrypt user data
     
         
-          const bytes = CryptoJS.AES.decrypt(encryptedUser, SECRET_KEY);
-          const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-         const UserData =await JSON.parse(decrypted);
+          const base64 = encryptedUser.replace(/-/g, "+").replace(/_/g, "/");
+
+    // 🔹 3. AES decrypt (gives compressed Base64 string)
+    const decryptedBase64 = CryptoJS.AES.decrypt(base64, SECRET_KEY).toString(CryptoJS.enc.Utf8);
+    if (!decryptedBase64) return null;
+
+    // 🔹 4. Convert Base64 → Uint8Array (binary bytes)
+    const binaryString = atob(decryptedBase64);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    // 🔹 5. Decompress (restore JSON string)
+    const decompressed = pako.inflate(bytes, { to: "string" });
+
+         const UserData =await JSON.parse(decompressed);
      
 
         // ✅ Step 3: Set user info from cookie

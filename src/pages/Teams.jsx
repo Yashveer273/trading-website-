@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
 import {  getTeamOverview, SECRET_KEY } from "../api"; // Your API function & key
 import "./Teams.css";
-
+import pako from "pako";
 const Teams = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Teams");
@@ -148,9 +148,22 @@ const styles = {
       const encryptedUser = Cookies.get("tredingWebUser");
       if (!encryptedUser) return navigate("/login");
 
-      const bytes = CryptoJS.AES.decrypt(encryptedUser, SECRET_KEY);
-      const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-      const userData = JSON.parse(decrypted);
+       const base64 = encryptedUser.replace(/-/g, "+").replace(/_/g, "/");
+                 
+                     // 🔹 3. AES decrypt (gives compressed Base64 string)
+                     const decryptedBase64 = CryptoJS.AES.decrypt(base64, SECRET_KEY).toString(CryptoJS.enc.Utf8);
+                     if (!decryptedBase64) return null;
+                 
+                     // 🔹 4. Convert Base64 → Uint8Array (binary bytes)
+                     const binaryString = atob(decryptedBase64);
+                     const bytes = new Uint8Array(binaryString.length);
+                     for (let i = 0; i < binaryString.length; i++) {
+                       bytes[i] = binaryString.charCodeAt(i);
+                     }
+                 
+                     // 🔹 5. Decompress (restore JSON string)
+                     const decompressed = pako.inflate(bytes, { to: "string" });
+                 const userData = await JSON.parse(decompressed);
       if (!userData?._id) return navigate("/login");
 const res = await getTeamOverview(userData._id);
 console.log(res.success)
