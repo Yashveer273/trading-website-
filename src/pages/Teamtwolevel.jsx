@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Teamtwolevel.css";
 import { getTeamLevel } from "../api"; // your API function
+import { ArrowLeft } from "lucide-react";
 
 const TeamTwoLevel = () => {
   const navigate = useNavigate();
@@ -36,13 +37,12 @@ const TeamTwoLevel = () => {
       {/* Navbar */}
       <nav className="navbar">
         <div className="navbar-left">
-          <h2>Team {level} Members</h2>
+         
+          <ArrowLeft color="black"onClick={() => navigate(-1)} />
+      
+            <h3>Team {level} Members</h3>
         </div>
-        <div className="navbar-right">
-          <button onClick={() => navigate("/home")}>Home</button>
-          <button onClick={() => navigate("/teams")}>Teams</button>
-          <button onClick={() => navigate("/account")}>Account</button>
-        </div>
+        
       </nav>
 
       {/* Header */}
@@ -68,8 +68,8 @@ const TeamTwoLevel = () => {
               }`}
             >
               <div className="member-info">
-                <p className="member-id">{member.id}</p>
-                <p className="member-date">{member.date}</p>
+                <p className="member-id">{member.id.slice(0, 5)}****</p>
+                {/* <p className="member-date">{member.date}</p> */}
               </div>
               <div
                 className={`status-box ${
@@ -83,10 +83,8 @@ const TeamTwoLevel = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="footer">
-        <p>© 2025 Vivo Trading Platform. All rights reserved.</p>
-      </footer>
+
+      
     </div>
   );
 };

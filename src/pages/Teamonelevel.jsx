@@ -56,9 +56,7 @@ const TeamOneLevel = () => {
       </section>
 
       {/* Footer */}
-      <footer className="footer">
-        <p>© 2025 Vivo Trading Platform. All rights reserved.</p>
-      </footer>
+     
     </div>
   );
 };

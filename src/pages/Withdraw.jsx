@@ -68,6 +68,7 @@ const Withdraw = () => {
     try {
       const id = await getUserId();
       const res = await GetBankDetails(id);
+  
       if (res.data.bankDetails && Object.keys(res.data.bankDetails).length > 0) {
         setHasBankDetails(true);
         setBankDetails(res.data.bankDetails);
@@ -79,6 +80,7 @@ const Withdraw = () => {
         setBalance(res.data.Withdrawal || 0);
       } else {
         setHasBankDetails(false);
+        setBalance(res.data.Withdrawal || 0);
       }
     } catch (err) {
       setResponseMessage({
