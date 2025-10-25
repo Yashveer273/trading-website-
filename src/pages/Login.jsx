@@ -90,7 +90,7 @@ const Login = () => {
     height: "200px", }}
       />
       <div className="login-card">
-      {password1===false?(<><div className="card-header">
+      {password1===false?(<><div className="card-header1">
           <h2 className="login-title">Login</h2>
           <button className="register-link" onClick={handleRegisterRedirect}>
             Register

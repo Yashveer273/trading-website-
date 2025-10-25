@@ -211,11 +211,21 @@ export default function Orders() {
               >   <b>{order.productName}</b>
                 <div className="order-title">
                
-                 <div></div>  <button
+                 <div></div> 
+                 <button
+                
+                    className="claim-btn"
+                              style={{backgroundColor: claimableCount === totalCycles?"#b8b8b8":"#56d18a",color:"white"}}
+                  >
+                    { claimableCount === totalCycles?"Expaired":"Active"} 
+                  </button> 
+                <button
+                 style={{display:order.claim === "claimed"?"none":"block"}}
                     className="claim-btn"
                     onClick={() => setModalOrder(order)}
+                    disabled={claimableCount === totalCycles}
                   >
-                    Claim Records ({claimableCount}/{totalCycles})
+                Claim Records ({claimableCount}/{totalCycles})
                   </button>
                   <button
                   className="claim-btn"
@@ -352,7 +362,7 @@ export default function Orders() {
                       </span>
                       <span>
                         ₹{incomePerCycle.toFixed(2)} -{" "}
-                        {renderTimeLeft(modalOrder, i)}
+                        {renderTimeLeft(modalOrder, i)=== "Ready to Claim" && !isAvailable ?"Claimed ✅":renderTimeLeft(modalOrder, i)} 
                       </span>
                       {isAvailable && (
                         <button
@@ -366,7 +376,7 @@ export default function Orders() {
                             )
                           }
                         >
-                          Achieved
+                          Claim
                         </button>
                       )}
                     </li>

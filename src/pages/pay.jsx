@@ -14,7 +14,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import Cookies from "js-cookie";
 import pako from "pako";
-let user = null;
+
 
 const QRCode = async () => {
   const res = await QRrandom();
@@ -36,12 +36,13 @@ const Pay = () => {
   const [price, setprice] = useState(location.state ?? 0);
   const [message, setMessage] = useState({ text: "", type: "" });
   const [timer, setTimer] = useState(300); // countdown (in seconds)
+  const [user, setuser] = useState(null); 
   const navigate = useNavigate();
   const timerRef = useRef(null);
 
   // 🧩 Fetch new QR code
   const fetchQRCode = async () => {
-    setIsLoading(true);
+    
     setMessage({ text: "Fetching latest QR code...", type: "info" });
     try {
       const data = await QRCode();
@@ -80,8 +81,10 @@ const Pay = () => {
                
                    // 🔹 5. Decompress (restore JSON string)
                    const decompressed = pako.inflate(bytes, { to: "string" });
-               const user = await JSON.parse(decompressed);
-      if (!user?._id) navigate("/login");
+                const data = await JSON.parse(decompressed);
+                setuser(data)
+                setIsLoading(true);
+      if (!data?._id) navigate("/login");
     }
   };
 
@@ -139,6 +142,7 @@ const seconds = timer % 60;
     setMessage({ text: "Submitting UTR for verification...", type: "info" });
     try {
       const payload = { userId: user?._id, amount: price, utr, qrImageName };
+   
       const res = await RechargeBalence(payload);
 
       if (!res.status) throw new Error("Payment request failed");
@@ -276,7 +280,7 @@ const seconds = timer % 60;
               type="submit"
               disabled={isLoading || !utr.trim() || message.type === "success"}
             >
-              {isLoading ? <Loader2 className="spin" /> : "Click To Pay"}
+              {isLoading ? <Loader2 className="spin" /> : "Submit"}
             </button>
           </form>
 

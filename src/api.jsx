@@ -106,6 +106,7 @@ export const BuyProduct = async (payload) => {
 };
 
 export const RechargeBalence = async (payload) => {
+
   const res = await axios.post(`${API_BASE_URL}QR/api/recharge`, payload);
   return res;
 };

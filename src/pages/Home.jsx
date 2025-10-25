@@ -180,7 +180,7 @@ console.log(res1)
                   <span className="rupee"></span>₹{balance}
                 </p>
               </div>
-              <Gift size={80} className="gift-icon" />
+              <Gift size={70} className="gift-icon" />
             </div>
             <div className="button-row">
               <button
@@ -201,12 +201,12 @@ console.log(res1)
           {/* --- Icon Grid --- */}
           <div className="icon-grid">
             <div className="grid-item" onClick={() => navigate("/teams")}>
-              <Users size={40} className="grid-icon" />
+              <Users size={30} className="grid-icon" />
               <span>Teams</span>
             </div>
 
             <div className="grid-item" onClick={() => navigate("/orders")}>
-              <ShoppingBag size={40} className="grid-icon" />
+              <ShoppingBag size={30} className="grid-icon" />
               <span>Orders</span>
             </div>
           </div>

@@ -7,6 +7,8 @@
 
   overflow: auto;
   padding: 1rem;
+      padding-left: 21px;
+    padding-right: 21px;
   margin:  1rem;
   display: flex;
   flex-direction: column;
@@ -33,7 +35,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem 0;
+
 
 }
 
@@ -45,8 +47,8 @@
 
 /* Container circle */
 .logo-circle1 {
-  width: 110px;             /* adjust size as needed */
-  height: 110px;
+  width: 90px;             /* adjust size as needed */
+  height: 90px;
   border-radius: 50%;      /* makes it circular */
   overflow: hidden;        /* crop image to circle */
   display: flex;
@@ -85,7 +87,7 @@ h1 {
   color: white;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  
 }
 
 .wallet-info {
@@ -100,7 +102,7 @@ h1 {
 }
 
 .balance {
-  font-size: 1.875rem;
+  font-size: 1.5rem;
   font-weight: 700;
   margin-top: 0.25rem;
 }
@@ -126,7 +128,7 @@ h1 {
   background-color: white;
   color: #f59e0b;
   font-weight: 700;
-  padding: 0.75rem 0;
+  padding: 0.5rem 0;
   border-radius: 9999px;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   transition: background-color 0.2s;
@@ -149,7 +151,7 @@ text-align: center;
 
 .grid-item {
   background-color: white;
-  padding: 1rem;
+  padding: .5rem;
   border-radius: 9999px;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   display: flex;
@@ -157,7 +159,7 @@ text-align: center;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  width: 15vh;
+  width: 10vh;
 }
 
 .grid-icon {
@@ -207,10 +209,11 @@ text-align: center;
 }
 
 .profile-img {
-  width: 4rem;
-  height: 4rem;
+    width: 74px;
+    height: 3rem;
   border-radius: 9999px;
   overflow: hidden;
+  border:1px solid#a5a5a5 ;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -231,9 +234,9 @@ text-align: center;
 }
 
 .full-button {
-  width: 100%;
+  width: 65%;
   font-weight: 700;
-  padding: 0.75rem 0;
+  padding: 0.65rem 0;
   border-radius: 9999px;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   transition: background-color 0.2s;

@@ -3,7 +3,7 @@ import { Home, Users, User, DollarSign, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
-import {  getTeamOverview, SECRET_KEY } from "../api"; // Your API function & key
+import { getTeamOverview, SECRET_KEY } from "../api"; // Your API function & key
 import "./Teams.css";
 import pako from "pako";
 const Teams = () => {
@@ -13,13 +13,13 @@ const Teams = () => {
 
   const [totalTeams, settotalTeams] = useState(0);
 
-const styles = {
+  const styles = {
     appContainer: {
       fontFamily: "Arial, sans-serif",
       backgroundColor: "#f5f5f5",
       minHeight: "130vh",
       maxHeight: "130vh",
-      overview:"scroll",
+      overview: "scroll",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -29,11 +29,10 @@ const styles = {
       background: "linear-gradient(to bottom, #ffc900, #ff9900)", // Stronger yellow to orange gradient
       paddingTop: "20px",
       paddingBottom: "34px",
-  alignItems: "center",
+      alignItems: "center",
       textAlign: "center",
       display: "flex",
       justifyContent: "space-evenly",
-    
 
       borderBottomLeftRadius: "60% 30px",
       borderBottomRightRadius: "60% 30px",
@@ -46,7 +45,7 @@ const styles = {
       alignItems: "center",
       padding: "0 20px",
       color: "#444",
-   
+
       position: "relative",
       zIndex: 2,
     },
@@ -73,7 +72,6 @@ const styles = {
     commissionRate: {
       fontSize: "15px",
       color: "#fff", // White text
-    
     },
     card: {
       background: "linear-gradient(to bottom, #ffffff, #fffdf8)", // Distinct white to off-white gradient
@@ -81,9 +79,9 @@ const styles = {
       boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
       margin: "15px 15px",
       padding: "20px",
-      width: "90%",
-      maxWidth: "90%",
-     
+      width: "84%",
+      maxWidth: "84%",
+
       zIndex: 2,
     },
     cardHeader: {
@@ -95,20 +93,24 @@ const styles = {
     cardContent: {
       display: "flex",
       alignItems: "center",
-      gap: "20px",
+
+      gap: "15px",
+      overflow: "hidden",
     },
     teamInfo: {
       display: "flex",
       flexDirection: "column",
       flexGrow: 1,
+      gap: "37px",
     },
     teamDetail: {
       display: "flex",
-      justifyContent: "space-between",
+
       fontSize: "14px",
       color: "#555",
       marginBottom: "8px",
-     width:"200px"
+      maxWidth: "221px",
+      gap: "20px",
     },
     goldImage: {
       width: "80px",
@@ -138,9 +140,6 @@ const styles = {
       color: "#ffc900", // Yellow color for the values
       fontWeight: "bold",
     },
-    
-   
-  
   };
 
   useEffect(() => {
@@ -148,45 +147,52 @@ const styles = {
       const encryptedUser = Cookies.get("tredingWebUser");
       if (!encryptedUser) return navigate("/login");
 
-       const base64 = encryptedUser.replace(/-/g, "+").replace(/_/g, "/");
-                 
-                     // 🔹 3. AES decrypt (gives compressed Base64 string)
-                     const decryptedBase64 = CryptoJS.AES.decrypt(base64, SECRET_KEY).toString(CryptoJS.enc.Utf8);
-                     if (!decryptedBase64) return null;
-                 
-                     // 🔹 4. Convert Base64 → Uint8Array (binary bytes)
-                     const binaryString = atob(decryptedBase64);
-                     const bytes = new Uint8Array(binaryString.length);
-                     for (let i = 0; i < binaryString.length; i++) {
-                       bytes[i] = binaryString.charCodeAt(i);
-                     }
-                 
-                     // 🔹 5. Decompress (restore JSON string)
-                     const decompressed = pako.inflate(bytes, { to: "string" });
-                 const userData = await JSON.parse(decompressed);
-      if (!userData?._id) return navigate("/login");
-const res = await getTeamOverview(userData._id);
-console.log(res.success)
-const levels = [1, 2, 3];
-const teamResults = levels.map((level) => {
-  const teamKey = `team${level}`;
-  const team =res.success? res?.overview[teamKey] || {}:{};
- settotalTeams(res?.overview?.totalTeams);
-  return {
-    level,
-    userid:userData?._id,
-    totalRecharge: team.totalRecharge || 0,
-    myCommission: team.totalCommission || 0,
-   
-    commissionRate: team.commissionRate ? `${team.commissionRate}%` : "0%",
-    path: level===1?"/teamonelevel" :level===2?"/teamtwolevel":"/teamthreelevel",
-  };
-});
+      const base64 = encryptedUser.replace(/-/g, "+").replace(/_/g, "/");
 
+      // 🔹 3. AES decrypt (gives compressed Base64 string)
+      const decryptedBase64 = CryptoJS.AES.decrypt(base64, SECRET_KEY).toString(
+        CryptoJS.enc.Utf8
+      );
+      if (!decryptedBase64) return null;
+
+      // 🔹 4. Convert Base64 → Uint8Array (binary bytes)
+      const binaryString = atob(decryptedBase64);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+
+      // 🔹 5. Decompress (restore JSON string)
+      const decompressed = pako.inflate(bytes, { to: "string" });
+      const userData = await JSON.parse(decompressed);
+      if (!userData?._id) return navigate("/login");
+      alert(userData._id)
+      const res = await getTeamOverview(userData._id);
+      console.log(res.success);
+      const levels = [1, 2, 3];
+      const teamResults = levels.map((level) => {
+        const teamKey = `team${level}`;
+        const team = res.success ? res?.overview[teamKey] || {} : {};
+        settotalTeams(res?.overview?.totalTeams);
+        return {
+          level,
+          userid: userData?._id,
+          totalRecharge: team.totalRecharge || 0,
+          myCommission: team.totalCommission || 0,
+
+          commissionRate: team.commissionRate
+            ? `${team.commissionRate}%`
+            : "0%",
+          path:
+            level === 1
+              ? "/teamonelevel"
+              : level === 2
+              ? "/teamtwolevel"
+              : "/teamthreelevel",
+        };
+      });
 
       setTeamData(teamResults);
-
-      
     };
 
     fetchUserTeam();
@@ -204,7 +210,7 @@ const teamResults = levels.map((level) => {
       {/* Header */}
       <div style={styles.header}>
         <div style={styles.headerContent}>
-          <img src="/logo.jpg"alt="logo"style={styles.vivoLogo}/>
+          <img src="/logo.jpg" alt="logo" style={styles.vivoLogo} />
         </div>
         <div style={styles.headerText}>Team</div>
         <div style={styles.commissionRate}>Total Team Member: {totalTeams}</div>
@@ -212,10 +218,24 @@ const teamResults = levels.map((level) => {
 
       {/* Team Cards */}
       {teamData.map((team, index) => (
-        <div key={index} style={styles.card} onClick={() => navigate(team.path, {state:{userid:team.userid, level:team.level}})}>
+        <div
+          key={index}
+          style={styles.card}
+          onClick={() =>
+            navigate(team.path, {
+              state: { userid: team.userid, level: team.level },
+            })
+          }
+        >
           <div style={styles.cardHeader}>Level {team.level} Teams</div>
           <div style={styles.cardContent}>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
               <div
                 style={{
                   ...styles.goldImage,
@@ -240,7 +260,6 @@ const teamResults = levels.map((level) => {
                 <span>My Commission:</span>
                 <span style={styles.coloredValue}>₹ {team.myCommission}</span>
               </div>
-             
             </div>
 
             <ChevronRight style={styles.arrowIcon} />

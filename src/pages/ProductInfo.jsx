@@ -260,13 +260,14 @@ export default function ProductInfo() {
            
                // 🔹 5. Decompress (restore JSON string)
                const decompressed = pako.inflate(bytes, { to: "string" });
-           const user = await JSON.parse(decompressed);
+            user = await JSON.parse(decompressed);
 
-      if (!user?._id) {
-        navigate("/login");
-      } else {
+      if (user?._id) {
         const res = await getUserInfo(user._id);
-        balance = res.data.users.balance || 0;
+// console.log(res.data)
+        balance = res.data.users.balance ;
+      } else {
+        navigate("/login");
       }
     }
   };

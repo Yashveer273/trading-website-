@@ -130,7 +130,7 @@ const ProductCard = ({ productData, onBuy }) => {
               isPrimary
             />
             <MetricItem
-              label="Daily Earnings"
+              label= {cycleType === "hour" ? "Hours Earning" : "Days Earning"} 
               value={dailyEarnings}
               valueColor="text-green-600"
             />

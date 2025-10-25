@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Withdraw.css";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 
 import {
   addBankDetails,
@@ -35,7 +35,7 @@ const Withdraw = () => {
   const [withdrawalAmount, setWithdrawalAmount] = useState("");
   const [balance, setBalance] = useState(0);
   const [responseMessage, setResponseMessage] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(true);
   const getUserId = async () => {
     if (encryptedUser) {
    
@@ -55,13 +55,13 @@ const Withdraw = () => {
                         // 🔹 5. Decompress (restore JSON string)
                         const decompressed = pako.inflate(bytes, { to: "string" });
                     const UserData = await JSON.parse(decompressed);
-      if (!UserData?._id) navigate("/login");
-      else {
-        setUserId(UserData._id);
-        return UserData._id;
-      }
+                   
+       setUserId(UserData?._id);
+         setIsLoading(false);
+      return UserData?._id;
     }
-    navigate("/login");
+      return null;
+    
   };
 
   const fetchBankDetails = async () => {
@@ -91,6 +91,7 @@ const Withdraw = () => {
   };
 
   useEffect(() => {
+    getUserId();
     fetchBankDetails();
   }, []);
 
@@ -136,7 +137,8 @@ const Withdraw = () => {
       setWithdrawalAmount("");
       setResponseMessage({ type: "success", message: res.data.message });
     } catch (err) {
-      setResponseMessage({ type: "error", message: err.response?.data?.message || "Withdrawal failed" });
+      console.log(err.message)
+      setResponseMessage({ type: "error", message: err.message || "Withdrawal failed" });
     }
   };
 
@@ -215,7 +217,7 @@ const Withdraw = () => {
               <>
                 <input type="number" className="input-field" placeholder="Withdrawal Amount" value={withdrawalAmount} onChange={(e) => setWithdrawalAmount(e.target.value)} />
                 <input type="password" className="input-field" placeholder="Trade Password" value={tradePassword} onChange={(e) => setTradePassword(e.target.value)} />
-                <button onClick={handleWithdrawal} className="apply-button">Apply Withdrawal</button>
+                <button onClick={handleWithdrawal} disabled={isLoading} className="apply-button">{isLoading ? <Loader2 className="spin" /> : "Apply Withdrawal"} </button>
               </>
             )}
 
