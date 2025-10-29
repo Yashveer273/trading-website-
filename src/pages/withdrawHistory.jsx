@@ -47,6 +47,7 @@ const WithdrawalItem = ({ record }) => {
 
   // Determine which icon to show based on the status (now using lowercase record.status)
   const getStatusIcon = (status) => {
+    console.log(record)
     switch (status) {
       case "approved":
         return <CheckCircle style={{ width: "1rem", height: "1rem" }} />;
@@ -74,17 +75,20 @@ const WithdrawalItem = ({ record }) => {
 
       {/* Date Row */}
       <div className="withdrawal-info-row">
-        <span>Date:</span>
-        <span className="withdrawal-info-value">{formatDate(record.date)}</span>
+        <span>Create Date:</span>
+        <span className="withdrawal-info-value">{formatDate(record.timestamp)}</span>
       </div>
-
+<div className="withdrawal-info-row">
+        <span>Status  Update Date:</span>
+        <span className="withdrawal-info-value">{formatDate(record.approvedAt)}</span>
+      </div>
       {/* Reference Number Row with Copy Button (using mock refId now) */}
       <div className="withdrawal-info-row">
-        <span>Ref ID:</span>
+        <span>Transection ID:</span>
         <div className="utr-copy-group">
-          <span className="utr-text">{record.refId}</span>
+          <span className="utr-text">{record._id.slice(0,5)}...</span>
           <button
-            onClick={() => copyToClipboard(record.refId)}
+            onClick={() => copyToClipboard(record._id)}
             className="copy-btn"
             title="Copy Reference ID"
             style={{ color: "var(--bright-orange)" }}

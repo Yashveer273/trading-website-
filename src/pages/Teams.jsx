@@ -166,7 +166,7 @@ const Teams = () => {
       const decompressed = pako.inflate(bytes, { to: "string" });
       const userData = await JSON.parse(decompressed);
       if (!userData?._id) return navigate("/login");
-      alert(userData._id)
+      
       const res = await getTeamOverview(userData._id);
       console.log(res.success);
       const levels = [1, 2, 3];

@@ -217,7 +217,7 @@ export default function Orders() {
                     className="claim-btn"
                               style={{backgroundColor: claimableCount === totalCycles?"#b8b8b8":"#56d18a",color:"white"}}
                   >
-                    { claimableCount === totalCycles?"Expaired":"Active"} 
+                    { claimableCount === totalCycles?"Expired":"Active"} 
                   </button> 
                 <button
                  style={{display:order.claim === "claimed"?"none":"block"}}

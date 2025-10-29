@@ -13,8 +13,8 @@ import {
   SECRET_KEY,
 } from "../api";
 
-let user = null;
-let balance = null;
+
+
 const encryptedUser = Cookies.get("tredingWebUser");
 
 // --- Sub-Components ---
@@ -26,6 +26,7 @@ const BuyCard = ({
   maxShare,
   dailyIncomePerShare,
   product,
+  balance,user
 }) => {
   const navigate = useNavigate();
   const [shareCount, setShareCount] = useState(minShare);
@@ -50,7 +51,10 @@ const BuyCard = ({
       setTimeout(() => setPopup({ ...popup, visible: false }), 2500);
       return;
     }
-
+ if( product.purchaseType === "One time buy" && shareCount>1){
+  alert("Product is one time buy, quantity must be 1.");
+  return;
+ }
     try {
       const res = await BuyProduct({
         userId: user?._id,
@@ -224,6 +228,8 @@ export default function ProductInfo() {
 
   const product = location.state;
     const [explanations, setExplanations] = useState([]);
+    const [balance, setbalance] = useState(0);
+    const [user, setuser] = useState({});
   const dailyIncome =
     product.cycleType === "hour" ? product.hour : product.daily;
   const PRODUCT_MOCK_DATA = {
@@ -260,12 +266,13 @@ export default function ProductInfo() {
            
                // 🔹 5. Decompress (restore JSON string)
                const decompressed = pako.inflate(bytes, { to: "string" });
-            user = await JSON.parse(decompressed);
+          const  data = await JSON.parse(decompressed);
+setuser(data);
+      if (data?._id) {
+        const res = await getUserInfo(data._id);
 
-      if (user?._id) {
-        const res = await getUserInfo(user._id);
-// console.log(res.data)
-        balance = res.data.users.balance ;
+         setbalance(res?.data?.users?.balance );
+
       } else {
         navigate("/login");
       }
@@ -279,8 +286,9 @@ export default function ProductInfo() {
    
   };
   useEffect(() => {
-    fetchExplanations();
+    
     getUserData();
+    fetchExplanations();
   }, []);
 
   return (
@@ -318,6 +326,8 @@ export default function ProductInfo() {
             maxShare={PRODUCT_MOCK_DATA.maxShare}
             dailyIncomePerShare={PRODUCT_MOCK_DATA.dailyIncomePerShare}
             product={product}
+            balance={balance}
+            user={user}
           />
         </div>
 

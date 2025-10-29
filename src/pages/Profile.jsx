@@ -556,11 +556,20 @@ const  currentInvestment =userInfo?.totalAmount?.totalRechargeAmount ||0 ;
       <div className="user-icon-wrapper">
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-around"}}>
    <div style={{display:"flex",alignItems:"center",gap:"14px"}}>
-          <div className="user-icon-border">
-          <User
-            style={{ width: "3rem", height: "3rem", color: "#4b5563" }}
-            strokeWidth={1.5}
-          />
+          <div className="avatar">
+          <img
+  src="/avatar.jpg"
+  alt="Profile"
+  style={{
+    width: "60px",
+    height: "60px",
+    borderRadius: "50%",
+    objectFit: "cover",
+    border: "3px solid #fbbf24",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+  
+  }}
+/>
         </div>
 
         {/* ID Display and Copy Button */}
@@ -593,7 +602,11 @@ const BalanceSummary = ({ accountData }) => {
       <div className="metrics-container">
         {data.map((item, index) => (
           <div key={index} className="metric-item">
-            <div className="metric-value">{item.value}</div>
+            <div className="metric-value">{item.value >= 1000000
+    ? (item.value / 1000000).toFixed(1) + "M"
+    : item.value >= 1000
+    ? (item.value / 1000).toFixed(1) + "K"
+    : item.value}</div>
             <div className="metric-label">{item.label}</div>
           </div>
         ))}

@@ -92,12 +92,10 @@ const Login = () => {
       <div className="login-card">
       {password1===false?(<><div className="card-header1">
           <h2 className="login-title">Login</h2>
-          <button className="register-link" onClick={handleRegisterRedirect}>
+          <button className="card-button" onClick={handleRegisterRedirect}>
             Register
           </button>
-           <button className="register-link" onClick={()=>{setPassword1(true)}}>
-            Forget Password
-          </button>
+           
         </div>
 
         <div className="input-section">
@@ -132,6 +130,9 @@ const Login = () => {
         <button className="login-btn" onClick={handleLogin}>
           Login
         </button>
+        <div className="Forget22"><button className="register-link" onClick={()=>{setPassword1(true)}}>
+            Forget Password
+          </button></div>
         
         </>):(<> <button className="login-btn" onClick={() => setPassword1(false)}>
        Back To Login

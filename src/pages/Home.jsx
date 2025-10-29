@@ -20,6 +20,7 @@ const HomePage = () => {
   const [UserData, setUserData] = useState({});
   const [copied, setCopied] = useState(false);
   const [balance, setBalance] = useState("0");
+  const [withdraw, setwithdraw] = useState("0");
   const [TeamSize, setTeamSize] = useState(0);
   const navigate = useNavigate();
   const fetchUser = async () => {
@@ -86,7 +87,8 @@ console.log(res1)
         const res = await getUserInfo(UserData._id); // fetch user info
         console.log(res?.data?.users?.team1);
         setTeamSize(res?.data?.users?.team1?.length??0);
-        setBalance(res.data.users.balance || "0");
+        setBalance(res?.data?.users?.balance || "0");
+        setwithdraw(res?.data?.users?.Withdrawal||"0")
      
       } catch (err) {
         console.error("Failed to fetch user info:", err);
@@ -178,6 +180,11 @@ console.log(res1)
                 <p className="label">Your Balance</p>
                 <p className="balance">
                   <span className="rupee"></span>₹{balance}
+                </p>
+              </div><div>
+                <p className="label">Total Profit</p>
+                <p className="balance">
+                  <span className="rupee"></span>₹{withdraw}
                 </p>
               </div>
               <Gift size={70} className="gift-icon" />

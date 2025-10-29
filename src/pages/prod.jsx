@@ -37,7 +37,10 @@ const MetricItem = ({
           color: finalValueColor,
         }}
       >
-        <span style={{ fontFamily: "sans-serif" }}>₹</span> {value}
+        <span style={{ fontFamily: "sans-serif" }}>₹</span> {value >= 1000000
+    ? (value / 1000000).toFixed(1) + "M"
+  
+    : value.toFixed(1)}
       </span>
     </div>
   );
@@ -83,7 +86,7 @@ const ProductCard = ({ productData, onBuy }) => {
         {durationDays} {cycleType === "hour" ? "Hours" : "Days"}
       </div>
 
-      <div style={{ paddingLeft:"1.5rem",paddingRight:"1.5rem", paddingTop: "2.5rem", height:"38vh"}}>
+      <div style={{ paddingLeft:"1.5rem",paddingRight:"1.5rem", paddingTop: "2.5rem", minHeight:"38vh"}}>
         
 
         <div
@@ -105,13 +108,13 @@ const ProductCard = ({ productData, onBuy }) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-            
+            overflow: "hidden"
             }}
           >
             <img
                src={`${API_BASE_URL2}${img}`}
               alt="Product"
-              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              style={{ width: "100%", height: "100%", objectFit: "fill" }}
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.src =
@@ -152,7 +155,7 @@ const ProductCard = ({ productData, onBuy }) => {
           backgroundColor: "#fffef3",
           display: "flex",
           justifyContent: "center",
-          marginTop: "16px",
+          marginTop: "4px",
                marginBottom: "3px",
         }}
       >

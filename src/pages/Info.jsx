@@ -4,10 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {
   Phone,
   Clipboard,
-  DollarSign,
-  Wallet,
-  ShoppingCart,
-  TrendingDown,
+
   CalendarDays,
   Copy,
   ArrowLeft,

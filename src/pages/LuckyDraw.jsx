@@ -1,6 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
-import { checkLuckySpinValidation, createLuckySpin, fetchLuckySpinPrizes, spinItem } from "../api";
+import {
+  checkLuckySpinValidation,
+  createLuckySpin,
+  fetchLuckySpinPrizes,
+  getLuckySpinData,
+  spinItem,
+} from "../api";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const mockWinnings = [];
@@ -175,8 +181,8 @@ const PrizeModal = ({ prize, onClose }) => (
 
 const LuckyDraw = () => {
   const navigate = useNavigate();
-   const location = useLocation();
-    const userId = location.state || {};
+  const location = useLocation();
+  const userId = location.state || {};
   const [isSpinning, setIsSpinning] = useState(false);
   const [result, setResult] = useState(0);
   const [winnings, setWinnings] = useState(mockWinnings);
@@ -185,29 +191,40 @@ const LuckyDraw = () => {
   const [prizes, setPrizes] = useState([]);
   const [winningPrizeDetails, setWinningPrizeDetails] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const fetchData = async () => {
+  const data2 = await  getLuckySpinData(userId);
+
+  if(data2.success
+){setWinnings( data2.luckySpin?.History)}
+
+
+  console.log(data2)
       const data = await fetchLuckySpinPrizes();
+
       setPrizes(data);
       try {
-  const data2 = await checkLuckySpinValidation(userId);
-  console.log(data2);
-
-  if (data2.canSpin) {
-    setIsLuckyAllow(data2);
-  } else {
-    alert(`Daily Spin Limit ${data2.SpinLimit} has been reached!`);
-  }
-} catch (err) {
-  console.error("Error checking LuckySpin:", err);
-  alert(err?.message || "Something went wrong while checking spin");
-}
-
-     
-    };
+      } catch (err) {
+        console.error("Error checking LuckySpin:", err);
+        alert(err?.message || "Something went wrong while checking spin");
+      }
+    }; 
+    
+    useEffect(() => {
+   
     fetchData();
   }, []);
+  const checkSpinLimit = async () => {
+    const data2 = await checkLuckySpinValidation(userId);
+    console.log(data2);
 
+    if (data2.canSpin) {
+      setIsLuckyAllow(data2);
+      return true;
+    } else {
+      alert(`Daily Spin Limit ${data2.SpinLimit} has been reached!`);
+      return false;
+    }
+  };
   const startSpin = async () => {
     if (isSpinning) return;
     setIsSpinning(true);
@@ -227,32 +244,31 @@ const LuckyDraw = () => {
 
       setResult(newResult);
 
-      setTimeout(() => {
-      }, 4000);
-    
-        
-     const res2=  await createLuckySpin(userId, prizes[newResult].value,);
-     try{
-     console.log(res2) }catch(e){
-alert(e?.message || "Something went wrong");
-  console.error("LuckySpin API error:", e);
-  return;
-     }
-   
-        setIsLuckyAllow(false);
-        setIsSpinning(false);
-        setWinningPrizeDetails(prizes[newResult]);
-        setShowModal(true);
-        setWinnings((prev) => [
-          {
-            id: Date.now(),
-            title: prizes[newResult].name,
-            value: prizes[newResult].value,
-            image: prizes[newResult].image,
-            date: new Date().toLocaleString(),
-          },
-          ...prev,
-        ]);
+      setTimeout(() => {}, 4000);
+
+      try {
+        const status = await checkSpinLimit();
+        if (status) {
+          const res2 = await createLuckySpin(userId, prizes[newResult].value,prizes[newResult]);
+          console.log(res2);
+          if(res2?.success){
+          setWinnings(
+res2?.luckySpin?.History);}
+        } else {
+          setIsSpinning(false);
+          return;
+        }
+      } catch (e) {
+        alert(e?.message || "Something went wrong");
+        console.error("LuckySpin error:", e);
+        return;
+      }
+
+      setIsLuckyAllow(false);
+      setIsSpinning(false);
+      setWinningPrizeDetails(prizes[newResult]);
+      setShowModal(true);
+      
     } catch (err) {
       console.error(err);
       setIsSpinning(false);
@@ -269,13 +285,14 @@ alert(e?.message || "Something went wrong");
         flexDirection: "column",
         alignItems: "center",
       }}
-    ><div className="header2">
-            <button className="back-btnR" onClick={() => navigate(-1)}>
-              <ArrowLeft color="black" />
-            </button>
-            <h1 className="header-title">Lucky Draw</h1>
-            <div className="spacer"></div>
-          </div>
+    >
+      <div className="header2">
+        <button className="back-btnR" onClick={() => navigate(-1)}>
+          <ArrowLeft color="black" />
+        </button>
+        <h1 className="header-title">Lucky Draw</h1>
+        <div className="spacer"></div>
+      </div>
 
       {/* Main Container */}
       <div
@@ -399,7 +416,7 @@ alert(e?.message || "Something went wrong");
         >
           {winnings.map((win) => (
             <div
-              key={win.id}
+              key={win.today}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -410,7 +427,7 @@ alert(e?.message || "Something went wrong");
               }}
             >
               <img
-                src={win.image}
+                src={win.data.image}
                 alt="win"
                 style={{
                   width: "3rem",
@@ -420,12 +437,22 @@ alert(e?.message || "Something went wrong");
                 }}
               />
               <div>
-                <p style={{ fontWeight: "bold" }}>{win.title}</p>
-                <p style={{ fontSize: "0.75rem", color: "#6b7280" }}>
-                  {win.date}
-                </p>
+                <p style={{ fontWeight: "bold" }}>{win.data.name}</p>
+               <p style={{ fontSize: "0.75rem", color: "#6b7280" }}>
+  {(() => {
+    const d = new Date(win.today);
+    return `${d.getDate().toString().padStart(2, "0")}/${
+      (d.getMonth() + 1).toString().padStart(2, "0")
+    }/${d.getFullYear()} ${d.toLocaleTimeString("en-IN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    })}`;
+  })()}
+</p>
+
                 <p style={{ color: "#d97706", fontWeight: "600" }}>
-                  {win.value}
+                  {win.data.value}
                 </p>
               </div>
             </div>

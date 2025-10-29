@@ -64,12 +64,12 @@ export const checkLuckySpinValidation = async (userId) => {
     return { success: false, message: err.message };
   }
 };
-export const createLuckySpin = async (userId,amount) => {
+export const createLuckySpin = async (userId,amount,data) => {
   try {
     const res = await fetch(`${API_BASE_URL}api/users/user-luckySpin-dataCreate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId,amount }),
+      body: JSON.stringify({ userId,amount,data }),
     });
     return await res.json();
   } catch (err) {
