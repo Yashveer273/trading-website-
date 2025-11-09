@@ -246,7 +246,7 @@ const Teams = () => {
                 }}
               ></div>
               <div style={styles.rateContainer}>
-                <div style={styles.rateValue}>{team.commissionRate}</div>
+                <div style={styles.rateValue}>{team.level===1?"20":team.level===2?"5":"0"}</div>
                 <div style={styles.rateLabel}>Commission Rate</div>
               </div>
             </div>

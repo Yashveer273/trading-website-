@@ -78,10 +78,10 @@ const WithdrawalItem = ({ record }) => {
         <span>Create Date:</span>
         <span className="withdrawal-info-value">{formatDate(record.timestamp)}</span>
       </div>
-<div className="withdrawal-info-row">
+{/* <div className="withdrawal-info-row">
         <span>Status  Update Date:</span>
         <span className="withdrawal-info-value">{formatDate(record.approvedAt)}</span>
-      </div>
+      </div> */}
       {/* Reference Number Row with Copy Button (using mock refId now) */}
       <div className="withdrawal-info-row">
         <span>Transection ID:</span>

@@ -87,6 +87,87 @@ const Pay = () => {
       if (!data?._id) navigate("/login");
     }
   };
+// --- Constants ---
+const upiId = "Q065208051@ybl";
+const payeeName = "Guest Name";
+const currency = "INR";
+
+const isMobileDevice = () =>
+  /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
+
+const initiatePayment = (appName) => {
+  let currentAmount = String(price).trim();
+
+  if (!upiId) {
+    setMessage({ text: "UPI ID is missing. Cannot proceed.", type: "error" });
+    return;
+  }
+
+  if (!currentAmount || parseFloat(currentAmount) <= 0) {
+    currentAmount = "1.00";
+  }
+
+  const formattedAmount = parseFloat(currentAmount).toFixed(2);
+  const transactionNote = `Recharge for User ${user?._id || "Guest"} via ${appName}`;
+
+  // 🧠 Base scheme depends on which app was clicked
+  let schemeBase;
+  if (appName === "PhonePe") {
+    schemeBase = "phonepe://pay?"; // specific to PhonePe
+  } else if (appName === "Paytm") {
+    schemeBase = "paytm://upi/pay?"; // specific to Paytm
+  } else {
+    schemeBase = "upi://pay?"; // fallback to system UPI
+  }
+
+  const params = new URLSearchParams();
+  params.append("pa", upiId);
+  params.append("pn", payeeName);
+  params.append("am", formattedAmount);
+  params.append("cu", currency);
+  params.append("tn", transactionNote);
+
+  const upiUrl = schemeBase + params.toString();
+
+  if (isMobileDevice()) {
+    console.log(`Trying to open ${appName}: ${upiUrl}`);
+    // Try to open app
+    window.location.href = upiUrl;
+
+    // Optional fallback if app is not installed (after a short delay)
+    setTimeout(() => {
+      setMessage({
+        text: `${appName} not detected. Opening website instead...`,
+        type: "info",
+      });
+      if (appName === "Paytm") window.open("https://paytm.com/", "_blank");
+      else if (appName === "PhonePe")
+        window.open("https://www.phonepe.com/", "_blank");
+    }, 2500);
+
+    setMessage({
+      text: `Opening ${appName} app to pay ₹${formattedAmount}...`,
+      type: "info",
+    });
+  } else {
+    // 💻 Desktop Fallback
+    let fallbackUrl = "";
+    if (appName === "Paytm") fallbackUrl = "https://paytm.com/";
+    else if (appName === "PhonePe") fallbackUrl = "https://www.phonepe.com/";
+
+    if (fallbackUrl) {
+      window.open(fallbackUrl, "_blank");
+      setMessage({
+        text: `Opening ${appName} website. Please scan QR or pay manually.`,
+        type: "info",
+      });
+    } else {
+      setMessage({ text: "Could not determine redirect URL.", type: "error" });
+    }
+  }
+};
 
   // 🚀 Initial setup
   useEffect(() => {
@@ -203,30 +284,30 @@ const seconds = timer % 60;
           <h3>₹{price}</h3>
         </header>
 
-        {/* Payment Methods */}
-        <div style={containerStyle}>
-          <div style={itemStyle}>
-            <div style={innerFlex}>
-              <img
-                src="https://pay.topcashwallet.com/assets/paytm-iAXkRI72.png"
-                alt="Paytm"
-                style={imageStyle}
-              />
-              <p style={textStyle}>Paytm</p>
-            </div>
-          </div>
+     <div style={containerStyle}>
+  <div style={itemStyle} onClick={() => initiatePayment("Paytm")}>
+    <div style={innerFlex}>
+      <img
+        src="https://pay.topcashwallet.com/assets/paytm-iAXkRI72.png"
+        alt="Paytm"
+        style={imageStyle}
+      />
+      <p style={textStyle}>Paytm</p>
+    </div>
+  </div>
 
-          <div style={itemStyle}>
-            <div style={innerFlex}>
-              <img
-                src="https://pay.topcashwallet.com/assets/qr_phonepe-DfcDrNXK.png"
-                alt="PhonePe"
-                style={imageStyle}
-              />
-              <p style={textStyle}>PhonePe</p>
-            </div>
-          </div>
-        </div>
+  <div style={itemStyle} onClick={() => initiatePayment("PhonePe")}>
+    <div style={innerFlex}>
+      <img
+        src="https://pay.topcashwallet.com/assets/qr_phonepe-DfcDrNXK.png"
+        alt="PhonePe"
+        style={imageStyle}
+      />
+      <p style={textStyle}>PhonePe</p>
+    </div>
+  </div>
+</div>
+
 
         {/* QR Section */}
         <section className="qr-section">

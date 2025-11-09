@@ -2,7 +2,7 @@ import React, {  useState } from "react";
 import { motion } from "framer-motion";
 import "./Invest.css";
 import { useNavigate } from "react-router-dom";
-import { Home, Users, User, DollarSign, ArrowLeft } from "lucide-react";
+import { Home, Users, User, DollarSign, } from "lucide-react";
 import ProductCard from "./prod";
 
 

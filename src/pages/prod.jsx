@@ -12,7 +12,7 @@ const MetricItem = ({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "0.5rem 0",
+    padding: "0.6rem 0.2rem 0 0.2rem",
     borderBottom: !isPrimary ? "1px solid #f3f4f6" : "none",
   };
 
@@ -33,7 +33,7 @@ const MetricItem = ({
       <span
         style={{
           fontWeight: "bold",
-          fontSize: isLarge ? "1.5rem" : "1.125rem",
+          fontSize: isLarge ? "1.2rem" : "1.1rem",
           color: finalValueColor,
         }}
       >
@@ -54,7 +54,7 @@ const ProductCard = ({ productData, onBuy }) => {
   const cardStyle = {
     position: "relative",
     width: "100%",
-
+minHeight:"33vh",
     background: "#ffffffff",
     borderRadius: "1.5rem",
      overflow: "hidden",
@@ -86,7 +86,7 @@ const ProductCard = ({ productData, onBuy }) => {
         {durationDays} {cycleType === "hour" ? "Hours" : "Days"}
       </div>
 
-      <div style={{ paddingLeft:"1.5rem",paddingRight:"1.5rem", paddingTop: "2.5rem", minHeight:"38vh"}}>
+      <div style={{ paddingLeft:".5rem",paddingRight:".5rem",paddingTop:".5rem" ,backgroundColor:"rgb(255 254 243)"}}>
         
 
         <div
@@ -124,7 +124,7 @@ const ProductCard = ({ productData, onBuy }) => {
           </div>
 
           {/* Product metrics */}
-          <div style={{ flexGrow: 1 }}>
+          <div style={{ flexGrow: 1, paddingTop:".5rem"}}>
             <h3>     {title}</h3>
             <MetricItem
               label="Plan Price"
@@ -138,7 +138,7 @@ const ProductCard = ({ productData, onBuy }) => {
               valueColor="text-green-600"
             />
             <MetricItem
-              label="Tota Earning"
+              label="Total Earning"
               value={totalGain}
               valueColor="text-red-600"
               isPrimary
@@ -151,12 +151,12 @@ const ProductCard = ({ productData, onBuy }) => {
       {/* Buy Button (matches your .buy-button CSS) */}
       <div
         style={{
-          padding: "5px  1.5rem",
+          padding: "10px 0 8px 0",
           backgroundColor: "#fffef3",
           display: "flex",
           justifyContent: "center",
-          marginTop: "4px",
-               marginBottom: "3px",
+          
+            
         }}
       >
         <button className="buy-button" onClick={onBuy}>

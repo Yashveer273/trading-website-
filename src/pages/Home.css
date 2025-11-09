@@ -83,7 +83,7 @@ h1 {
 }
 
 .wallet-card {
-  background: linear-gradient(rgb(255, 201, 0), rgb(255, 153, 0));
+  background: linear-gradient(rgb(255, 201, 0), #ff9900);
   color: white;
   display: flex;
   flex-direction: column;

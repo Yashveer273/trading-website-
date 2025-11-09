@@ -15,6 +15,8 @@ import Cookies from "js-cookie";
 import { getUserInfo, SECRET_KEY, tokenVerify } from "../api";
 import Support from "./Support";
 import pako from "pako";
+import PopupCard from "./PopupCard";
+import LiveProof from "./LiveProofList";
 const HomePage = () => {
   const [activeTab, setActiveTab] = useState("Home");
   const [UserData, setUserData] = useState({});
@@ -86,7 +88,7 @@ console.log(res1)
 
         const res = await getUserInfo(UserData._id); // fetch user info
         console.log(res?.data?.users?.team1);
-        setTeamSize(res?.data?.users?.team1?.length??0);
+        setTeamSize(res?.data?.activeCount||0);
         setBalance(res?.data?.users?.balance || "0");
         setwithdraw(res?.data?.users?.Withdrawal||"0")
      
@@ -174,6 +176,7 @@ console.log(res1)
 
           {/* --- Wallet Card --- */}
           <div className="card1 wallet-card">
+           
             <h3>Main Wallet</h3>
             <div className="wallet-info">
               <div>
@@ -217,7 +220,7 @@ console.log(res1)
               <span>Orders</span>
             </div>
           </div>
-
+ <PopupCard/>
           {/* --- Invitation Card --- */}
           <div className="card1 invitation-card">
             <div className="card-header">
@@ -265,6 +268,9 @@ console.log(res1)
             </button>
           </div>
 
+
+
+<LiveProof/>
           {/* --- Quest Rewards --- */}
           <div className="card1 quest-rewards-card">
             <h3>Quest Rewards</h3>
