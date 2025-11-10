@@ -1,249 +1,311 @@
 import React, { useState, useEffect } from 'react';
 
-import { getSocialLinks } from "../api";
+// Assuming getSocialLinks is defined in your api file
+import { getSocialLinks } from "../api"; 
+
 const PopupCard = () => {
- 
-  const [isOpen, setIsOpen] = useState(false);
+    // State to control the visibility of the popup
+    const [isOpen, setIsOpen] = useState(false);
 
-   const [usernameLink, setUsernameLink] = useState("");
-   const [groupLink, setGroupLink] = useState("");
- 
-   // ✅ Fetch dynamic links from backend
-   useEffect(() => {
-     const fetchLinks = async () => {
-       try {
-         const data = await getSocialLinks();
-         if (data && data.length > 0) {
-           setUsernameLink(data[0].telegramUsernameLink || "");
-           setGroupLink(data[0].telegramGroupLink || "");
-         }
-       } catch (err) {
-         console.error("Failed to fetch links:", err);
-       }
-     };
-     fetchLinks();
-   }, []);
-  useEffect(() => {
-    // Set a timeout for 1 seconds (1000 milliseconds)
-    const timer = setTimeout(() => {
-      setIsOpen(true); // Show the popup
-    }, 1000); 
+    // States for dynamic links (from backend)
+    const [usernameLink, setUsernameLink] = useState("");
+    const [groupLink, setGroupLink] = useState("");
 
-    return () => clearTimeout(timer);
-  }, []); 
+    // ✅ Fetch dynamic links from backend (runs once on mount)
+    useEffect(() => {
+        const fetchLinks = async () => {
+            try {
+                const data = await getSocialLinks();
+                if (data && data.length > 0) {
+                    setUsernameLink(data[0].telegramUsernameLink || "");
+                    setGroupLink(data[0].telegramGroupLink || "");
+                }
+            } catch (err) {
+                console.error("Failed to fetch links:", err);
+            }
+        };
+        fetchLinks();
+    }, []);
 
-  const handleClose = () => {
+    // ✅ Set a timeout to show the popup after 1 second (runs once on mount)
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsOpen(true); // Show the popup
+        }, 1000);
 
-    setIsOpen(false);
-  };
-  
+        return () => clearTimeout(timer);
+    }, []);
 
-  const alertStyles = `
-    /* --- ALERT POPUP STYLES (.alert-*) --- */
-    .alert-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: flex-start; /* Start from top */
-        z-index: 50;
-        padding: 1rem;
-        padding-top: 2.5rem;
-    }
-    
-    .alert-card {
-        background-color: white;
-        border-radius: 1rem;
-        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
-        width: 100%;
-        max-width: 400px;
-      
-        position: relative;
-        padding: 1.25rem 1.75rem;
-        font-family: 'Inter', sans-serif;
-    }
-    
-    .alert-close-btn {
-        position: absolute;
-        top: 0.5rem;
-        right: 1rem;
-        color: #9ca3af;
-        font-size: 2rem;
-        font-weight: 300;
-        line-height: 1;
-        padding: 0.5rem;
-        cursor: pointer;
-        transition: color 0.15s ease-in-out;
-    }
-    .alert-close-btn:hover {
-        color: #4b5563;
-    }
-    
-    .alert-header {
-        text-align: center;
-        font-size: 1rem;
-        line-height: 2rem;
-        font-weight: 800;
-        color: linear-gradient(#ffc800ff, #ff9900ff);
-        margin-bottom: 1.25rem;
-        border-bottom: 1px solid #fed7aa;
-        padding-bottom: 0.75rem;
-    }
-    .alert-header span {
-        font-size: 1.5rem;
-        margin: 0 0.5rem;
-    }
-    
-    .alert-content p {
-        margin-bottom: 1rem;
-        line-height: 1.5;
-        color: #1f2937;
-        display: flex;
-        align-items: flex-start;
-    }
-    .alert-content p span:first-child {
-        font-size: 1.125rem;
-        margin-right: 0.75rem;
-        margin-top: 0.25rem;
-    }
-    
-    .alert-bold {
-        font-weight: 700;
-        color: #ff9900; /* Custom Orange */
-    }
-    
-    .alert-detail-row-container {
-        padding-top: 0.75rem;
-        border-top: 1px solid #f3f4f6;
-        margin-bottom: 1rem;
-    }
-    
-    .alert-detail-row {
-        display: flex;
-        align-items: center;
-        margin-bottom: 0.5rem;
-    }
-    
-    .alert-cta-btn {
-        width: 100%;
-        padding: 0.75rem 0;
-       background: linear-gradient(rgb(255, 201, 0), #ff9900);
-        color: white;
-        border: none;
-        border-radius: 0.5rem;
-        font-size: 1.125rem;
-        font-weight: 800;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        cursor: pointer;
-        transition: background-color 0.3s ease, transform 0.1s ease;
-    }
-    .alert-cta-btn:hover {
-      background: linear-gradient(rgb(255, 201, 0), #ff9900);
-        transform: scale(1.01);
-    }
-   
-  `;
+    const handleClose = () => {
+        setIsOpen(false);
+    };
 
+    // --- UPDATED CSS STYLES TO MATCH THE IMAGE ---
+    const alertStyles = `
+        /* Variables */
+        :root {
+            --primary-yellow: #ffc900;
+            --secondary-orange: #ff9900;
+            --text-color: #333;
+        }
 
-  // When the popup is initially closed, show a minimal background
-  if (!isOpen) {
-    return (
-      <div >
-        <style dangerouslySetInnerHTML={{ __html: alertStyles }} />
-        {/* Placeholder text visible before the popup appears */}
+        /* --- ALERT POPUP STYLES (.alert-*) --- */
+        .alert-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center; /* CENTERED VERTICALLY */
+            z-index: 50;
+            padding: 1rem;
+        }
         
-      </div>
-    );
-  }
+        .alert-card {
+            background-color: white;
+            /* Added the gradient border effect from the image */
+            border-radius: 1rem;
+            border: 5px solid transparent; 
+            border-image: linear-gradient(to bottom right, var(--primary-yellow), var(--secondary-orange)) 1;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Stronger shadow for pop effect */
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            padding: 1.5rem;
+            font-family: Arial, sans-serif;
+            text-align: center; /* Center all content */
+        }
+        
+        .alert-close-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            color: #d1d5db; /* Light gray close button */
+            font-size: 1.5rem;
+            font-weight: bold;
+            line-height: 1;
+            padding: 0.25rem;
+            cursor: pointer;
+            transition: color 0.15s ease-in-out;
+            background: none;
+            border: none;
+        }
+        .alert-close-btn:hover {
+            color: #9ca3af;
+        }
+        
+        .alert-header {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .alert-content p {
+            margin: 0.75rem 0;
+            line-height: 1.5;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center text lines */
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* Styling for the pin icon and the text */
+        .alert-content p .icon {
+            font-size: 1.1rem;
+            margin-right: 0.5rem;
+            color: var(--secondary-orange); /* Pin color */
+        }
+        
+        .alert-bold-text {
+            font-weight: 700;
+            color: var(--secondary-orange); 
+        }
+
+        .alert-founded {
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--text-color);
+        }
+
+        /* Styles for the separator and instant payment text */
+        .alert-separator-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 1rem 0;
+        }
+
+        .alert-instant-text {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #4497e6; /* Blue text color in the image */
+            margin: 0.5rem 0;
+        }
+
+        .alert-line {
+            width: 80%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0.5rem 0;
+        }
+        .alert-line hr {
+            flex-grow: 1;
+            border: 0;
+            border-top: 1px solid #ccc;
+            margin: 0 0.5rem;
+        }
+        .alert-line .cross-icon {
+            font-size: 1.2rem;
+            color: #e57373; /* Reddish cross */
+            margin: 0 0.25rem;
+        }
+        
+        .alert-cta-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem 0 2rem;
+            color: var(--text-color);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        .alert-cta-text .target-icon {
+            font-size: 1.1rem;
+            margin-right: 0.5rem;
+            color: #ff9800; /* Target icon color */
+        }
 
 
-  return (
-    <div className="">
-      <style dangerouslySetInnerHTML={{ __html: alertStyles }} />
+        .alert-cta-btn {
+            width: 85%; /* Slightly narrower button */
+            padding: 0.9rem 0;
+            background: linear-gradient(to bottom, #4497e6, #2d70c4); /* Changed to blue to match the button in the image */
+            color: white;
+            border: 3px solid #79b0f0; /* Outer blue border */
+            border-radius: 0.75rem;
+            font-size: 1.15rem;
+            font-weight: 800;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.1s ease;
+            margin: 0 auto;
+            display: block;
+        }
+        .alert-cta-btn:hover {
+            background: linear-gradient(to bottom, #5ba6f3, #4382d5);
+            transform: scale(1.02);
+        }
+    `;
 
-      <div className="alert-overlay">
-        <div className="alert-card">
-          
-      
-          <button
-            onClick={handleClose}
-            className="alert-close-btn"
-            aria-label="Close"
-          >
-            &times;
-          </button>
-
-          {/* Header: IMPORTANT NOTICE */}
-          <div className="alert-header">
-            <span role="img" aria-label="alert">🚨</span>
-            IMPORTANT NOTICE
-            <span role="img" aria-label="alert">🚨</span>
-          </div>
-          
-          {/* Content Details */}
-          <div className="alert-content">
-            
-            {/* Welcome Text */}
-            <p>
-              <span role="img" aria-label="wave">👋</span> 
-              <span>Welcome to <span className="alert-bold">realstateinvest Official Platform!</span></span>
-            </p>
-
-            {/* Launch Bonus */}
-            <p>
-              <span role="img" aria-label="sun">☀️</span> 
-              <span>
-                <span className="alert-bold">Launch Bonus:</span> All new users will receive an instant 
-                <span className="alert-bold"> ₹12 Signup Reward.</span>
-              </span>
-            </p>
-            
-            {/* Detail Rows */}
-            <div className="alert-detail-row-container">
-              {/* Launch Date */}
-              <div className="alert-detail-row">
-                <span role="img" aria-label="calendar">🗓️</span>
-                <span>Launch Date: <span className="alert-bold">24th October 2025</span></span>
-              </div>
-
-              {/* Minimum Recharge */}
-              <div className="alert-detail-row">
-                <span role="img" aria-label="money-bag">💰</span>
-                <span>Minimum Recharge: <span className="alert-bold">₹250.00</span></span>
-              </div>
-
-              {/* Minimum Withdrawal */}
-              <div className="alert-detail-row">
-                <span role="img" aria-label="bank">🏛️</span>
-                <span>Minimum Withdrawal: <span className="alert-bold">160.00rs</span></span>
-              </div>
+    // Only render the component if isOpen is true
+    if (!isOpen) {
+        return (
+            <div >
+                <style dangerouslySetInnerHTML={{ __html: alertStyles }} />
             </div>
-            
-            {/* Call to Action Text */}
-            <p>
-              <span role="img" aria-label="heart">💖</span> 
-              <span>Start earning today and enjoy exclusive early access benefits!</span>
-            </p>
-          </div>
+        );
+    }
 
-          {/* Join Telegram Button */}
-          <div>
-            <button
-              onClick={() => window.open(groupLink, "_blank")}
-              className="alert-cta-btn"
-            >
-              Join Telegram
-            </button>
-          </div>
-          
+    return (
+        <div className="">
+            <style dangerouslySetInnerHTML={{ __html: alertStyles }} />
+
+            <div className="alert-overlay">
+                <div className="alert-card">
+
+                    <button
+                        onClick={handleClose}
+                        className="alert-close-btn"
+                        aria-label="Close"
+                    >
+                        ❌
+                    </button>
+
+                    {/* Header: IMPORTANT NOTICE */}
+                    <div className="alert-header">
+                        <span role="img" aria-label="alert">🚨</span>
+                        <span role="img" aria-label="pin" style={{ margin: '0 0.5rem' }}>📌</span>
+                        IMPORTANT NOTICE
+                        <span role="img" aria-label="alert" style={{ margin: '0 0.5rem' }}>🚨</span>
+                        
+                    </div>
+
+                    {/* Content Details */}
+                    <div className="alert-content">
+
+                        {/* Welcome Text */}
+                        <p>
+                            <span className="icon">📍</span>
+                            <span>welcome to <span className="alert-bold-text">Realstatepropertyinvestment</span></span>
+                        </p>
+
+                        {/* Join Group Text */}
+                        <p>
+                            <span className="icon">📍</span>
+                            <span>join our Telegram group for Amazing offers <span role="img" aria-label="smile">😊</span></span>
+                        </p>
+                        
+                        {/* Founded */}
+                        <div className="alert-founded">
+                            Founded : <span className="alert-bold-text">2022</span>
+                        </div>
+                        
+                        {/* Instant Deposit Payment */}
+                        <div className="alert-instant-text">
+                            <span className="icon">📍</span>
+                            instant deposit payment
+                        </div>
+
+                        {/* Separator Line */}
+                        <div className="alert-separator-section">
+                            <div className="alert-line">
+                                <span className="cross-icon">❌</span>
+                                <hr style={{  border: "none",           /* remove default styling */
+  borderTop:" 2px solid blue", /* 2-pixel solid blue line */
+  margin: "10px 0",         }}/>
+                                <span className="cross-icon">❌</span>
+                            </div>
+                        </div>
+
+                        {/* Instant Withdrawal Payment */}
+                        <div className="alert-instant-text" style={{marginBottom: '1rem'}}>
+                            <span className="icon">📍</span>
+                            instant withdrawal payment
+                        </div>
+                        
+                        {/* CTA Text */}
+                        <div className="alert-cta-text">
+                           
+                            <span>🎯start earning today and enjoy exclusive early access benefits</span>
+                        </div>
+                    </div>
+
+                    {/* Join Telegram Button */}
+                    <div>
+                        <button
+                            // Use the dynamically fetched groupLink
+                            onClick={() => window.open(groupLink || "https://t.me/", "_blank")}
+                            className="alert-cta-btn"
+                        >
+                            Join telegram
+                        </button>
+                    </div>
+
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default PopupCard;

@@ -26,7 +26,7 @@ const BuyCard = ({
   maxShare,
   dailyIncomePerShare,
   product,
-  balance,user
+  balance,user,isdailyClaim
 }) => {
   const navigate = useNavigate();
   const [shareCount, setShareCount] = useState(minShare);
@@ -61,6 +61,7 @@ const BuyCard = ({
         quantity: shareCount,
         product,
         TotalAmount: amount,
+        
       });
 
       if (res.data.success) {
@@ -172,6 +173,7 @@ const DetailCards = ({
   totalIncome,
   needLevel,
   product,
+  isdailyClaim
 }) => (
   <div className="space-y-6">
     <div className="card">
@@ -179,6 +181,11 @@ const DetailCards = ({
         Buy and upgrade vip1
       </h2>
       <div className="space-y-3 color-gray-700">
+         <DetailRow
+          label="Is Daily Claim Product"
+          value={isdailyClaim}
+          valueClassName="color-green-600 font-bold"
+        />
         <DetailRow
           label="Price"
           value={`₹${price.toFixed(2)}`}
@@ -328,6 +335,7 @@ setuser(data);
             product={product}
             balance={balance}
             user={user}
+            isdailyClaim={product.isdailyClaim}
           />
         </div>
 
@@ -338,6 +346,7 @@ setuser(data);
           totalIncome={totalIncome}
           needLevel={PRODUCT_MOCK_DATA.needLevel}
           product={product}
+          isdailyClaim={product.isdailyClaim===true?"Yes":"No"}
         />
         <div className="explain-box">
           <h3>Explain</h3>

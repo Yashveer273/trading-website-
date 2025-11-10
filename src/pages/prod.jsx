@@ -27,27 +27,45 @@ const MetricItem = ({
   else if (valueColor === "text-green-600") finalValueColor = "#000000ff";
   else if (valueColor === "text-red-600") finalValueColor = "#000000ff";
 
-  return (
-    <div style={containerStyle}>
-      <span style={labelStyle}>{label}</span>
-      <span
-        style={{
-          fontWeight: "bold",
-          fontSize: isLarge ? "1.2rem" : "1.1rem",
-          color: finalValueColor,
-        }}
-      >
-        <span style={{ fontFamily: "sans-serif" }}>₹</span> {value >= 1000000
-    ? (value / 1000000).toFixed(1) + "M"
-  
-    : value.toFixed(1)}
-      </span>
-    </div>
-  );
+ return (
+  <div style={containerStyle}>
+    <span style={labelStyle}>{label}</span>
+
+    <span
+      style={{
+        fontWeight: "bold",
+        fontSize: isLarge ? "1.1rem" : "1rem",
+        color: finalValueColor,
+      }}
+    >
+      {(() => {
+        // Remove commas and convert to number
+        const cleaned = (value || "").toString().replace(/,/g, "");
+        const num = Number(cleaned);
+
+        // If not a valid number, show raw string WITHOUT ₹ sign
+        if (isNaN(num)) {
+          return value; // directly show string value
+        }
+
+        // Otherwise, show formatted number WITH ₹ sign
+        return (
+          <>
+            <span style={{ fontFamily: "sans-serif" }}>₹</span>
+            {num >= 1000000
+              ? (num / 1000000).toFixed(1) + "M"
+              : num.toFixed(1)}
+          </>
+        );
+      })()}
+    </span>
+  </div>
+);
+
 };
 
 const ProductCard = ({ productData, onBuy }) => {
-  const { title, price, dailyEarnings, totalGain, durationDays, cycleType,img } =
+  const { title, price, dailyEarnings, totalGain, durationDays, cycleType,img,isdailyClaim } =
     productData;
 
 
@@ -126,6 +144,12 @@ minHeight:"33vh",
           {/* Product metrics */}
           <div style={{ flexGrow: 1, paddingTop:".5rem"}}>
             <h3>     {title}</h3>
+            <MetricItem
+              label="Is Daily Claim Product"
+              value={isdailyClaim===true?"Yes":"No"}
+              valueColor="text-green-800"
+              isPrimary
+            />
             <MetricItem
               label="Plan Price"
               value={price}

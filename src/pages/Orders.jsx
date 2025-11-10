@@ -114,7 +114,7 @@ export default function Orders() {
       if (res.data.success) {
         setClaimStatus({
           type: "success",
-          message: `Claimed ₹${claimAmount} successfully!`,
+          message: `Claimed ₹${cycleIndex===-1?res.data.claimAmount: claimAmount} successfully!`,
         });
 
         // Update orders
@@ -199,6 +199,7 @@ export default function Orders() {
                       (1000 * 60 * 60 * 24)
                   );
             const claimableCount = Math.min(elapsed, totalCycles);
+            const claimaCount = order.claimedCycles.length;
 
             return (
               <motion.div
@@ -208,78 +209,94 @@ export default function Orders() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{ scale: 1.03 }}
-              >   <b>{order.productName}</b>
+              >
+                {" "}
+                <b>{order.productName}</b>
                 <div className="order-title">
-               
-                 <div></div> 
-                 <button
-                
-                    className="claim-btn"
-                              style={{backgroundColor: claimableCount === totalCycles?"#b8b8b8":"#56d18a",color:"white"}}
-                  >
-                    { claimableCount === totalCycles?"Expired":"Active"} 
-                  </button> 
-                <button
-                 style={{display:order.claim === "claimed"?"none":"block"}}
-                    className="claim-btn"
-                    onClick={() => setModalOrder(order)}
-                    disabled={claimableCount === totalCycles}
-                  >
-                Claim Records ({claimableCount}/{totalCycles})
-                  </button>
+                  <div></div>
                   <button
-                  className="claim-btn"
-                  style={{
-                    backgroundColor:
-                      order.claim === "waiting" &&
-                      claimableCount === totalCycles
-                        ? "black"
-                        : "gray",
-                    color: "white",
-                    cursor:
-                      order.claim === "waiting" &&
-                      claimableCount === totalCycles
-                        ? "pointer"
-                        : "not-allowed",
-                  }}
-                  disabled={
-                    !(
-                      order.claim === "waiting" &&
-                      claimableCount === totalCycles
-                    )
-                  }
-                  onClick={() => handleClaim(order.productId, -1, 0, true)}
-                >
-                  {order.claim === "claimed" ? (
-                    <>Claimed ✅</>
-                  ) : order.claim === "waiting" &&
-                    claimableCount === totalCycles ? (
-                    <>
-                      Claim ₹
-                      {(
-                        order.cycleValue *
-                        order.dailyIncome *
-                        order.quantity
-                      ).toFixed(2)}{" "}
-                      ({claimableCount}/{totalCycles})
-                    </>
+                    className="claim-btn"
+                    style={{
+                      backgroundColor:
+                        claimableCount === totalCycles ? "#b8b8b8" : "#56d18a",
+                      color: "white",
+                    }}
+                  >
+                    {claimableCount === totalCycles ? "Expired" : "Active"}
+                  </button>
+                  {order.isdailyClaim === true ? (
+                    //  Show FIRST button when isdailyClaim = true
+                  
+                    <button
+                      style={{
+                        display:
+                          claimaCount === totalCycles ? "none" : "block",
+                      }}
+                      className="claim-btn"
+                      onClick={() => setModalOrder(order)}
+                      disabled={claimaCount === totalCycles}
+                    >
+                      Claim Records ({claimableCount}/{totalCycles})
+                    </button>
                   ) : (
-                    <>
-                      Claim Locked ₹
-                      {(
-                        order.cycleValue *
-                        order.dailyIncome *
-                        order.quantity
-                      ).toFixed(2)}
-                      ({claimableCount}/{totalCycles})
-                    </>
+                    //  Show SECOND button when isdailyClaim = false
+                    <button
+                      className="claim-btn"
+                      style={{
+                        backgroundColor:
+                          order.claim === "waiting" &&
+                          claimableCount === totalCycles
+                            ? "black"
+                            : "gray",
+                        color: "white",
+                        cursor:
+                          order.claim === "waiting" &&
+                          claimableCount === totalCycles
+                            ? "pointer"
+                            : "not-allowed",
+                      }}
+                      disabled={
+                        !(
+                          order.claim === "waiting" &&
+                          claimableCount === totalCycles
+                        )
+                      }
+                      onClick={() => handleClaim(order.productId, -1, 0, true)}
+                    >
+                      {order.claim === "claimed" ? (
+                        <>Claimed ✅</>
+                      ) : order.claim === "waiting" &&
+                        claimableCount === totalCycles ? (
+                        <>
+                          Claim ₹
+                          {(
+                            order.cycleValue *
+                            order.dailyIncome *
+                            order.quantity
+                          ).toFixed(2)}{" "}
+                          ({claimableCount}/{totalCycles})
+                        </>
+                      ) : (
+                        <>
+                          Claim Locked ₹
+                          {(
+                            order.cycleValue *
+                            order.dailyIncome *
+                            order.quantity
+                          ).toFixed(2)}
+                          ({claimableCount}/{totalCycles})
+                        </>
+                      )}
+                    </button>
                   )}
-                </button>
-               
                 </div>
-                
-
                 <div className="order-body">
+                  <div className="order-row">
+                    <span className="order-label">Is Daily Claim Product</span>
+                    <span className="order-value">
+                      {order.isdailyClaim === true ? "Yes" : "No"}
+                    </span>
+                  </div>
                   <div className="order-row">
                     <span className="order-label">Buy Share</span>
                     <span className="order-value">{order.quantity}</span>
@@ -362,7 +379,10 @@ export default function Orders() {
                       </span>
                       <span>
                         ₹{incomePerCycle.toFixed(2)} -{" "}
-                        {renderTimeLeft(modalOrder, i)=== "Ready to Claim" && !isAvailable ?"Claimed ✅":renderTimeLeft(modalOrder, i)} 
+                        {renderTimeLeft(modalOrder, i) === "Ready to Claim" &&
+                        !isAvailable
+                          ? "Claimed ✅"
+                          : renderTimeLeft(modalOrder, i)}
                       </span>
                       {isAvailable && (
                         <button

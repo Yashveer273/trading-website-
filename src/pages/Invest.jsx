@@ -109,7 +109,8 @@ console.log(products)
         : product.totalIncomeDay,
     durationDays: product.cycleValue,
     cycleType: product.cycleType,
-    Claim:product.claim
+    Claim:product.claim,
+    isdailyClaim:product.isdailyClaim
   }}
   onBuy={() => buyitem(product)}  // ✅ pass buy action here
 />
