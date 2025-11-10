@@ -9,7 +9,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import "./pay.css";
-import { QRrandom, RechargeBalence, SECRET_KEY } from "../api";
+import { getRandomUPI, QRrandom, RechargeBalence, SECRET_KEY } from "../api";
 import { useLocation, useNavigate } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import Cookies from "js-cookie";
@@ -31,6 +31,8 @@ const Pay = () => {
   const location = useLocation();
   const [qrCodeUrl, setQrCodeUrl] = useState("");
   const [qrImageName, setQrImageName] = useState("");
+  const [upiId, setupiId] = useState("Q065208051@ybl");
+  const [payeeName, setPayeeName] = useState("Guest Name");
   const [utr, setUtr] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [price, setprice] = useState(location.state ?? 0);
@@ -88,8 +90,8 @@ const Pay = () => {
     }
   };
 // --- Constants ---
-const upiId = "Q065208051@ybl";
-const payeeName = "Guest Name";
+
+
 const currency = "INR";
 
 const isMobileDevice = () =>
@@ -106,22 +108,13 @@ const initiatePayment = (appName) => {
   }
 
   if (!currentAmount || parseFloat(currentAmount) <= 0) {
-    currentAmount = "1.00";
+    currentAmount = "1.00"; // default minimum amount
   }
 
   const formattedAmount = parseFloat(currentAmount).toFixed(2);
   const transactionNote = `Recharge for User ${user?._id || "Guest"} via ${appName}`;
 
-  // 🧠 Base scheme depends on which app was clicked
-  let schemeBase;
-  if (appName === "PhonePe") {
-    schemeBase = "phonepe://pay?"; // specific to PhonePe
-  } else if (appName === "Paytm") {
-    schemeBase = "paytm://upi/pay?"; // specific to Paytm
-  } else {
-    schemeBase = "upi://pay?"; // fallback to system UPI
-  }
-
+  // ✅ Prepare URL Params
   const params = new URLSearchParams();
   params.append("pa", upiId);
   params.append("pn", payeeName);
@@ -129,21 +122,63 @@ const initiatePayment = (appName) => {
   params.append("cu", currency);
   params.append("tn", transactionNote);
 
+  // ✅ Handle Paytm separately using Intent-based scheme
+  if (appName === "Paytm") {
+    const intentUrl = `intent://upi/pay?${params.toString()}#Intent;scheme=paytm;package=net.one97.paytm;end;`;
+
+    if (isMobileDevice()) {
+      console.log("Opening Paytm Intent:", intentUrl);
+
+      window.location.href = intentUrl;
+
+      // Fallback after 2.5s
+      setTimeout(() => {
+        setMessage({
+          text: "Paytm app not detected. Opening Paytm website...",
+          type: "info",
+        });
+        window.open("https://paytm.com/", "_blank");
+      }, 2500);
+
+      setMessage({
+        text: `Opening Paytm app to pay ₹${formattedAmount}...`,
+        type: "info",
+      });
+    } else {
+      window.open("https://paytm.com/", "_blank");
+      setMessage({
+        text: "Opening Paytm website. Please scan QR or pay manually.",
+        type: "info",
+      });
+    }
+
+    return; // stop further execution
+  }
+
+  // ✅ PHONEPE and OTHER APPS
+  let schemeBase;
+
+  if (appName === "PhonePe") {
+    schemeBase = "phonepe://pay?";
+  } else {
+    schemeBase = "upi://pay?";
+  }
+
   const upiUrl = schemeBase + params.toString();
 
   if (isMobileDevice()) {
     console.log(`Trying to open ${appName}: ${upiUrl}`);
-    // Try to open app
+
     window.location.href = upiUrl;
 
-    // Optional fallback if app is not installed (after a short delay)
+    // Fallback if app not found
     setTimeout(() => {
       setMessage({
         text: `${appName} not detected. Opening website instead...`,
         type: "info",
       });
-      if (appName === "Paytm") window.open("https://paytm.com/", "_blank");
-      else if (appName === "PhonePe")
+
+      if (appName === "PhonePe")
         window.open("https://www.phonepe.com/", "_blank");
     }, 2500);
 
@@ -152,10 +187,10 @@ const initiatePayment = (appName) => {
       type: "info",
     });
   } else {
-    // 💻 Desktop Fallback
+    // ✅ Desktop Fallback
     let fallbackUrl = "";
-    if (appName === "Paytm") fallbackUrl = "https://paytm.com/";
-    else if (appName === "PhonePe") fallbackUrl = "https://www.phonepe.com/";
+
+    if (appName === "PhonePe") fallbackUrl = "https://www.phonepe.com/";
 
     if (fallbackUrl) {
       window.open(fallbackUrl, "_blank");
@@ -164,13 +199,24 @@ const initiatePayment = (appName) => {
         type: "info",
       });
     } else {
-      setMessage({ text: "Could not determine redirect URL.", type: "error" });
+      setMessage({
+        text: "Could not determine redirect URL.",
+        type: "error",
+      });
     }
   }
 };
 
+const GetUPI=async()=>{ const res=await getRandomUPI();
+  console.log(res);
+  if(res.success){
+setupiId(res?.data?.upiId||"Q065208051@ybl")
+setPayeeName(res?.data?.payeeName||"Guest Name")
+  }
+}
   // 🚀 Initial setup
   useEffect(() => {
+   GetUPI();
     getUserData();
     fetchQRCode();
     setTimer(300);
@@ -189,6 +235,7 @@ const initiatePayment = (appName) => {
   // 🔁 When timer hits 0, fetch new QR and reset timer
   useEffect(() => {
     if (timer === 0) {
+      GetUPI();
       fetchQRCode(); // fetch new QR
       setTimer(300); // restart countdown
     }
@@ -341,8 +388,16 @@ const seconds = timer % 60;
 
           <div className="qr-warning">
             ⚠️ Do not use the same QR code multiple times
-            <span>userId: {user?._id}</span>
+            
+            
           </div>
+      
+          {isLoading && !qrCodeUrl ? (
+              <div className="qr-loading">
+                <Loader2 className="spin" />
+                <p>Loading QR...</p>
+              </div>
+            ):(<span>UPI Id: {upiId}</span>)}
         </section>
 
         {/* UTR Section */}
