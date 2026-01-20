@@ -1,4 +1,5 @@
 import axios from "axios";
+import { decryptResponse } from "./utils/decrypt";
 
 // ✅ Exported base URL (so other files like Account.jsx can import it)
 export const API_BASE_URL = "https://bdgwin.com.co/";
@@ -173,11 +174,11 @@ export const tokenVerify = async (token,phone) => {
 
   return res;
 };
-export const sendClaim = async (userId, productId, cycleIndex, claimAmount,isCycleComplete) => {
+export const sendClaim = async (userId, purchaseId, cycleIndex, claimAmount,isCycleComplete) => {
   try {
     const res = await axios.post(`${API_BASE_URL}api/claimROI/add`, {
       userId,
-      productId,
+      purchaseId,
       cycleIndex,
       claimAmount,
       isCycleComplete
@@ -188,7 +189,21 @@ export const sendClaim = async (userId, productId, cycleIndex, claimAmount,isCyc
     throw err;
   }
 };
-
+export const handleClaimRecordDB = async (userId, purchaseId, cycleIndex, claimAmount,isCycleComplete) => {
+  try {
+    const res = await axios.post(`${API_BASE_URL}api/claimROI/add_Record`, {
+      userId,
+      purchaseId,
+      cycleIndex,
+      claimAmount,
+      isCycleComplete
+    });
+    return res;
+  } catch (err) {
+    console.error("Claim request failed:", err);
+    throw err;
+  }
+};
 export const getTeamData = async (userId, teamLevel) => {
   try {
     const res = await axios.post(`${API_BASE_URL}api/users/get-team`, { _id: userId, teamLevel });
@@ -230,7 +245,8 @@ export const sendOtp=async(phone)=>{ const res = await fetch(`${API_BASE_URL}api
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phone }),
       });
-      return res;
+  const json = await res.json();
+  return decryptResponse(json.payload);
     }
     
 
@@ -239,7 +255,9 @@ export const sendOtp=async(phone)=>{ const res = await fetch(`${API_BASE_URL}api
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phone }),
       });
-      return res;
+       const json = await res.json();
+
+  return decryptResponse(json.payload);
     }
 
     export const getSocialLinks = async () => {

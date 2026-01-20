@@ -33,8 +33,8 @@ const Register = () => {
 
     try {
       setLoading(true);
-      const res = await sendOtpNoCheck(phone,);
-      const data = await res.json();
+      const data = await sendOtpNoCheck(phone,);
+
       console.log("OTP Response:", data);
 
       if (data.success) {

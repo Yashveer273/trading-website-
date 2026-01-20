@@ -26,6 +26,8 @@ const Login = () => {
     const credentials = { phone: mobileNumber, password };
 
     try {
+      Cookies.remove("tredingWeb");
+      Cookies.remove("tredingWebUser");
       const response = await loginUser(credentials);
 
       if (response.token && response.user) {

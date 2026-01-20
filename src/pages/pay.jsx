@@ -266,7 +266,9 @@ const seconds = timer % 60;
   // 🧾 Submit UTR
   const handleSubmit = async (e) => {
     e.preventDefault();
+     if (isLoading) return;
     setIsLoading(true);
+
     setMessage({ text: "Submitting UTR for verification...", type: "info" });
     try {
       const payload = { userId: user?._id, amount: price, utr, qrImageName };

@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, X } from "lucide-react";
+
 import "./Orders.css";
 import CryptoJS from "crypto-js";
 import Cookies from "js-cookie";
 import { getUserInfo, SECRET_KEY, sendClaim } from "../api";
 import pako from "pako";
 export default function Orders() {
+  const isApiLocked = useRef(false);
   const [filter, setFilter] = useState("all");
   const [orders, setOrders] = useState([]);
   const [modalOrder, setModalOrder] = useState(null);
@@ -39,6 +41,7 @@ export default function Orders() {
     const decompressed = pako.inflate(bytes, { to: "string" });
     const Data = await JSON.parse(decompressed);
     setUserData(Data);
+
     if (!Data?._id) return navigate("/login");
 
     try {
@@ -78,10 +81,10 @@ export default function Orders() {
     if (order.cycleType === "hour") {
       leftTime =
         new Date(order.createdAt).getTime() + (i + 1) * 60 * 60 * 1000 - now;
-      if (leftTime <= 0) return "Ready to Claim";
+      if (leftTime <= 0) return "Time Slot Completed";
     } else {
       const endTime = startTime + msPerDay;
-      if (now >= endTime) return "Ready to Claim";
+      if (now >= endTime) return "Time Slot Completed";
       if (now >= startTime && now < endTime) leftTime = endTime - now;
       else if (now < startTime)
         return `${Math.ceil((startTime - now) / msPerDay)} day(s) left`;
@@ -95,17 +98,19 @@ export default function Orders() {
   };
 
   const handleClaim = async (
-    productId,
+    purchaseId,
     cycleIndex,
     claimAmount,
     isCycleComplete
   ) => {
-    if (!UserData?._id) return;
+     if (isApiLocked.current) return;
 
+    isApiLocked.current = true;
+    if (!UserData?._id) return;
     try {
       const res = await sendClaim(
         UserData._id,
-        productId,
+        purchaseId,
         cycleIndex,
         claimAmount,
         isCycleComplete
@@ -120,7 +125,7 @@ export default function Orders() {
         // Update orders
         setOrders((prevOrders) =>
           prevOrders.map((p) => {
-            if (p._id === productId) {
+            if (p.purchaseId === purchaseId) {
               const newClaimed = [...(p.claimedCycles || []), cycleIndex];
               return { ...p, claimedCycles: newClaimed };
             }
@@ -130,7 +135,7 @@ export default function Orders() {
 
         // Update modalOrder if it's open
         setModalOrder((prev) => {
-          if (prev && prev.productId === productId) {
+          if (prev && prev.purchaseId === purchaseId) {
             const newClaimed = [...(prev.claimedCycles || []), cycleIndex];
             return { ...prev, claimedCycles: newClaimed };
           }
@@ -149,9 +154,69 @@ export default function Orders() {
       console.error(err);
       setClaimStatus({ type: "fail", message: "Claim failed!" });
       setTimeout(() => setClaimStatus(null), 2000);
+    } finally {
+      setTimeout(() => {
+        isApiLocked.current = false;
+      }, 2000);
     }
   };
+// const handleClaimRecord = async (
+//     purchaseId,
+//     cycleIndex,
+//     claimAmount,
+//     isCycleComplete
+//   ) => {
+//     if (!UserData?._id) return;
 
+//     try {
+//       const res = await handleClaimRecordDB(
+//         UserData._id,
+//         purchaseId,
+//         cycleIndex,
+//         claimAmount,
+//         isCycleComplete
+//       );
+
+//       if (res.data.success) {
+//         setClaimStatus({
+//           type: "success",
+//           message: `Claimed ₹${cycleIndex===-1?res.data.claimAmount: claimAmount} successfully!`,
+//         });
+
+//         // Update orders
+//         setOrders((prevOrders) =>
+//           prevOrders.map((p) => {
+//             if (p.purchaseId === purchaseId) {
+//               const newClaimed = [...(p.claimedCycles || []), cycleIndex];
+//               return { ...p, claimedCycles: newClaimed };
+//             }
+//             return p;
+//           })
+//         );
+
+//         // Update modalOrder if it's open
+//         setModalOrder((prev) => {
+//           if (prev && prev.purchaseId === purchaseId) {
+//             const newClaimed = [...(prev.claimedCycles || []), cycleIndex];
+//             return { ...prev, claimedCycles: newClaimed };
+//           }
+//           return prev;
+//         });
+//         fetchUser();
+//       } else {
+//         setClaimStatus({
+//           type: "fail",
+//           message: res.data.message || "Claim failed!",
+//         });
+//       }
+
+//       setTimeout(() => setClaimStatus(null), 2000);
+//     } catch (err) {
+//       console.error(err);
+//       setClaimStatus({ type: "fail", message: "Claim failed!" });
+//       setTimeout(() => setClaimStatus(null), 2000);
+//     }
+//   };
   return (
     <div className="orders-page">
       <div className="header2">
@@ -224,8 +289,6 @@ export default function Orders() {
                   >
                     {claimableCount === totalCycles ? "Expired" : "Active"}
                   </button>
-                  {order.isdailyClaim === true ? (
-                    //  Show FIRST button when isdailyClaim = true
                   
                     <button
                       style={{
@@ -236,16 +299,16 @@ export default function Orders() {
                       onClick={() => setModalOrder(order)}
                       disabled={claimaCount === totalCycles}
                     >
-                      Claim Records ({claimableCount}/{totalCycles})
+                      Records Info ({claimableCount}/{totalCycles}) 
+                 
                     </button>
-                  ) : (
-                    //  Show SECOND button when isdailyClaim = false
+             
                     <button
                       className="claim-btn"
                       style={{
                         backgroundColor:
-                          order.claim === "waiting" &&
-                          claimableCount === totalCycles
+                         ( order.claim === "waiting" &&
+                          claimableCount === totalCycles )|| order.exp
                             ? "black"
                             : "gray",
                         color: "white",
@@ -255,13 +318,13 @@ export default function Orders() {
                             ? "pointer"
                             : "not-allowed",
                       }}
-                      disabled={
-                        !(
-                          order.claim === "waiting" &&
+                      disabled={ 
+                          ( order.claim === "claimed" &&
                           claimableCount === totalCycles
-                        )
+                           )||order.exp
+                        
                       }
-                      onClick={() => handleClaim(order.productId, -1, 0, true)}
+                      onClick={() => handleClaim(order.purchaseId, -1, 0, true)}
                     >
                       {order.claim === "claimed" ? (
                         <>Claimed ✅</>
@@ -288,14 +351,11 @@ export default function Orders() {
                         </>
                       )}
                     </button>
-                  )}
+                   
                 </div>
                 <div className="order-body">
                   <div className="order-row">
-                    <span className="order-label">Is Daily Claim Product</span>
-                    <span className="order-value">
-                      {order.isdailyClaim === true ? "Yes" : "No"}
-                    </span>
+                   
                   </div>
                   <div className="order-row">
                     <span className="order-label">Buy Share</span>
@@ -379,17 +439,17 @@ export default function Orders() {
                       </span>
                       <span>
                         ₹{incomePerCycle.toFixed(2)} -{" "}
-                        {renderTimeLeft(modalOrder, i) === "Ready to Claim" &&
+                        {renderTimeLeft(modalOrder, i) === "Time Slot Completed" &&
                         !isAvailable
-                          ? "Claimed ✅"
+                          ? "Time Slot Completed ✅"
                           : renderTimeLeft(modalOrder, i)}
                       </span>
-                      {isAvailable && (
+                      {/* {isAvailable && (
                         <button
                           className="claim-now-btn"
                           onClick={() =>
-                            handleClaim(
-                              modalOrder.productId,
+                            handleClaimRecord(
+                              modalOrder.purchaseId,
                               i,
                               incomePerCycle,
                               false
@@ -398,7 +458,7 @@ export default function Orders() {
                         >
                           Claim
                         </button>
-                      )}
+                      )} */}
                     </li>
                   );
                 }

@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { X, ShieldCheck, Zap, TrendingUp, ChevronRight, ExternalLink } from 'lucide-react';
 
-// Assuming getSocialLinks is defined in your api file
-import { getSocialLinks } from "../api"; 
+// Import from your actual API file
+// import { getSocialLinks } from "../api"; 
 
 const PopupCard = () => {
-    // State to control the visibility of the popup
     const [isOpen, setIsOpen] = useState(false);
-
-    // States for dynamic links (from backend)
-    const [usernameLink, setUsernameLink] = useState("");
     const [groupLink, setGroupLink] = useState("");
 
-    // ✅ Fetch dynamic links from backend (runs once on mount)
     useEffect(() => {
         const fetchLinks = async () => {
             try {
-                const data = await getSocialLinks();
+                // Replace with actual API call: const data = await getSocialLinks();
+                const data = [{ telegramGroupLink: "https://t.me/example" }]; 
                 if (data && data.length > 0) {
-                    setUsernameLink(data[0].telegramUsernameLink || "");
                     setGroupLink(data[0].telegramGroupLink || "");
                 }
             } catch (err) {
@@ -25,14 +21,10 @@ const PopupCard = () => {
             }
         };
         fetchLinks();
-    }, []);
 
-    // ✅ Set a timeout to show the popup after 1 second (runs once on mount)
-    useEffect(() => {
         const timer = setTimeout(() => {
-            setIsOpen(true); // Show the popup
+            setIsOpen(true);
         }, 1000);
-
         return () => clearTimeout(timer);
     }, []);
 
@@ -40,268 +32,192 @@ const PopupCard = () => {
         setIsOpen(false);
     };
 
-    // --- UPDATED CSS STYLES TO MATCH THE IMAGE ---
     const alertStyles = `
-        /* Variables */
-        :root {
-            --primary-yellow: #ffc900;
-            --secondary-orange: #ff9900;
-            --text-color: #333;
-        }
-
-        /* --- ALERT POPUP STYLES (.alert-*) --- */
         .alert-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.4);
             display: flex;
             justify-content: center;
-            align-items: center; /* CENTERED VERTICALLY */
-            z-index: 50;
+            align-items: center;
+            z-index: 9999;
             padding: 1rem;
         }
         
         .alert-card {
-            background-color: white;
-            /* Added the gradient border effect from the image */
-            border-radius: 1rem;
-            border: 5px solid transparent; 
-            border-image: linear-gradient(to bottom right, var(--primary-yellow), var(--secondary-orange)) 1;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Stronger shadow for pop effect */
+            background-color: #f9fafb;
+            border-radius: 0.75rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
             position: relative;
             padding: 1.5rem;
-            font-family: Arial, sans-serif;
-            text-align: center; /* Center all content */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #1f2937;
         }
         
         .alert-close-btn {
             position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            color: #d1d5db; /* Light gray close button */
-            font-size: 1.5rem;
-            font-weight: bold;
-            line-height: 1;
-            padding: 0.25rem;
+            top: 0.75rem;
+            right: 0.75rem;
+            color: #9ca3af;
             cursor: pointer;
-            transition: color 0.15s ease-in-out;
-            background: none;
+            background: transparent;
             border: none;
+            padding: 4px;
+            display: flex;
+            transition: color 0.2s;
         }
         .alert-close-btn:hover {
-            color: #9ca3af;
+            color: #1f2937;
         }
         
         .alert-header {
-            font-size: 1.6rem;
-            font-weight: 900;
-            color: var(--text-color);
-            margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
-            justify-content: center;
-        }
-        
-        .alert-content p {
-            margin: 0.75rem 0;
-            line-height: 1.5;
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
-            justify-content: center; /* Center text lines */
-            font-size: 0.95rem;
-            font-weight: 500;
-        }
-
-        /* Styling for the pin icon and the text */
-        .alert-content p .icon {
-            font-size: 1.1rem;
-            margin-right: 0.5rem;
-            color: var(--secondary-orange); /* Pin color */
-        }
-        
-        .alert-bold-text {
+            gap: 0.5rem;
+            font-size: 0.75rem;
             font-weight: 700;
-            color: var(--secondary-orange); 
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            color: #f97316;
+            margin-bottom: 0.75rem;
         }
 
-        .alert-founded {
-            font-weight: 700;
-            font-size: 1.4rem;
-            margin: 1.5rem 0 1rem;
-            color: var(--text-color);
-        }
-
-        /* Styles for the separator and instant payment text */
-        .alert-separator-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 1rem 0;
-        }
-
-        .alert-instant-text {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: #4497e6; /* Blue text color in the image */
-            margin: 0.5rem 0;
-        }
-
-        .alert-line {
-            width: 80%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0.5rem 0;
-        }
-        .alert-line hr {
-            flex-grow: 1;
-            border: 0;
-            border-top: 1px solid #ccc;
-            margin: 0 0.5rem;
-        }
-        .alert-line .cross-icon {
-            font-size: 1.2rem;
-            color: #e57373; /* Reddish cross */
-            margin: 0 0.25rem;
-        }
-        
-        .alert-cta-text {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 1rem 0 2rem;
-            color: var(--text-color);
-            font-size: 0.95rem;
-            font-weight: 500;
-        }
-        .alert-cta-text .target-icon {
-            font-size: 1.1rem;
-            margin-right: 0.5rem;
-            color: #ff9800; /* Target icon color */
-        }
-
-
-        .alert-cta-btn {
-            width: 85%; /* Slightly narrower button */
-            padding: 0.9rem 0;
-            background: linear-gradient(to bottom, #4497e6, #2d70c4); /* Changed to blue to match the button in the image */
-            color: white;
-            border: 3px solid #79b0f0; /* Outer blue border */
-            border-radius: 0.75rem;
-            font-size: 1.15rem;
+        .alert-title {
+            font-size: 1.25rem;
             font-weight: 800;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.1s ease;
-            margin: 0 auto;
-            display: block;
+            margin-bottom: 0.25rem;
+            line-height: 1.2;
         }
+
+        .alert-subtitle {
+            font-size: 0.875rem;
+            color: #4b5563;
+            margin-bottom: 1.25rem;
+        }
+        
+        .feature-row {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-pill {
+            flex: 1;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pill-text {
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            background: rgba(249, 115, 22, 0.05);
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+        }
+        
+        .alert-cta-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #f97316;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.9375rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 1rem;
+        }
+
         .alert-cta-btn:hover {
-            background: linear-gradient(to bottom, #5ba6f3, #4382d5);
-            transform: scale(1.02);
+            background: #ea580c;
+        }
+
+        .footer-note {
+            margin-top: 0.75rem;
+            font-size: 0.7rem;
+            color: #6b7280;
+            text-align: center;
         }
     `;
 
-    // Only render the component if isOpen is true
-    if (!isOpen) {
-        return (
-            <div >
-                <style dangerouslySetInnerHTML={{ __html: alertStyles }} />
-            </div>
-        );
-    }
+    if (!isOpen) return null;
 
     return (
-        <div className="">
+        <div className="popup-wrapper">
             <style dangerouslySetInnerHTML={{ __html: alertStyles }} />
 
             <div className="alert-overlay">
                 <div className="alert-card">
-
-                    <button
-                        onClick={handleClose}
-                        className="alert-close-btn"
-                        aria-label="Close"
-                    >
-                        ❌
+                    <button onClick={handleClose} className="alert-close-btn" aria-label="Close">
+                        <X size={18} />
                     </button>
 
-                    {/* Header: IMPORTANT NOTICE */}
                     <div className="alert-header">
-                        <span role="img" aria-label="alert">🚨</span>
-                        <span role="img" aria-label="pin" style={{ margin: '0 0.5rem' }}>📌</span>
-                        IMPORTANT NOTICE
-                        <span role="img" aria-label="alert" style={{ margin: '0 0.5rem' }}>🚨</span>
-                        
+                        <ShieldCheck size={14} />
+                        Verified Platform
                     </div>
 
-                    {/* Content Details */}
-                    <div className="alert-content">
+                    <h2 className="alert-title">Realstate Investment</h2>
+                    <p className="alert-subtitle">Professional property asset management.</p>
 
-                        {/* Welcome Text */}
-                        <p>
-                            <span className="icon">📍</span>
-                            <span>welcome to <span className="alert-bold-text">Realstatepropertyinvestment</span></span>
-                        </p>
-
-                        {/* Join Group Text */}
-                        <p>
-                            <span className="icon">📍</span>
-                            <span>join our Telegram group for Amazing offers <span role="img" aria-label="smile">😊</span></span>
-                        </p>
-                        
-                        {/* Founded */}
-                        <div className="alert-founded">
-                            Founded : <span className="alert-bold-text">2022</span>
+                    <div className="feature-row">
+                        <div className="feature-pill">
+                            <TrendingUp size={14} color="#f97316" />
+                            <span className="pill-text">Founded 2022</span>
                         </div>
-                        
-                        {/* Instant Deposit Payment */}
-                        <div className="alert-instant-text">
-                            <span className="icon">📍</span>
-                            instant deposit payment
-                        </div>
-
-                        {/* Separator Line */}
-                        <div className="alert-separator-section">
-                            <div className="alert-line">
-                                <span className="cross-icon">❌</span>
-                                <hr style={{  border: "none",           /* remove default styling */
-  borderTop:" 2px solid blue", /* 2-pixel solid blue line */
-  margin: "10px 0",         }}/>
-                                <span className="cross-icon">❌</span>
-                            </div>
-                        </div>
-
-                        {/* Instant Withdrawal Payment */}
-                        <div className="alert-instant-text" style={{marginBottom: '1rem'}}>
-                            <span className="icon">📍</span>
-                            instant withdrawal payment
-                        </div>
-                        
-                        {/* CTA Text */}
-                        <div className="alert-cta-text">
-                           
-                            <span>🎯start earning today and enjoy exclusive early access benefits</span>
+                        <div className="feature-pill">
+                            <ExternalLink size={14} color="#f97316" />
+                            <span className="pill-text">Early Access</span>
                         </div>
                     </div>
 
-                    {/* Join Telegram Button */}
-                    <div>
-                        <button
-                            // Use the dynamically fetched groupLink
-                            onClick={() => window.open(groupLink || "https://t.me/", "_blank")}
-                            className="alert-cta-btn"
-                        >
-                            Join telegram
-                        </button>
+                    <div className="status-badge">
+                        <Zap size={14} fill="#f97316" color="#f97316" />
+                        Instant Deposit Processing
+                    </div>
+                    
+                    <div className="status-badge">
+                        <Zap size={14} fill="#f97316" color="#f97316" />
+                        Instant Withdrawal Processing
                     </div>
 
+                    <button
+                        onClick={() => window.open(groupLink || "https://t.me/", "_blank")}
+                        className="alert-cta-btn"
+                    >
+                        Join Telegram Portal
+                        <ChevronRight size={18} />
+                    </button>
+
+                    <p className="footer-note">
+                        Secure community for real-time market updates.
+                    </p>
                 </div>
             </div>
         </div>

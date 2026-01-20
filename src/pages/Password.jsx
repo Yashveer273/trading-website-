@@ -23,10 +23,8 @@ function Password() {
     if (!phone) return alert("Please enter phone number");
 
     try {
-      const res = await sendOtp(phone);
-      
-      const data = await res.json();
-console.log(data.data)
+      const data = await sendOtp(phone);
+
    if (data.success) {
          setOtpSent(true);
          setGeneratedOtp(data?.data?.otp|| "123456"); // store OTP from API response

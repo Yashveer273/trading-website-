@@ -31,14 +31,10 @@ function TradePassword() {
   }, [timer]);
 
  const handleSendOtp = async () => {
-
      if (!phone) return alert("Please enter phone number");
  setLoading(true);
      try {
-       const res = await sendOtp(phone);
-  
-       const data = await res.json();
- console.log(data?.data?.otp);
+       const data = await sendOtp(phone);
        if (data.success) {
          setOtpSent(true);
          setGeneratedOtp(data?.data?.otp|| "123456"); // store OTP from API response

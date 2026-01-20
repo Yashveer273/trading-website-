@@ -141,15 +141,10 @@ minHeight:"33vh",
             />
           </div>
 
-          {/* Product metrics */}
+      
           <div style={{ flexGrow: 1, paddingTop:".5rem"}}>
             <h3>     {title}</h3>
-            <MetricItem
-              label="Is Daily Claim Product"
-              value={isdailyClaim===true?"Yes":"No"}
-              valueColor="text-green-800"
-              isPrimary
-            />
+            
             <MetricItem
               label="Plan Price"
               value={price}
@@ -172,7 +167,7 @@ minHeight:"33vh",
         </div>
       </div>
 
-      {/* Buy Button (matches your .buy-button CSS) */}
+     
       <div
         style={{
           padding: "10px 0 8px 0",

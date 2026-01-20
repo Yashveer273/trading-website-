@@ -1,19 +1,11 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { ChevronLeft, Zap } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import "./ProductInfo.css";
 import Cookies from "js-cookie";
 import pako from "pako";
-import {
-  API_BASE_URL2,
-  BuyProduct,
- 
-  getUserInfo,
-  SECRET_KEY,
-} from "../api";
-
-
+import { API_BASE_URL2, BuyProduct, getUserInfo, SECRET_KEY } from "../api";
 
 const encryptedUser = Cookies.get("tredingWebUser");
 
@@ -26,8 +18,11 @@ const BuyCard = ({
   maxShare,
   dailyIncomePerShare,
   product,
-  balance,user,isdailyClaim
+  balance,
+  user,
+  isdailyClaim,
 }) => {
+  const isLocked = useRef(false);
   const navigate = useNavigate();
   const [shareCount, setShareCount] = useState(minShare);
   const [popup, setPopup] = useState({
@@ -42,6 +37,7 @@ const BuyCard = ({
   const newPrice = price * shareCount;
 
   const handleBuy = async (shareCount, product, amount) => {
+    
     if (amount > balance) {
       setPopup({
         visible: true,
@@ -51,17 +47,19 @@ const BuyCard = ({
       setTimeout(() => setPopup({ ...popup, visible: false }), 2500);
       return;
     }
- if( product.purchaseType === "One time buy" && shareCount>1){
-  alert("Product is one time buy, quantity must be 1.");
-  return;
- }
+    if (product.purchaseType === "One time buy" && shareCount > 1) {
+      alert("Product is one time buy, quantity must be 1.");
+      return;
+    }
+if (isLocked.current) return;
+    isLocked.current = true;
+ 
     try {
       const res = await BuyProduct({
         userId: user?._id,
         quantity: shareCount,
         product,
         TotalAmount: amount,
-        
       });
 
       if (res.data.success) {
@@ -88,6 +86,9 @@ const BuyCard = ({
         message: `❌ ${err.response.data.message ?? "Internal Error"}`,
       });
     } finally {
+      setTimeout(() => {
+        isLocked.current = false;
+      }, 1000);
       setTimeout(() => setPopup({ ...popup, visible: false }), 2500);
     }
   };
@@ -173,7 +174,7 @@ const DetailCards = ({
   totalIncome,
   needLevel,
   product,
-  isdailyClaim
+  isdailyClaim,
 }) => (
   <div className="space-y-6">
     <div className="card">
@@ -181,7 +182,7 @@ const DetailCards = ({
         Buy and upgrade vip1
       </h2>
       <div className="space-y-3 color-gray-700">
-         <DetailRow
+        <DetailRow
           label="Is Daily Claim Product"
           value={isdailyClaim}
           valueClassName="color-green-600 font-bold"
@@ -232,11 +233,10 @@ export default function ProductInfo() {
   const location = useLocation();
   const navigate = useNavigate();
 
-
   const product = location.state;
-    const [explanations, setExplanations] = useState([]);
-    const [balance, setbalance] = useState(0);
-    const [user, setuser] = useState({});
+  const [explanations, setExplanations] = useState([]);
+  const [balance, setbalance] = useState(0);
+  const [user, setuser] = useState({});
   const dailyIncome =
     product.cycleType === "hour" ? product.hour : product.daily;
   const PRODUCT_MOCK_DATA = {
@@ -258,42 +258,39 @@ export default function ProductInfo() {
 
   const getUserData = async () => {
     if (encryptedUser) {
-    const base64 = encryptedUser.replace(/-/g, "+").replace(/_/g, "/");
-           
-               // 🔹 3. AES decrypt (gives compressed Base64 string)
-               const decryptedBase64 = CryptoJS.AES.decrypt(base64, SECRET_KEY).toString(CryptoJS.enc.Utf8);
-               if (!decryptedBase64) return null;
-           
-               // 🔹 4. Convert Base64 → Uint8Array (binary bytes)
-               const binaryString = atob(decryptedBase64);
-               const bytes = new Uint8Array(binaryString.length);
-               for (let i = 0; i < binaryString.length; i++) {
-                 bytes[i] = binaryString.charCodeAt(i);
-               }
-           
-               // 🔹 5. Decompress (restore JSON string)
-               const decompressed = pako.inflate(bytes, { to: "string" });
-          const  data = await JSON.parse(decompressed);
-setuser(data);
+      const base64 = encryptedUser.replace(/-/g, "+").replace(/_/g, "/");
+
+      // 🔹 3. AES decrypt (gives compressed Base64 string)
+      const decryptedBase64 = CryptoJS.AES.decrypt(base64, SECRET_KEY).toString(
+        CryptoJS.enc.Utf8
+      );
+      if (!decryptedBase64) return null;
+
+      // 🔹 4. Convert Base64 → Uint8Array (binary bytes)
+      const binaryString = atob(decryptedBase64);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+
+      // 🔹 5. Decompress (restore JSON string)
+      const decompressed = pako.inflate(bytes, { to: "string" });
+      const data = await JSON.parse(decompressed);
+      setuser(data);
       if (data?._id) {
         const res = await getUserInfo(data._id);
 
-         setbalance(res?.data?.users?.balance );
-
+        setbalance(res?.data?.users?.balance);
       } else {
         navigate("/login");
       }
     }
   };
   const fetchExplanations = async () => {
-
-  if(product?.productExplanation)
+    if (product?.productExplanation)
       setExplanations(product.productExplanation);
-
-   
   };
   useEffect(() => {
-    
     getUserData();
     fetchExplanations();
   }, []);
@@ -346,13 +343,13 @@ setuser(data);
           totalIncome={totalIncome}
           needLevel={PRODUCT_MOCK_DATA.needLevel}
           product={product}
-          isdailyClaim={product.isdailyClaim===true?"Yes":"No"}
+          isdailyClaim={product.isdailyClaim === true ? "Yes" : "No"}
         />
         <div className="explain-box">
           <h3>Explain</h3>
           <ol>
             {explanations.map((item, i) => (
-              <li key={ i}>{item}</li>
+              <li key={i}>{item}</li>
             ))}
           </ol>
         </div>

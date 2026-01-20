@@ -124,6 +124,7 @@ const VIP = () => {
    const location = useLocation();
     const userData = location.state || {};
   const  currentInvestment =userData?.totalAmount?.totalRechargeAmount ||0 ;
+  console.log(userData);
   // Memoize the calculation of current and next VIP level
   const { currentLevel, nextLevel } = useMemo(() => {
     let current = VIP_LEVELS[0];
@@ -133,7 +134,7 @@ const VIP = () => {
     for (let i = VIP_LEVELS.length - 1; i >= 0; i--) {
       if (currentInvestment >= VIP_LEVELS[i].investment) {
         current = VIP_LEVELS[i];
-        // Determine the next level
+        // Determine the next level 
         next = i < VIP_LEVELS.length - 1 ? VIP_LEVELS[i + 1] : null;
         break;
       }
