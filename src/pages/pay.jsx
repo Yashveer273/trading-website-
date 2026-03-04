@@ -66,7 +66,7 @@ const Pay = () => {
 
   // 🔐 Get user data
   const getUserData = async() => {
-    const encryptedUser = Cookies.get("tredingWebUser");
+    const encryptedUser = Cookies.get("2ndtredingWebUser");
     if (encryptedUser) {
      const base64 = encryptedUser.replace(/-/g, "+").replace(/_/g, "/");
                
@@ -210,7 +210,7 @@ const initiatePayment = (appName) => {
 const GetUPI=async()=>{ const res=await getRandomUPI();
   console.log(res);
   if(res.success){
-setupiId(res?.data?.upiId||"Q065208051@ybl")
+setupiId(res?.data?.upiId||"")
 setPayeeName(res?.data?.payeeName||"Guest Name")
   }
 }

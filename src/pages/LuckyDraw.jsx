@@ -9,7 +9,6 @@ import {
 } from "../api";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const mockWinnings = [];
 
 const Reel = ({ prizes, isSpinning, finalValue }) => {
   const [position, setPosition] = useState(0);
@@ -185,7 +184,7 @@ const LuckyDraw = () => {
   const userId = location.state || {};
   const [isSpinning, setIsSpinning] = useState(false);
   const [result, setResult] = useState(0);
-  const [winnings, setWinnings] = useState(mockWinnings);
+  const [winnings, setWinnings] = useState([]);
   const [IsLuckyAllow, setIsLuckyAllow] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [prizes, setPrizes] = useState([]);
