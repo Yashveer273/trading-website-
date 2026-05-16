@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./Withdraw.css";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Loader2 } from "lucide-react";
@@ -36,7 +36,7 @@ const Withdraw = () => {
   const [balance, setBalance] = useState(0);
   const [responseMessage, setResponseMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const getUserId = async () => {
+  const getUserId = useCallback(async () => {
     if (encryptedUser) {
    
           const base64 = encryptedUser.replace(/-/g, "+").replace(/_/g, "/");
@@ -62,9 +62,9 @@ const Withdraw = () => {
     }
       return null;
     
-  };
+  }, []);
 
-  const fetchBankDetails = async () => {
+  const fetchBankDetails = useCallback(async () => {
     try {
       const id = await getUserId();
       const res = await GetBankDetails(id);
@@ -88,12 +88,12 @@ const Withdraw = () => {
         message: err.response?.data?.message || "Failed to fetch bank details",
       });
     }
-  };
+  }, [getUserId]);
 
   useEffect(() => {
     getUserId();
     fetchBankDetails();
-  }, []);
+  }, [getUserId, fetchBankDetails]);
 
   const handleAddBank = async () => {
     if (!holderName || !accountNumber || !ifscCode || !bankName) return alert("Fill all required fields");

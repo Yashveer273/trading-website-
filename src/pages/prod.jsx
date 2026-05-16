@@ -65,7 +65,7 @@ const MetricItem = ({
 };
 
 const ProductCard = ({ productData, onBuy }) => {
-  const { title, price, dailyEarnings, totalGain, durationDays, cycleType,img,isdailyClaim } =
+  const { title, price, dailyEarnings, totalGain, durationDays, cycleType, img } =
     productData;
 
 

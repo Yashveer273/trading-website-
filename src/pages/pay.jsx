@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Smile,
   Loader2,
@@ -35,7 +35,7 @@ const Pay = () => {
   const [payeeName, setPayeeName] = useState("Guest Name");
   const [utr, setUtr] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [price, setprice] = useState(location.state ?? 0);
+  const price = location.state ?? 0;
   const [message, setMessage] = useState({ text: "", type: "" });
   const [timer, setTimer] = useState(300); // countdown (in seconds)
   const [user, setuser] = useState(null); 
@@ -43,8 +43,7 @@ const Pay = () => {
   const timerRef = useRef(null);
 
   // 🧩 Fetch new QR code
-  const fetchQRCode = async () => {
-    
+  const fetchQRCode = useCallback(async () => {
     setMessage({ text: "Fetching latest QR code...", type: "info" });
     try {
       const data = await QRCode();
@@ -62,10 +61,10 @@ const Pay = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   // 🔐 Get user data
-  const getUserData = async() => {
+  const getUserData = useCallback(async () => {
     const encryptedUser = Cookies.get("2ndtredingWebUser");
     if (encryptedUser) {
      const base64 = encryptedUser.replace(/-/g, "+").replace(/_/g, "/");
@@ -88,7 +87,7 @@ const Pay = () => {
                 setIsLoading(true);
       if (!data?._id) navigate("/login");
     }
-  };
+  }, [navigate]);
 // --- Constants ---
 
 
@@ -207,20 +206,21 @@ const initiatePayment = (appName) => {
   }
 };
 
-const GetUPI=async()=>{ const res=await getRandomUPI();
+const GetUPI = useCallback(async () => {
+  const res = await getRandomUPI();
   console.log(res);
-  if(res.success){
-setupiId(res?.data?.upiId||"")
-setPayeeName(res?.data?.payeeName||"Guest Name")
+  if (res.success) {
+    setupiId(res?.data?.upiId || "");
+    setPayeeName(res?.data?.payeeName || "Guest Name");
   }
-}
+}, []);
   // 🚀 Initial setup
   useEffect(() => {
    GetUPI();
     getUserData();
     fetchQRCode();
     setTimer(300);
-  }, []);
+  }, [GetUPI, getUserData, fetchQRCode]);
 
   // ⏱ Countdown effect
   useEffect(() => {
@@ -239,7 +239,7 @@ setPayeeName(res?.data?.payeeName||"Guest Name")
       fetchQRCode(); // fetch new QR
       setTimer(300); // restart countdown
     }
-  }, [timer]);
+  }, [timer, GetUPI, fetchQRCode]);
 const minutes = Math.floor(timer / 60);
 const seconds = timer % 60;
   // Inline styles

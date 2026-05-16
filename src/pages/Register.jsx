@@ -55,7 +55,7 @@ const Register = () => {
   // --- Verify OTP ---
   const handleVerifyOtp = () => {
     if (!otp) return alert("Enter OTP");
-    if (otp == generatedOtp) {
+    if (otp === generatedOtp) {
       setOtpVerified(true);
       alert("OTP verified successfully!");
     } else {
